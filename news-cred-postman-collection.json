@@ -1,0 +1,2795 @@
+{
+    "id": "e5a6708d2d7b71c369f335d7e5978e41",
+    "name": "News Cred",
+    "description": null,
+    "auth": null,
+    "events": null,
+    "variables": [],
+    "order": [],
+    "folders_order": [],
+    "folders": [],
+    "requests": [
+        {
+            "id": "b4f21fc386e9c391b5b6b28fc7ffdc50",
+            "name": "Topic Articles",
+            "url": "httpsapi.newscred.com\/\/topic\/{guid]\/articles\/",
+            "description": "Returns a list of articles related to the specified topic.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "article_filter_mode",
+                    "description": "Enables article_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "article_filter_name",
+                    "description": "Limit items to a predefined list of articles. Value is the name of the predefined article filter list (applicable only when article filtering is enabled via article_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "categories",
+                    "description": "Limit items to the categories specified. Value is a space delimited list of dashed category names.  See Category module for more information.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "from_date",
+                    "description": "Beginning of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "get_topics",
+                    "description": "Set to true to include associated topics inline with each article. For faster response times, we recommend setting this to false unless topics are explicitly being used.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "guid",
+                    "description": "The topic guid.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "has_images",
+                    "description": "Return only articles that have associated images (accessible via article\/GUID\/images). Valid values are True or False.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "languages",
+                    "description": "Limit items to those in the specified language. Value is a 2 letter ISO language code.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "licensed",
+                    "description": "Search exclusively for fully licensed, full text content. Not available without a contract. Valid values are True or False.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "media_types",
+                    "description": "Limit the media type of the returned items. Value is a space delimited list of media types. See Source module for a list of valid media types.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "offset",
+                    "description": "Number of items to skip before beginning the result set. I.e. a pagesize of 10 and offest of 10 will return items 11-20. Used for paginating api queries.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "pagesize",
+                    "description": "Number of items to return.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "sort",
+                    "description": "Sort order for returned items. Valid values are date and relevance.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "sources",
+                    "description": "List of sources to retrieve items from. Valid sources are specified as a space delimited list of source GUIDs.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_countries",
+                    "description": "Search against only sources from the specified countries. Value is a space delimited list of 2 character ISO 3166-1 country codes.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_filter_mode",
+                    "description": "Enables source_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_filter_name",
+                    "description": "Limit items to a predefined list of sources.Value is the name of the predefined source filter list (applicable only when source filtering is enabled via source_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "to_date",
+                    "description": "End of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "f13710b4eb459c973ed121e5b2f1afe4",
+            "name": "Articles",
+            "url": "httpsapi.newscred.com\/articles\/",
+            "description": "Returns a list of articles according to the specified set of parameters.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "article_filter_mode",
+                    "description": "Enables article_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "article_filter_name",
+                    "description": "Limit items to a predefined list of articles. Value is the name of the predefined article filter list (applicable only when article filtering is enabled via article_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "boolean_operator",
+                    "description": "Indicates the boolean operation to use on search keywords that do not have explicit whitelist (+) or blacklist (-) operators on them. The value can either be and or or.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "categories",
+                    "description": "Limit items to the categories specified. Value is a space delimited list of dashed category names.  See Category module for more information.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "exact",
+                    "description": "If this parameter is not specified, then stemming is applied, so that for example the query term ship matches articles containing shipping, and vice versa. Specifying exact=true turns stemming off.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "from_date",
+                    "description": "Beginning of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "get_topics",
+                    "description": "Set to true to include associated topics inline with each article. For faster response times, we recommend setting this to false unless topics are explicitly being used.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "has_images",
+                    "description": "Return only articles that have associated images (accessible via article\/GUID\/images). Valid values are True or False.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "languages",
+                    "description": "Limit items to those in the specified language. Value is a 2 letter ISO language code.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "licensed",
+                    "description": "Search exclusively for fully licensed, full text content. Not available without a contract. Valid values are True or False.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "links",
+                    "description": "Value is a space delimited list of article links. Articles returned must match one of links provided.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "max_length",
+                    "description": "Returns only articles with at most this many words. For example, max_length=200",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "media_types",
+                    "description": "Limit the media type of the returned items. Value is a space delimited list of media types. See Source module for a list of valid media types.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "min_length",
+                    "description": "Returns only articles with at least this many words. For example, min_length=100",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "mm",
+                    "description": "Minimum Match: specifies how many of the non whitelist\/blacklist keywords must match for an article to be included in the results. Can be an integer (e.g., 1) or a percentage (e.g., 50%). The default value requires that all words match.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "modified_since",
+                    "description": "Get only articles that have been modified since the supplied date. An articles modified date is the same as its creation date if it hasnt been modified. ",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "offset",
+                    "description": "Number of items to skip before beginning the result set. I.e. a pagesize of 10 and offest of 10 will return items 11-20. Used for paginating api queries.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "query",
+                    "description": "Specifies the set of words and phrases to search for. ",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "query_fields",
+                    "description": "Specifies which field to search when searching for articles. ",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "safe_search",
+                    "description": "Removes articles containing offensive words from search result; when set to true.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "sort",
+                    "description": "Sort order for returned items. Valid values are date and relevance.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "sources",
+                    "description": "List of sources to retrieve items from. Valid sources are specified as a space delimited list of source GUIDs.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_countries",
+                    "description": "Search against only sources from the specified countries. Value is a space delimited list of 2 character ISO 3166-1 country codes.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_filter_mode",
+                    "description": "Enables source_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_filter_name",
+                    "description": "Limit items to a predefined list of sources.Value is the name of the predefined source filter list (applicable only when source filtering is enabled via source_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topics",
+                    "description": "Value is a space delimited list of topic guids. Articles returned must contain at least one of the topics provided.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_filter_mode",
+                    "description": "Enables topic_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_filter_name",
+                    "description": "Limit items to a predefined list of topics. Value is the name of the predefined topic filter list (applicable only when topic filtering is enabled via topic_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "to_date",
+                    "description": "End of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "a0da7fdeca585d8fc02ccbcdf6a8eb82",
+            "name": "Author",
+            "url": "httpsapi.newscred.com\/author\/",
+            "description": "Returns an author that has written content available via this API.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "d779a885e72659e276277127f5c19cd7",
+            "name": "Author Articles",
+            "url": "httpsapi.newscred.com\/author\/{guid}\/articles\/",
+            "description": "Returns articles written by the specified author and matching the given query string.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "article_filter_mode",
+                    "description": "Enables article_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "article_filter_name",
+                    "description": "Limit items to a predefined list of articles. Value is the name of the predefined article filter list (applicable only when article filtering is enabled via article_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "categories",
+                    "description": "Limit items to the categories specified. Value is a space delimited list of dashed category names.  See Category module for more information.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "from_date",
+                    "description": "Beginning of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "get_topics",
+                    "description": "Set to true to include associated topics inline with each article. For faster response times, we recommend setting this to false unless topics are explicitly being used.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "guid",
+                    "description": "The topic guid.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "has_images",
+                    "description": "Return only articles that have associated images (accessible via article\/GUID\/images). Valid values are True or False.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "languages",
+                    "description": "Limit items to those in the specified language. Value is a 2 letter ISO language code.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "licensed",
+                    "description": "Search exclusively for fully licensed, full text content. Not available without a contract. Valid values are True or False.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "media_types",
+                    "description": "Limit the media type of the returned items. Value is a space delimited list of media types. See Source module for a list of valid media types.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "offset",
+                    "description": "Number of items to skip before beginning the result set. I.e. a pagesize of 10 and offest of 10 will return items 11-20. Used for paginating api queries.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "pagesize",
+                    "description": "Number of items to return.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "sort",
+                    "description": "Sort order for returned items. Valid values are date and relevance.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "sources",
+                    "description": "List of sources to retrieve items from. Valid sources are specified as a space delimited list of source GUIDs.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_countries",
+                    "description": "Search against only sources from the specified countries. Value is a space delimited list of 2 character ISO 3166-1 country codes.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_filter_mode",
+                    "description": "Enables source_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_filter_name",
+                    "description": "Limit items to a predefined list of sources.Value is the name of the predefined source filter list (applicable only when source filtering is enabled via source_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topics",
+                    "description": "Value is a space delimited list of topic guids. Articles returned must contain at least one of the topics provided.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_filter_mode",
+                    "description": "Enables topic_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_filter_name",
+                    "description": "Limit items to a predefined list of topics. Value is the name of the predefined topic filter list (applicable only when topic filtering is enabled via topic_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "to_date",
+                    "description": "End of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "de3cd7d2c97aa5b2a4335a1f08d6206a",
+            "name": "Author Topics",
+            "url": "httpsapi.newscred.com\/author\/{guid}\/topics\/",
+            "description": "Gets a list of topics related to an author.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "from_date",
+                    "description": "Beginning of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "guid",
+                    "description": "The topic guid.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "offset",
+                    "description": "Number of items to skip before beginning the result set. I.e. a pagesize of 10 and offest of 10 will return items 11-20. Used for paginating api queries.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "pagesize",
+                    "description": "Number of items to return.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topics",
+                    "description": "Value is a space delimited list of topic guids. Articles returned must contain at least one of the topics provided.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_classifications",
+                    "description": "Limit results to those with the specified topic classification. Value is a space delimited list of topic classifications.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_filter_mode",
+                    "description": "Enables topic_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_filter_name",
+                    "description": "Limit items to a predefined list of topics. Value is the name of the predefined topic filter list (applicable only when topic filtering is enabled via topic_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_subclassifications",
+                    "description": "Limit results to those with the specified topic sub-classification. Value is a space delimited list of topic sub-classifications.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "to_date",
+                    "description": "End of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "4d4759b20e2a4a38915314e12d66dfdc",
+            "name": "Categories",
+            "url": "httpsapi.newscred.com\/categories\/",
+            "description": "Search for categories",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "autosuggest",
+                    "description": "If true, partial matches will be returned, i.e. the query pol will match the category politics. This is intended for use in autosuggest dropdowns.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "query",
+                    "description": "Specifies the set of words and phrases to search for. ",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "fb0a45e3a65d70f562d2b316a4868aef",
+            "name": "Category Sources",
+            "url": "httpsapi.newscred.com\/category\/dashed-name\/sources\/",
+            "description": "Gets a list of sources that write most frequently about the category specified by the dashed name",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "from_date",
+                    "description": "Beginning of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "media_types",
+                    "description": "Limit the media type of the returned items. Value is a space delimited list of media types. See Source module for a list of valid media types.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "offset",
+                    "description": "Number of items to skip before beginning the result set. I.e. a pagesize of 10 and offest of 10 will return items 11-20. Used for paginating api queries.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "pagesize",
+                    "description": "Number of items to return.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "sources",
+                    "description": "List of sources to retrieve items from. Valid sources are specified as a space delimited list of source GUIDs.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_countries",
+                    "description": "Search against only sources from the specified countries. Value is a space delimited list of 2 character ISO 3166-1 country codes.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_filter_mode",
+                    "description": "Enables source_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_filter_name",
+                    "description": "Limit items to a predefined list of sources.Value is the name of the predefined source filter list (applicable only when source filtering is enabled via source_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "to_date",
+                    "description": "End of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "e7cd1caffc65e9f2dd0afe76cb027bec",
+            "name": "Category Topics",
+            "url": "httpsapi.newscred.com\/category\/dashed-name\/topics\/",
+            "description": "Gets a list of topics within the category specified by the dashed name.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "from_date",
+                    "description": "Beginning of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "offset",
+                    "description": "Number of items to skip before beginning the result set. I.e. a pagesize of 10 and offest of 10 will return items 11-20. Used for paginating api queries.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "pagesize",
+                    "description": "Number of items to return.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_classifications",
+                    "description": "Limit results to those with the specified topic classification. Value is a space delimited list of topic classifications.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_filter_mode",
+                    "description": "Enables topic_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_filter_name",
+                    "description": "Limit items to a predefined list of topics. Value is the name of the predefined topic filter list (applicable only when topic filtering is enabled via topic_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_subclassifications",
+                    "description": "Limit results to those with the specified topic sub-classification. Value is a space delimited list of topic sub-classifications.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "to_date",
+                    "description": "End of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "c73aa7698d00c09d7a3a5cd12ce617d4",
+            "name": "Category Stories",
+            "url": "httpsapi.newscred.com\/category\/{category-name]\/stories\/",
+            "description": "Find the top news stories related to a given category. A story is a collection of similar articles.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "article_filter_mode",
+                    "description": "Enables article_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "article_filter_name",
+                    "description": "Limit items to a predefined list of articles. Value is the name of the predefined article filter list (applicable only when article filtering is enabled via article_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "cluster_size",
+                    "description": "Number of articles returned for each story",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "from_date",
+                    "description": "Beginning of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "get_topics",
+                    "description": "Set to true to include associated topics inline with each article. For faster response times, we recommend setting this to false unless topics are explicitly being used.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "has_images",
+                    "description": "Return only articles that have associated images (accessible via article\/GUID\/images). Valid values are True or False.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "languages",
+                    "description": "Limit items to those in the specified language. Value is a 2 letter ISO language code.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "licensed",
+                    "description": "Search exclusively for fully licensed, full text content. Not available without a contract. Valid values are True or False.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "media_types",
+                    "description": "Limit the media type of the returned items. Value is a space delimited list of media types. See Source module for a list of valid media types.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "offset",
+                    "description": "Number of items to skip before beginning the result set. I.e. a pagesize of 10 and offest of 10 will return items 11-20. Used for paginating api queries.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "pagesize",
+                    "description": "Number of items to return.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "sources",
+                    "description": "List of sources to retrieve items from. Valid sources are specified as a space delimited list of source GUIDs.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_countries",
+                    "description": "Search against only sources from the specified countries. Value is a space delimited list of 2 character ISO 3166-1 country codes.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_filter_mode",
+                    "description": "Enables source_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_filter_name",
+                    "description": "Limit items to a predefined list of sources.Value is the name of the predefined source filter list (applicable only when source filtering is enabled via source_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "to_date",
+                    "description": "End of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "32b37584a19079099f1ed32b5a769f79",
+            "name": "Category Articles",
+            "url": "httpsapi.newscred.com\/category\/{dashed-name}\/articles\/",
+            "description": "Search for articles within the category specified by dashed name.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "article_filter_mode",
+                    "description": "Enables article_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "article_filter_name",
+                    "description": "Limit items to a predefined list of articles. Value is the name of the predefined article filter list (applicable only when article filtering is enabled via article_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "from_date",
+                    "description": "Beginning of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "get_topics",
+                    "description": "Set to true to include associated topics inline with each article. For faster response times, we recommend setting this to false unless topics are explicitly being used.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "has_images",
+                    "description": "Return only articles that have associated images (accessible via article\/GUID\/images). Valid values are True or False.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "languages",
+                    "description": "Limit items to those in the specified language. Value is a 2 letter ISO language code.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "licensed",
+                    "description": "Search exclusively for fully licensed, full text content. Not available without a contract. Valid values are True or False.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "media_types",
+                    "description": "Limit the media type of the returned items. Value is a space delimited list of media types. See Source module for a list of valid media types.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "offset",
+                    "description": "Number of items to skip before beginning the result set. I.e. a pagesize of 10 and offest of 10 will return items 11-20. Used for paginating api queries.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "pagesize",
+                    "description": "Number of items to return.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "sort",
+                    "description": "Sort order for returned items. Valid values are date and relevance.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "sources",
+                    "description": "List of sources to retrieve items from. Valid sources are specified as a space delimited list of source GUIDs.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_countries",
+                    "description": "Search against only sources from the specified countries. Value is a space delimited list of 2 character ISO 3166-1 country codes.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_filter_mode",
+                    "description": "Enables source_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_filter_name",
+                    "description": "Limit items to a predefined list of sources.Value is the name of the predefined source filter list (applicable only when source filtering is enabled via source_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "to_date",
+                    "description": "End of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "557ba94d4d02dbd6725bfb96990c61d1",
+            "name": "Category Images",
+            "url": "httpsapi.newscred.com\/category\/{dashed-name}\/images\/",
+            "description": "Gets images related to the specified category.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "safe_search",
+                    "description": "Removes articles containing offensive words from search result; when set to true.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "a18ab25d9756dc51a10e044593d12630",
+            "name": "Image",
+            "url": "httpsapi.newscred.com\/image\/{guid}\/",
+            "description": "Returns the image specified by the given GUID.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "guid",
+                    "description": "The topic guid.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "062eefb5eab894d388f05a1611c68ddf",
+            "name": "Search Images",
+            "url": "httpsapi.newscred.com\/images\/",
+            "description": "Returns images matched by the query string",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "from_date",
+                    "description": "Beginning of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "offset",
+                    "description": "Number of items to skip before beginning the result set. I.e. a pagesize of 10 and offest of 10 will return items 11-20. Used for paginating api queries.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "pagesize",
+                    "description": "Number of items to return.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "query",
+                    "description": "Specifies the set of words and phrases to search for. ",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "to_date",
+                    "description": "End of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "62912831a4ef48f75ecf7e4743f7420a",
+            "name": "Source",
+            "url": "httpsapi.newscred.com\/source\/",
+            "description": "Returns the source represented by the specified GUID.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "guid",
+                    "description": "The topic guid.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "dc243431a8dfd4dda8fd489d73d8f508",
+            "name": "Source Articles",
+            "url": "httpsapi.newscred.com\/source\/{GUID}\/articles\/",
+            "description": "Returns a list of articles provided by the specified source",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "article_filter_mode",
+                    "description": "Enables article_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "article_filter_name",
+                    "description": "Limit items to a predefined list of articles. Value is the name of the predefined article filter list (applicable only when article filtering is enabled via article_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "categories",
+                    "description": "Limit items to the categories specified. Value is a space delimited list of dashed category names.  See Category module for more information.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "from_date",
+                    "description": "Beginning of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "get_topics",
+                    "description": "Set to true to include associated topics inline with each article. For faster response times, we recommend setting this to false unless topics are explicitly being used.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "has_images",
+                    "description": "Return only articles that have associated images (accessible via article\/GUID\/images). Valid values are True or False.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "languages",
+                    "description": "Limit items to those in the specified language. Value is a 2 letter ISO language code.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "licensed",
+                    "description": "Search exclusively for fully licensed, full text content. Not available without a contract. Valid values are True or False.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "media_types",
+                    "description": "Limit the media type of the returned items. Value is a space delimited list of media types. See Source module for a list of valid media types.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "offset",
+                    "description": "Number of items to skip before beginning the result set. I.e. a pagesize of 10 and offest of 10 will return items 11-20. Used for paginating api queries.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "pagesize",
+                    "description": "Number of items to return.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "sort",
+                    "description": "Sort order for returned items. Valid values are date and relevance.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topics",
+                    "description": "Value is a space delimited list of topic guids. Articles returned must contain at least one of the topics provided.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_filter_mode",
+                    "description": "Enables topic_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_filter_name",
+                    "description": "Limit items to a predefined list of topics. Value is the name of the predefined topic filter list (applicable only when topic filtering is enabled via topic_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "to_date",
+                    "description": "End of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "e4006a4f5e8fa5b72f54950e99c780a7",
+            "name": "Source Topics",
+            "url": "httpsapi.newscred.com\/source\/{GUID}\/topics\/",
+            "description": "Returns a list of topics related to the source specified by the given GUID.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "from_date",
+                    "description": "Beginning of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "offset",
+                    "description": "Number of items to skip before beginning the result set. I.e. a pagesize of 10 and offest of 10 will return items 11-20. Used for paginating api queries.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "pagesize",
+                    "description": "Number of items to return.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topics",
+                    "description": "Value is a space delimited list of topic guids. Articles returned must contain at least one of the topics provided.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_classifications",
+                    "description": "Limit results to those with the specified topic classification. Value is a space delimited list of topic classifications.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_filter_mode",
+                    "description": "Enables topic_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_filter_name",
+                    "description": "Limit items to a predefined list of topics. Value is the name of the predefined topic filter list (applicable only when topic filtering is enabled via topic_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_subclassifications",
+                    "description": "Limit results to those with the specified topic sub-classification. Value is a space delimited list of topic sub-classifications.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "to_date",
+                    "description": "End of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "c9ae86fc75279295b5434bcc65790e64",
+            "name": "Sources",
+            "url": "httpsapi.newscred.com\/sources\/",
+            "description": "Search sources by name. Returns a list of sources objects",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "autosuggest",
+                    "description": "If true, partial matches will be returned, i.e. the query pol will match the category politics. This is intended for use in autosuggest dropdowns.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "licensed",
+                    "description": "Search exclusively for fully licensed, full text content. Not available without a contract. Valid values are True or False.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "media_types",
+                    "description": "Limit the media type of the returned items. Value is a space delimited list of media types. See Source module for a list of valid media types.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "query",
+                    "description": "Specifies the set of words and phrases to search for. ",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "sources",
+                    "description": "List of sources to retrieve items from. Valid sources are specified as a space delimited list of source GUIDs.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_countries",
+                    "description": "Search against only sources from the specified countries. Value is a space delimited list of 2 character ISO 3166-1 country codes.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_filter_mode",
+                    "description": "Enables source_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_filter_name",
+                    "description": "Limit items to a predefined list of sources.Value is the name of the predefined source filter list (applicable only when source filtering is enabled via source_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "ea0154d613054d5e9c57583af97d6ce4",
+            "name": "Stories",
+            "url": "httpsapi.newscred.com\/stories\/",
+            "description": "Returns the top stories related to the specified query. A story is a group of similar articles. By default, stories are sorted by a combination of recency and importance. If the from_date and\/or to_date parameters are specified, stories are sorted by importance only.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "article_filter_mode",
+                    "description": "Enables article_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "article_filter_name",
+                    "description": "Limit items to a predefined list of articles. Value is the name of the predefined article filter list (applicable only when article filtering is enabled via article_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "boolean_operator",
+                    "description": "Indicates the boolean operation to use on search keywords that do not have explicit whitelist (+) or blacklist (-) operators on them. The value can either be and or or.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "categories",
+                    "description": "Limit items to the categories specified. Value is a space delimited list of dashed category names.  See Category module for more information.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "cluster_size",
+                    "description": "Number of articles returned for each story",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "exact",
+                    "description": "If this parameter is not specified, then stemming is applied, so that for example the query term ship matches articles containing shipping, and vice versa. Specifying exact=true turns stemming off.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "from_date",
+                    "description": "Beginning of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "get_topics",
+                    "description": "Set to true to include associated topics inline with each article. For faster response times, we recommend setting this to false unless topics are explicitly being used.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "has_images",
+                    "description": "Return only articles that have associated images (accessible via article\/GUID\/images). Valid values are True or False.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "languages",
+                    "description": "Limit items to those in the specified language. Value is a 2 letter ISO language code.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "licensed",
+                    "description": "Search exclusively for fully licensed, full text content. Not available without a contract. Valid values are True or False.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "links",
+                    "description": "Value is a space delimited list of article links. Articles returned must match one of links provided.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "max_length",
+                    "description": "Returns only articles with at most this many words. For example, max_length=200",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "media_types",
+                    "description": "Limit the media type of the returned items. Value is a space delimited list of media types. See Source module for a list of valid media types.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "min_length",
+                    "description": "Returns only articles with at least this many words. For example, min_length=100",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "mm",
+                    "description": "Minimum Match: specifies how many of the non whitelist\/blacklist keywords must match for an article to be included in the results. Can be an integer (e.g., 1) or a percentage (e.g., 50%). The default value requires that all words match.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "modified_since",
+                    "description": "Get only articles that have been modified since the supplied date. An articles modified date is the same as its creation date if it hasnt been modified. ",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "offset",
+                    "description": "Number of items to skip before beginning the result set. I.e. a pagesize of 10 and offest of 10 will return items 11-20. Used for paginating api queries.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "query",
+                    "description": "Specifies the set of words and phrases to search for. ",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "query_fields",
+                    "description": "Specifies which field to search when searching for articles. ",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "safe_search",
+                    "description": "Removes articles containing offensive words from search result; when set to true.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "sort",
+                    "description": "Sort order for returned items. Valid values are date and relevance.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "sources",
+                    "description": "List of sources to retrieve items from. Valid sources are specified as a space delimited list of source GUIDs.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_countries",
+                    "description": "Search against only sources from the specified countries. Value is a space delimited list of 2 character ISO 3166-1 country codes.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_filter_mode",
+                    "description": "Enables source_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_filter_name",
+                    "description": "Limit items to a predefined list of sources.Value is the name of the predefined source filter list (applicable only when source filtering is enabled via source_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topics",
+                    "description": "Value is a space delimited list of topic guids. Articles returned must contain at least one of the topics provided.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_filter_mode",
+                    "description": "Enables topic_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_filter_name",
+                    "description": "Limit items to a predefined list of topics. Value is the name of the predefined topic filter list (applicable only when topic filtering is enabled via topic_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "to_date",
+                    "description": "End of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "f6f0fb0ca711ab51ab4dbc002af16207",
+            "name": "Topic Images",
+            "url": "httpsapi.newscred.com\/topic\/{guide{\/images\/",
+            "description": "Returns images related to the specified topic.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "guid",
+                    "description": "The topic guid.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "e8918d122ddf70d16eabc4b891e2c6c8",
+            "name": "Topic",
+            "url": "httpsapi.newscred.com\/topic\/{guid}\/",
+            "description": "Return the topic specified by the given GUID. ",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "2fce21af8e5bdde84f97299e2554a08a",
+            "name": "Topic Sources",
+            "url": "httpsapi.newscred.com\/topic\/{guid}\/sources\/",
+            "description": "The guid for the topic.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "from_date",
+                    "description": "Beginning of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "offset",
+                    "description": "Number of items to skip before beginning the result set. I.e. a pagesize of 10 and offest of 10 will return items 11-20. Used for paginating api queries.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "pagesize",
+                    "description": "Number of items to return.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "sources",
+                    "description": "List of sources to retrieve items from. Valid sources are specified as a space delimited list of source GUIDs.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_countries",
+                    "description": "Search against only sources from the specified countries. Value is a space delimited list of 2 character ISO 3166-1 country codes.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_filter_mode",
+                    "description": "Enables source_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_filter_name",
+                    "description": "Limit items to a predefined list of sources.Value is the name of the predefined source filter list (applicable only when source filtering is enabled via source_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "Topic Sources",
+                    "description": "The guid for the topic.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "to_date",
+                    "description": "End of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "b2fc43c18d653f73d6ac2005cf6ba25f",
+            "name": "Related Topics",
+            "url": "httpsapi.newscred.com\/topic\/{guid}\/topics\/",
+            "description": "Returns a list of topics related to the topic specified.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "from_date",
+                    "description": "Beginning of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "guid",
+                    "description": "The guid for the topic.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "offset",
+                    "description": "Number of items to skip before beginning the result set. I.e. a pagesize of 10 and offest of 10 will return items 11-20. Used for paginating api queries.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "pagesize",
+                    "description": "Number of items to return.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topics",
+                    "description": "Value is a space delimited list of topic guids. Articles returned must contain at least one of the topics provided.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_classifications",
+                    "description": "Limit results to those with the specified topic classification. Value is a space delimited list of topic classifications.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_filter_mode",
+                    "description": "Enables topic_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_filter_name",
+                    "description": "Limit items to a predefined list of topics. Value is the name of the predefined topic filter list (applicable only when topic filtering is enabled via topic_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_subclassifications",
+                    "description": "Limit results to those with the specified topic sub-classification. Value is a space delimited list of topic sub-classifications.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "to_date",
+                    "description": "End of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "5f32f79c79ecc5503eaff1a9c1957e81",
+            "name": "Related Tweets",
+            "url": "httpsapi.newscred.com\/topic\/{guid}\/tweets\/",
+            "description": "Returns a list of real-time tweets related to the specified topic.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "guid",
+                    "description": "The topic guid.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "offset",
+                    "description": "Number of items to skip before beginning the result set. I.e. a pagesize of 10 and offest of 10 will return items 11-20. Used for paginating api queries.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "pagesize",
+                    "description": "Number of items to return.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "6ce57d077072d4697e3935b5cf99fba1",
+            "name": "Topic Videos",
+            "url": "httpsapi.newscred.com\/topic\/{guid}\/videos\/",
+            "description": "Returns a list of videos related to the specified topic.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "categories",
+                    "description": "Limit items to the categories specified. Value is a space delimited list of dashed category names.  See Category module for more information.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "guid",
+                    "description": "The topic guid.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "offset",
+                    "description": "Number of items to skip before beginning the result set. I.e. a pagesize of 10 and offest of 10 will return items 11-20. Used for paginating api queries.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "pagesize",
+                    "description": "Number of items to return.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "f832ea316dcb50c35f059dfc852dc671",
+            "name": "Topic Stories",
+            "url": "httpsapi.newscred.com\/topic\/{topic_guid}\/stories\/",
+            "description": "Find the top stories that are happening for a given topic. A story is a collection of similar articles.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "article_filter_mode",
+                    "description": "Enables article_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "article_filter_name",
+                    "description": "Limit items to a predefined list of articles. Value is the name of the predefined article filter list (applicable only when article filtering is enabled via article_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "categories",
+                    "description": "Limit items to the categories specified. Value is a space delimited list of dashed category names.  See Category module for more information.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "cluster_size",
+                    "description": "Number of articles returned for each story",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "from_date",
+                    "description": "Beginning of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "get_topics",
+                    "description": "Set to true to include associated topics inline with each article. For faster response times, we recommend setting this to false unless topics are explicitly being used.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "has_images",
+                    "description": "Return only articles that have associated images (accessible via article\/GUID\/images). Valid values are True or False.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "languages",
+                    "description": "Limit items to those in the specified language. Value is a 2 letter ISO language code.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "licensed",
+                    "description": "Search exclusively for fully licensed, full text content. Not available without a contract. Valid values are True or False.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "media_types",
+                    "description": "Limit the media type of the returned items. Value is a space delimited list of media types. See Source module for a list of valid media types.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "offset",
+                    "description": "Number of items to skip before beginning the result set. I.e. a pagesize of 10 and offest of 10 will return items 11-20. Used for paginating api queries.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "pagesize",
+                    "description": "Number of items to return.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "sources",
+                    "description": "List of sources to retrieve items from. Valid sources are specified as a space delimited list of source GUIDs.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_countries",
+                    "description": "Search against only sources from the specified countries. Value is a space delimited list of 2 character ISO 3166-1 country codes.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_filter_mode",
+                    "description": "Enables source_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "source_filter_name",
+                    "description": "Limit items to a predefined list of sources.Value is the name of the predefined source filter list (applicable only when source filtering is enabled via source_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_guid",
+                    "description": "The topic guid.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "to_date",
+                    "description": "End of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "898dbc968048d4f1d9e69b00838ab217",
+            "name": "Search Topics",
+            "url": "httpsapi.newscred.com\/topics\/",
+            "description": "Search for a specific topics.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "exact",
+                    "description": "If this parameter is not specified, then stemming is applied, so that for example the query term ship matches articles containing shipping, and vice versa. Specifying exact=true turns stemming off.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "query",
+                    "description": "Specifies the set of words and phrases to search for. ",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "4541965530263ec7b8e735f26aff2868",
+            "name": "Extract Related Topics",
+            "url": "httpsapi.newscred.com\/topics\/extract\/",
+            "description": "Returns a list of topics extracted from the input query.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "query",
+                    "description": "Specifies the set of words and phrases to search for. ",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topics",
+                    "description": "Value is a space delimited list of topic guids. Articles returned must contain at least one of the topics provided.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_classifications",
+                    "description": "Limit results to those with the specified topic classification. Value is a space delimited list of topic classifications.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_filter_mode",
+                    "description": "Enables topic_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_filter_name",
+                    "description": "Limit items to a predefined list of topics. Value is the name of the predefined topic filter list (applicable only when topic filtering is enabled via topic_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_subclassifications",
+                    "description": "Limit results to those with the specified topic sub-classification. Value is a space delimited list of topic sub-classifications.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "6eed52c6dc6a8e06825a879ecf2e3164",
+            "name": "Related Topics",
+            "url": "httpsapi.newscred.com\/topics\/related\/",
+            "description": "Given some search criteria, returns a list of topics related to those criteria.",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "access_key",
+                    "description": "Unique API access key",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "from_date, to_date",
+                    "description": "Find topics that were trending (written about more than usual) during the specified date range. For example, from_date=-1DAY finds topics that have been trending over the past day.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "offset",
+                    "description": "Number of items to skip before beginning the result set. I.e. a pagesize of 10 and offest of 10 will return items 11-20. Used for paginating api queries.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "pagesize",
+                    "description": "Number of items to return.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "query",
+                    "description": "Specifies the set of words and phrases to search for. ",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topics",
+                    "description": "Value is a space delimited list of topic guids. Articles returned must contain at least one of the topics provided.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_classifications",
+                    "description": "Limit results to those with the specified topic classification. Value is a space delimited list of topic classifications.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_filter_mode",
+                    "description": "Enables topic_filter_name and indicates filtering type. Allowed values are whitelist or blacklist",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_filter_name",
+                    "description": "Limit items to a predefined list of topics. Value is the name of the predefined topic filter list (applicable only when topic filtering is enabled via topic_filter_mode).",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "topic_subclassifications",
+                    "description": "Limit results to those with the specified topic sub-classification. Value is a space delimited list of topic sub-classifications.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        },
+        {
+            "id": "a3d6a301dba13729b77bc592b38857d9",
+            "name": "Videos",
+            "url": "httpsapi.newscred.com\/videos\/",
+            "description": "Returns videos matching the given query string",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "from_date",
+                    "description": "Beginning of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "licensed",
+                    "description": "Search exclusively for fully licensed, full text content. Not available without a contract. Valid values are True or False.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "maxduration",
+                    "description": "Maximum duration for searched videos (in milliseconds)",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "minduration",
+                    "description": "Minimum duration for searched videos (in milliseconds)",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "offset",
+                    "description": "Number of items to skip before beginning the result set. I.e. a pagesize of 10 and offest of 10 will return items 11-20. Used for paginating api queries.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "pagesize",
+                    "description": "Number of items to return.",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "query",
+                    "description": "Specifies the set of words and phrases to search for. ",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "to_date",
+                    "description": "End of date range for which items are searched. Format: yyyy-mm-dd [hh:mm:ss]",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "rawModeData": ""
+        }
+    ]
+}
