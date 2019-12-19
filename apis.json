@@ -1,0 +1,124 @@
+{
+    "name": "NewsCred",
+    "description": "NewsCred is the leading enterprise content marketing company. NewsCred delivers content marketing solutions that drive business results for top brands",
+    "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/869-newscred.jpg",
+    "tags": [
+        "api lifeycle",
+        "api provider",
+        "articles",
+        "general data",
+        "have api",
+        "news",
+        "news api",
+        "news syndication service",
+        "service api",
+        "syndication"
+    ],
+    "created": "2019-12-19",
+    "modified": "2019-12-19",
+    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/newscred\/master\/apis.json",
+    "specificationVersion": "0.14",
+    "apis": [
+        {
+            "name": "News Cred",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/869-newscred.jpg",
+            "humanURL": "http:\/\/newscred.com",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "http:\/\/kinlane-productions.s3.amazonaws.com\/api-evangelist-site\/company\/openapis\/news-cred.json"
+                },
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/news-cred-openapi.json"
+                },
+                {
+                    "type": "x-postman-collecction",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/news-cred-postman-collection.json"
+                }
+            ]
+        }
+    ],
+    "include": [],
+    "x-common": [
+        {
+            "type": "Base",
+            "url": "http:\/\/api.newscred.com"
+        },
+        {
+            "type": "Blog",
+            "url": "http:\/\/blog.newscred.com\/"
+        },
+        {
+            "type": "Blog RSS",
+            "url": "http:\/\/blog.newscred.com\/feed\/rss\/"
+        },
+        {
+            "type": "Case Studies",
+            "url": "http:\/\/www.newscred.com\/casestudies"
+        },
+        {
+            "type": "Crunchbase",
+            "url": "https:\/\/crunchbase.com\/organization\/newscred"
+        },
+        {
+            "type": "Crunchbase",
+            "url": "http:\/\/www.crunchbase.com\/company\/newscred"
+        },
+        {
+            "type": "Developers",
+            "url": "http:\/\/www.newscred.com\/developer\/docs"
+        },
+        {
+            "type": "Drupal Plugin",
+            "url": "http:\/\/www.newscred.com\/developer\/drupal_integration"
+        },
+        {
+            "type": "Email",
+            "url": "legal@newscred.com"
+        },
+        {
+            "type": "Email",
+            "url": "sales@newscred.com"
+        },
+        {
+            "type": "FAQ",
+            "url": "http:\/\/www.newscred.com\/developer\/faq"
+        },
+        {
+            "type": "Github",
+            "url": "https:\/\/github.com\/newscred"
+        },
+        {
+            "type": "Pricing",
+            "url": "http:\/\/newscred.com\/pricing"
+        },
+        {
+            "type": "Privacy",
+            "url": "http:\/\/www.newscred.com\/legal\/privacy"
+        },
+        {
+            "type": "Registration",
+            "url": "http:\/\/www.newscred.com\/developer\/accesskey"
+        },
+        {
+            "type": "Terms of Service",
+            "url": "http:\/\/www.newscred.com\/legal\/tos"
+        },
+        {
+            "type": "Twitter",
+            "url": "https:\/\/twitter.com\/newscred"
+        },
+        {
+            "type": "Website",
+            "url": "http:\/\/newscred.com"
+        },
+        {
+            "type": "Website",
+            "url": "https:\/\/newscred.com"
+        }
+    ]
+}
