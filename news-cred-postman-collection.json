@@ -1,5 +1,5 @@
 {
-    "id": "e5a6708d2d7b71c369f335d7e5978e41",
+    "id": "2112f063446a67966b4c3569840459a9",
     "name": "News Cred",
     "description": null,
     "auth": null,
@@ -10,7 +10,7 @@
     "folders": [],
     "requests": [
         {
-            "id": "b4f21fc386e9c391b5b6b28fc7ffdc50",
+            "id": "7c87028f765a0e5f69516d77ddfa651c",
             "name": "Topic Articles",
             "url": "httpsapi.newscred.com\/\/topic\/{guid]\/articles\/",
             "description": "Returns a list of articles related to the specified topic.",
@@ -163,11 +163,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "f13710b4eb459c973ed121e5b2f1afe4",
+            "id": "5b80b2d27625ca3249640e6a9bfda081",
             "name": "Articles",
             "url": "httpsapi.newscred.com\/articles\/",
             "description": "Returns a list of articles according to the specified set of parameters.",
@@ -397,11 +397,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "a0da7fdeca585d8fc02ccbcdf6a8eb82",
+            "id": "945c1c74d1ea756f954e28e2961e67fe",
             "name": "Author",
             "url": "httpsapi.newscred.com\/author\/",
             "description": "Returns an author that has written content available via this API.",
@@ -428,11 +428,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "d779a885e72659e276277127f5c19cd7",
+            "id": "974f5678ac6df2a0ad86a7b47c9f69ba",
             "name": "Author Articles",
             "url": "httpsapi.newscred.com\/author\/{guid}\/articles\/",
             "description": "Returns articles written by the specified author and matching the given query string.",
@@ -606,11 +606,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "de3cd7d2c97aa5b2a4335a1f08d6206a",
+            "id": "9e8df6ca576b24846fa39f6643ff4b13",
             "name": "Author Topics",
             "url": "httpsapi.newscred.com\/author\/{guid}\/topics\/",
             "description": "Gets a list of topics related to an author.",
@@ -707,11 +707,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "4d4759b20e2a4a38915314e12d66dfdc",
+            "id": "c574ef2f00fe591ae2fc2a102398c46b",
             "name": "Categories",
             "url": "httpsapi.newscred.com\/categories\/",
             "description": "Search for categories",
@@ -752,11 +752,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "fb0a45e3a65d70f562d2b316a4868aef",
+            "id": "649814dff5c20fbf873745d9eac2fa6b",
             "name": "Category Sources",
             "url": "httpsapi.newscred.com\/category\/dashed-name\/sources\/",
             "description": "Gets a list of sources that write most frequently about the category specified by the dashed name",
@@ -846,11 +846,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "e7cd1caffc65e9f2dd0afe76cb027bec",
+            "id": "9fe26dda4ea5c8d3e3f1e1f68a9db666",
             "name": "Category Topics",
             "url": "httpsapi.newscred.com\/category\/dashed-name\/topics\/",
             "description": "Gets a list of topics within the category specified by the dashed name.",
@@ -933,11 +933,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "c73aa7698d00c09d7a3a5cd12ce617d4",
+            "id": "37b0a5d6b35369c4ba3fe924efd84163",
             "name": "Category Stories",
             "url": "httpsapi.newscred.com\/category\/{category-name]\/stories\/",
             "description": "Find the top news stories related to a given category. A story is a collection of similar articles.",
@@ -1076,11 +1076,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "32b37584a19079099f1ed32b5a769f79",
+            "id": "d061ed104790ffe6a4277822aae4fcb7",
             "name": "Category Articles",
             "url": "httpsapi.newscred.com\/category\/{dashed-name}\/articles\/",
             "description": "Search for articles within the category specified by dashed name.",
@@ -1219,11 +1219,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "557ba94d4d02dbd6725bfb96990c61d1",
+            "id": "d4fb58f6ad0e4e15ba0e2b2d70c24e84",
             "name": "Category Images",
             "url": "httpsapi.newscred.com\/category\/{dashed-name}\/images\/",
             "description": "Gets images related to the specified category.",
@@ -1257,11 +1257,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "a18ab25d9756dc51a10e044593d12630",
+            "id": "056075f948b713b11db507d846ad3241",
             "name": "Image",
             "url": "httpsapi.newscred.com\/image\/{guid}\/",
             "description": "Returns the image specified by the given GUID.",
@@ -1295,11 +1295,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "062eefb5eab894d388f05a1611c68ddf",
+            "id": "96ce846907798f7306a9a90d4e6ee36a",
             "name": "Search Images",
             "url": "httpsapi.newscred.com\/images\/",
             "description": "Returns images matched by the query string",
@@ -1361,11 +1361,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "62912831a4ef48f75ecf7e4743f7420a",
+            "id": "416732f23876560d238cd0283eec2ef4",
             "name": "Source",
             "url": "httpsapi.newscred.com\/source\/",
             "description": "Returns the source represented by the specified GUID.",
@@ -1399,11 +1399,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "dc243431a8dfd4dda8fd489d73d8f508",
+            "id": "671168959902a4c86abf45993bb55a1a",
             "name": "Source Articles",
             "url": "httpsapi.newscred.com\/source\/{GUID}\/articles\/",
             "description": "Returns a list of articles provided by the specified source",
@@ -1542,11 +1542,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "e4006a4f5e8fa5b72f54950e99c780a7",
+            "id": "668fc0ae3a1dcb52026df037574167f1",
             "name": "Source Topics",
             "url": "httpsapi.newscred.com\/source\/{GUID}\/topics\/",
             "description": "Returns a list of topics related to the source specified by the given GUID.",
@@ -1636,11 +1636,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "c9ae86fc75279295b5434bcc65790e64",
+            "id": "3a2d55f68ed38b4748eb07dc2689ed88",
             "name": "Sources",
             "url": "httpsapi.newscred.com\/sources\/",
             "description": "Search sources by name. Returns a list of sources objects",
@@ -1723,11 +1723,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "ea0154d613054d5e9c57583af97d6ce4",
+            "id": "5052722aaa08f478ce7724591ec7400e",
             "name": "Stories",
             "url": "httpsapi.newscred.com\/stories\/",
             "description": "Returns the top stories related to the specified query. A story is a group of similar articles. By default, stories are sorted by a combination of recency and importance. If the from_date and\/or to_date parameters are specified, stories are sorted by importance only.",
@@ -1964,11 +1964,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "f6f0fb0ca711ab51ab4dbc002af16207",
+            "id": "f6bf2b0512b0fbc399ec4bd23925aaa6",
             "name": "Topic Images",
             "url": "httpsapi.newscred.com\/topic\/{guide{\/images\/",
             "description": "Returns images related to the specified topic.",
@@ -2002,11 +2002,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "e8918d122ddf70d16eabc4b891e2c6c8",
+            "id": "ef3bc883ac4a8e2d907cf6fd78c22136",
             "name": "Topic",
             "url": "httpsapi.newscred.com\/topic\/{guid}\/",
             "description": "Return the topic specified by the given GUID. ",
@@ -2033,11 +2033,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "2fce21af8e5bdde84f97299e2554a08a",
+            "id": "6c8e5dbae676ee3e8b18dc05e5078852",
             "name": "Topic Sources",
             "url": "httpsapi.newscred.com\/topic\/{guid}\/sources\/",
             "description": "The guid for the topic.",
@@ -2127,11 +2127,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "b2fc43c18d653f73d6ac2005cf6ba25f",
+            "id": "d215575440bbadef2d2bbf10d2a062a6",
             "name": "Related Topics",
             "url": "httpsapi.newscred.com\/topic\/{guid}\/topics\/",
             "description": "Returns a list of topics related to the topic specified.",
@@ -2228,11 +2228,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "5f32f79c79ecc5503eaff1a9c1957e81",
+            "id": "63fcb546b2f03d2b03914462e269f6a0",
             "name": "Related Tweets",
             "url": "httpsapi.newscred.com\/topic\/{guid}\/tweets\/",
             "description": "Returns a list of real-time tweets related to the specified topic.",
@@ -2280,11 +2280,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "6ce57d077072d4697e3935b5cf99fba1",
+            "id": "a178865cf37e402c9c7f82d4d5da0b64",
             "name": "Topic Videos",
             "url": "httpsapi.newscred.com\/topic\/{guid}\/videos\/",
             "description": "Returns a list of videos related to the specified topic.",
@@ -2339,11 +2339,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "f832ea316dcb50c35f059dfc852dc671",
+            "id": "02b0ca39a27baa4793631f9d57d96910",
             "name": "Topic Stories",
             "url": "httpsapi.newscred.com\/topic\/{topic_guid}\/stories\/",
             "description": "Find the top stories that are happening for a given topic. A story is a collection of similar articles.",
@@ -2496,11 +2496,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "898dbc968048d4f1d9e69b00838ab217",
+            "id": "cbdd7b29fa7e24d2f8f9da043e1b56b1",
             "name": "Search Topics",
             "url": "httpsapi.newscred.com\/topics\/",
             "description": "Search for a specific topics.",
@@ -2541,11 +2541,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "4541965530263ec7b8e735f26aff2868",
+            "id": "70af022e10fe36d29748c3d8c4179bf0",
             "name": "Extract Related Topics",
             "url": "httpsapi.newscred.com\/topics\/extract\/",
             "description": "Returns a list of topics extracted from the input query.",
@@ -2614,11 +2614,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "6eed52c6dc6a8e06825a879ecf2e3164",
+            "id": "05c51c9c5317a4d6eac502d3d63379f8",
             "name": "Related Topics",
             "url": "httpsapi.newscred.com\/topics\/related\/",
             "description": "Given some search criteria, returns a list of topics related to those criteria.",
@@ -2708,11 +2708,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         },
         {
-            "id": "a3d6a301dba13729b77bc592b38857d9",
+            "id": "6d78a9dbb379e1c639485776fbc82ac6",
             "name": "Videos",
             "url": "httpsapi.newscred.com\/videos\/",
             "description": "Returns videos matching the given query string",
@@ -2788,7 +2788,7 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "e5a6708d2d7b71c369f335d7e5978e41",
+            "collectionId": "2112f063446a67966b4c3569840459a9",
             "rawModeData": ""
         }
     ]
