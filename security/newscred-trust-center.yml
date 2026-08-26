@@ -1,0 +1,20 @@
+generated: '2026-08-26'
+method: searched
+probe: true
+source: https://www.optimizely.com/trust-center/compliance
+url: https://www.optimizely.com/trust-center/compliance
+certifications:
+- SOC 2
+- ISO 27001
+- ISO 27017
+- ISO 27018
+- PCI DSS
+- HIPAA
+evidence:
+- source: https://www.optimizely.com/trust-center/compliance
+  keywords:
+  - soc 2
+  - iso 27001
+  - pci dss
+  - hipaa
+  - trust center

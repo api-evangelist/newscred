@@ -1,0 +1,61 @@
+generated: '2026-08-26'
+method: searched
+source: https://docs.developers.optimizely.com/content-marketing-platform/docs/authentication-1
+summary:
+  types:
+  - oauth2
+  oauth2_flows:
+  - authorizationCode
+  - clientCredentials
+schemes:
+- name: OAuth2
+  type: oauth2
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/auth
+    tokenUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/token
+    scopes: 3
+  - flow: clientCredentials
+    tokenUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/token
+    scopes: 0
+  sources:
+  - openapi/newscred-cmp-open-api-openapi.json
+docs: https://docs.developers.optimizely.com/content-marketing-platform/docs/authentication-1
+derived_from: openapi/newscred-cmp-open-api-openapi.json
+authorization_server:
+  host: https://accounts.cmp.optimizely.com
+  authorization_endpoint: https://accounts.cmp.optimizely.com/o/oauth2/v1/auth
+  token_endpoint: https://accounts.cmp.optimizely.com/o/oauth2/v1/token
+  userinfo_endpoint: https://accounts.cmp.optimizely.com/o/oauth2/v1/userinfo
+  revocation: https://docs.developers.optimizely.com/content-marketing-platform/docs/revoke-tokens
+  legacy_host: https://accounts.welcomesoftware.com (Welcome-era; the legacy spec documents the same paths under
+    this host)
+  discovery: NONE — /.well-known/openid-configuration and /.well-known/oauth-authorization-server both return 404
+    on accounts.cmp.optimizely.com and accounts.welcomesoftware.com. An OAuth/OIDC client must be configured from
+    prose.
+app_registration:
+  self_serve: false
+  where: 'In-product only: Admin > Apps and Webhooks > Register App, inside an existing CMP organization.'
+  inputs:
+  - Mode (Production or Development)
+  - Name
+  - Description
+  - Expose Email Addresses?
+  - Homepage URL
+  - Authorization Callback URL
+  issues:
+  - client_id
+  - client_secret
+  note: There is no developer signup, no self-serve key issuance, and no public sandbox. API access requires an
+    existing CMP tenancy.
+token_handling:
+  access_token: opaque UUID-shaped bearer token
+  refresh: refresh_token grant at the token endpoint; the @welcomesoftware/cmp-sdk documents automatic retry with
+    token refresh on authorization errors
+  revocation_docs: https://docs.developers.optimizely.com/content-marketing-platform/docs/revoke-tokens
+rfc_citations:
+- RFC 6749 s4.1 authorization code
+- RFC 6749 s4.4 client credentials
+legacy_note: The legacy Welcome Open API spec documents the identical flow against https://accounts.welcomesoftware.com
+  with the same three scopes, and supported ONLY the authorization code flow. Client credentials is an Optimizely-era
+  addition.

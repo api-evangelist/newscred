@@ -1,0 +1,123 @@
+generated: '2026-08-26'
+method: searched
+source: https://docs.developers.optimizely.com/content-marketing-platform/reference/get-started
+docs: https://docs.developers.optimizely.com/content-marketing-platform/reference/get-started
+api: Optimizely CMP Open API v3
+asyncapi_published: false
+asyncapi_note: >-
+  Newscred / Welcome / Optimizely CMP publishes NO AsyncAPI document. The event surface is
+  documented as a hand-written webhook reference on the docs host and as a redoc-rendered
+  "Welcome Webhooks" page in the newscred GitHub organization
+  (https://newscred.github.io/settings-ex-im-automation-sample/webhooks.html). This file is the
+  webhook catalog harvested from that reference; it is NOT a fabricated AsyncAPI.
+transport: https-webhook
+subscription:
+  how: >-
+    Registered in the CMP UI under Admin > Apps and Webhooks, or via the Settings import/export
+    API (POST /settings, which merges webhooks by name). A registration supplies a callback URL,
+    one or more event names, and an optional secret.
+  callback_requirements:
+  - HTTPS is required; the URL may contain subdomains, paths, subpaths and query strings.
+  - One callback URL may subscribe to one or many events.
+delivery:
+  method: HTTP POST with a JSON body
+  ack_statuses: [200, 202]
+  failure: Any status other than 200 or 202 is treated as a delivery failure.
+  timeout_seconds: 30
+  retry: Redelivered with exponential backoff for up to three days after a delivery failure.
+  ordering: >-
+    Not guaranteed. CMP explicitly does not guarantee events arrive in the order they were
+    generated; consumers are told to re-fetch current state from the Open API.
+  duplicates: >-
+    Possible. CMP states a callback endpoint may receive the same event more than once and that
+    consumers must make their event processing idempotent. This is CONSUMER-side idempotency —
+    CMP itself publishes no idempotency key for its REST writes (see conventions/).
+  security:
+    mechanism: shared secret echoed in a request header
+    header: Callback-Secret
+    note: >-
+      An optional secret of up to 32 characters supplied at registration is sent back verbatim in
+      the Callback-Secret header on every delivery. This is a shared-secret echo, not an HMAC
+      signature over the payload, so it does not prove payload integrity.
+backward_compatibility:
+  non_breaking:
+  - Add a field to the webhook payload
+  - Add a value to an enum
+  - Add a request header
+  source: https://docs.developers.optimizely.com/content-marketing-platform/reference/get-started
+payload_envelope:
+  event_name: string — the event name, e.g. asset_added
+  data: object — event-specific body; entities carry id plus a links object of CMP Open API URLs
+  note: >-
+    Payloads are reference-style: they carry entity ids and a links.self URL back into
+    https://api.cmp.optimizely.com/v3/... rather than the full entity, so a consumer must call the
+    REST API to read state.
+event_count: 43
+groups:
+- group: Library
+  docs: https://docs.developers.optimizely.com/content-marketing-platform/reference/library-events
+  events:
+  - {name: asset_added, description: 'An asset (article, image, video, raw file or structured content) was added to the library.'}
+  - {name: asset_removed, description: An asset was removed from the library.}
+  - {name: asset_modified, description: An asset in the library was modified.}
+  - {name: asset_renditions_created, description: Renditions were created for a library asset.}
+- group: Task
+  docs: https://docs.developers.optimizely.com/content-marketing-platform/reference/task-events
+  events:
+  - {name: task_added, description: A task was created.}
+  - {name: task_removed, description: A task was removed.}
+  - {name: task_metadata_modified, description: 'Task title, campaign, start_at, due_at, is_completed, is_archived or a label-type field changed.'}
+  - {name: task_brief_added, description: A brief was added to a task.}
+  - {name: task_brief_removed, description: A brief was removed from a task.}
+  - {name: task_brief_modified, description: A task brief was modified.}
+  - {name: task_asset_added, description: An asset was added to a task.}
+  - {name: task_asset_removed, description: An asset was removed from a task.}
+  - {name: task_asset_modified, description: A task asset was modified.}
+  - {name: task_asset_draft_added, description: A draft was added to a task asset.}
+  - {name: task_asset_draft_removed, description: A draft was removed from a task asset.}
+  - {name: task_custom_field_modified, description: A custom field on a task was modified.}
+  - {name: content_preview_requested, description: A content preview was requested for a task.}
+  - {name: workflow_sub_step_updated, description: A workflow substep on a task was updated.}
+  - {name: workflow_sub_step_comment_added, description: A comment was added to a workflow substep.}
+  - {name: workflow_sub_step_comment_modified, description: A workflow substep comment was modified.}
+  - {name: workflow_sub_step_comment_removed, description: A workflow substep comment was removed.}
+- group: Campaign
+  docs: https://docs.developers.optimizely.com/content-marketing-platform/reference/campaign-events
+  events:
+  - {name: campaign_added, description: A campaign was added.}
+  - {name: campaign_metadata_modified, description: Campaign metadata was modified.}
+  - {name: campaign_brief_added, description: A brief was added to a campaign.}
+  - {name: campaign_brief_removed, description: A brief was removed from a campaign.}
+  - {name: campaign_brief_modified, description: A campaign brief was modified.}
+- group: Publish
+  docs: https://docs.developers.optimizely.com/content-marketing-platform/reference/publishing-events
+  events:
+  - {name: asset_published, description: An asset was published to a webhook-type channel.}
+  - {name: asset_synced, description: An asset was synced to a publishing channel.}
+  - {name: asset_unpublished, description: An asset was unpublished from a channel.}
+- group: Work request
+  docs: https://docs.developers.optimizely.com/content-marketing-platform/reference/work-request-events
+  events:
+  - {name: work_request_added, description: A work request was created.}
+  - {name: work_request_modified, description: A work request was modified.}
+  - {name: work_request_removed, description: A work request was removed.}
+  - {name: work_request_comment_added, description: A comment was added to a work request.}
+  - {name: work_request_comment_modified, description: A work request comment was modified.}
+  - {name: work_request_comment_removed, description: A work request comment was removed.}
+- group: External work management
+  docs: https://docs.developers.optimizely.com/content-marketing-platform/reference/external-work-management-events
+  events:
+  - {name: external_sub_step_started, description: An external substep was started from a task.}
+  - {name: external_sub_step_completed, description: An external substep was completed.}
+  - {name: external_sub_step_modified, description: An external substep was modified.}
+  - {name: external_sub_step_comment_added, description: A comment was added to an external substep.}
+  - {name: external_sub_step_comment_modified, description: An external substep comment was modified.}
+  - {name: external_sub_step_comment_removed, description: An external substep comment was removed.}
+- group: Event
+  docs: https://docs.developers.optimizely.com/content-marketing-platform/reference/event-events
+  events:
+  - {name: event_added, description: A calendar event was added.}
+  - {name: event_modified, description: A calendar event was modified.}
+experimental_note: >-
+  Some webhook documents carry an Experimental badge. Optimizely states experimental webhooks are
+  most often NOT operational and their documentation may change until fully released.

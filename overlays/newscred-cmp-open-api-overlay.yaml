@@ -1,0 +1,70 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Optimizely CMP Open API v3
+  version: 1.0.0
+x-provenance:
+  generated: '2026-08-26'
+  method: generated
+  source: openapi/newscred-cmp-open-api-openapi.json
+  extends: openapi/newscred-cmp-open-api-openapi.json
+  note: >-
+    Non-destructive enhancements only. The harvested contract is never mutated; a copy lives in
+    openapi/_original/. Every action below adds provenance, contact/licence/externalDocs metadata
+    the vendor omitted, or an x-api-evangelist annotation pointing at a companion artifact in this
+    repo. No path, schema, parameter or response is changed.
+actions:
+- target: $.info
+  description: Add the ownership and lineage the contract does not state about itself.
+  update:
+    contact:
+      name: Optimizely Content Marketing Platform (formerly NewsCred, then Welcome)
+      url: https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+    termsOfService: https://www.optimizely.com/legal/terms
+    x-api-evangelist:
+      provider: newscred
+      lineage: NewsCred -> Welcome (2020 rebrand) -> Optimizely (acquired December 2021)
+      base_url_history:
+      - https://api.newscred.com/v3
+      - https://api.welcomesoftware.com/v3
+      - https://api.cmp.optimizely.com/v3
+      harvested_from: https://raw.githubusercontent.com/newscred/opti-cmp-sdk/HEAD/specification/openapi.json
+      harvested_on: '2026-08-26'
+- target: $
+  description: Point the contract at the developer surfaces it omits.
+  update:
+    externalDocs:
+      description: Optimizely CMP Open REST API reference
+      url: https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+- target: $.info
+  description: Attach the runtime facts an agent needs that the contract does not declare.
+  update:
+    x-api-evangelist-runtime:
+      rate_limits:
+        artifact: rate-limits/newscred-rate-limits.yml
+        published: 10 requests/second and 200,000 requests/month per organization
+        runtime_headers: none — no X-RateLimit-*, no Retry-After, and no 429 declared on any operation
+      idempotency:
+        artifact: conventions/newscred-conventions.yml
+        supported: false
+      reversibility:
+        artifact: conventions/newscred-conventions.yml
+        state: none
+        warning: No cancel/restore/undo operation and no recovery window is published for any delete.
+      errors:
+        artifact: errors/newscred-problem-types.yml
+        format: custom {message, errors}; 422 uses {detail[{loc,msg,type}]}
+        rfc9457: false
+      webhooks:
+        artifact: asyncapi/newscred-cmp-webhooks.yml
+        events: 43
+        asyncapi_published: false
+      lifecycle:
+        artifact: lifecycle/newscred-lifecycle.yml
+        deprecation_policy: none published
+        backward_compatibility_policy: https://docs.developers.optimizely.com/content-marketing-platform/docs/backward-compatibility-1
+      changelog:
+        artifact: changelog/newscred-changelog.yml
+        machine_readable: https://docs.developers.optimizely.com/content-marketing-platform/api-next/v2/changelogs?page=1&per_page=10&visibility=public
+      data_model:
+        artifact: data-model/newscred-data-model.yml
+        id_scheme: opaque hex, no type prefix — resolve through links.self

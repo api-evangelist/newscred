@@ -1,0 +1,43 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Welcome Open API v3 (legacy)
+  version: 1.0.0
+x-provenance:
+  generated: '2026-08-26'
+  method: generated
+  source: openapi/newscred-welcome-open-api-openapi.yml
+  extends: openapi/newscred-welcome-open-api-openapi.yml
+  note: >-
+    Non-destructive enhancements to the legacy Welcome-branded contract. The original is preserved
+    verbatim in openapi/_original/. This overlay records that the document is superseded and where
+    its successor is, which the contract itself cannot say.
+actions:
+- target: $.info
+  description: Mark the document as the superseded generation and name its successor.
+  update:
+    contact:
+      name: Optimizely Content Marketing Platform (formerly NewsCred, then Welcome)
+      url: https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+    termsOfService: https://www.optimizely.com/legal/terms
+    x-api-evangelist:
+      provider: newscred
+      status: superseded
+      superseded_by: openapi/newscred-cmp-open-api-openapi.json
+      superseded_by_base: https://api.cmp.optimizely.com/v3
+      still_functional: >-
+        The document's own description states the previous base URL https://api.newscred.com/v3
+        "will remain functional as it used to be until any further notice" after the 28 March 2021
+        move to https://api.welcomesoftware.com/v3. No sunset date has ever been published.
+      harvested_from: https://raw.githubusercontent.com/newscred/settings-ex-im-automation-sample/HEAD/docs/openapi.yml
+      harvested_on: '2026-08-26'
+      operations: 48
+      note: >-
+        48 operations against 7 tags, versus 170 across 19 tags in the current CMP contract. The
+        delta is the Optimizely-era surface: Brand Compliance, Structured Contents, Work Requests,
+        Publishing, Templates, Milestones, Teams, Events, Fields, Workflows and Task Step.
+- target: $
+  description: Point at the current reference.
+  update:
+    externalDocs:
+      description: Current Optimizely CMP Open REST API reference (successor to this document)
+      url: https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference

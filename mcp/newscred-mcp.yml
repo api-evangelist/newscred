@@ -1,0 +1,280 @@
+generated: '2026-08-26'
+method: derived
+source: openapi/newscred-cmp-open-api-openapi.json
+provider: Newscred / Welcome / Optimizely Content Marketing Platform
+status: candidate
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: oauth
+  verified: probed
+searched:
+  note: 'Searched for a published CMP MCP server and found none. Optimizely does run MCP under its Opal agent platform,
+    but the only live namespace found is Experimentation: POST https://exp.mcp.opal.optimizely.com/mcp returns 401
+    {"detail":"Authentication required."} — it exists but it is not CMP. The CMP namespace does not exist: POST
+    https://cmp.mcp.opal.optimizely.com/mcp returns 404 {"detail":"No active namespace found for subdomain ''cmp''."},
+    which is the server itself denying a CMP namespace. mcp.cmp.optimizely.com and mcp.opal.optimizely.com do not
+    resolve in DNS. The newscred GitHub org does contain opal-mcp-adapter and sample-opal-tools, but those are Opal
+    tool scaffolding, not a published CMP MCP server, and neither is distributed on a registry. NO MCPServer pointer
+    is emitted in apis.yml: the tool list below is OUR derivation from the OpenAPI, not something the provider ships.'
+  probes:
+  - url: https://cmp.mcp.opal.optimizely.com/mcp
+    method: POST tools/list
+    status: 404
+    body: No active namespace found for subdomain 'cmp'.
+  - url: https://exp.mcp.opal.optimizely.com/mcp
+    method: POST tools/list
+    status: 401
+    body: Authentication required. (Experimentation namespace, not CMP)
+  - url: https://mcp.cmp.optimizely.com/mcp
+    method: POST tools/list
+    status: null
+    body: DNS NXDOMAIN
+  - url: https://mcp.opal.optimizely.com/mcp
+    method: POST tools/list
+    status: null
+    body: DNS NXDOMAIN
+auth_if_built:
+  type: oauth2
+  flows:
+  - authorizationCode
+  - clientCredentials
+  token_endpoint: https://accounts.cmp.optimizely.com/o/oauth2/v1/token
+  scopes:
+  - openid
+  - profile
+  - offline_access
+candidate_tool_count: 170
+candidate_tools_note: One candidate tool per OpenAPI operation, carrying its operationId as the tool name and inheriting
+  that operation parameters and requestBody as its inputSchema. Grouped by the spec own tags. Listed by category
+  with counts; the full binding is the OpenAPI itself.
+candidate_categories:
+- category: Tasks
+  tool_count: 44
+  tools:
+  - listTasks
+  - createTask
+  - getTask
+  - updateTask
+  - listTaskAssets
+  - addAssetToTask
+  - listTaskAttachments
+  - getTaskBrief
+  - listTaskCustomFields
+  - getTaskArticle
+  - listTaskAssetComments
+  - addCommentToTaskAsset
+  - listTaskAssetDrafts
+  - addDraftToTaskAsset
+  - listTaskAssetFields
+  - updateTaskAssetFields
+  - addCommentToTask
+  - getTaskCustomField
+  - updateTaskCustomField
+  - listTaskCustomFieldChoices
+  - listTaskFields
+  - addFieldToTask
+  - removeTaskField
+  - updateTaskField
+  - getTaskImage
+  - createTaskPublishingIntent
+  - getTaskRawFile
+  - getTaskSubStep
+  - updateTaskSubStep
+  - listTaskSubStepComments
+  - addCommentToTaskSubStep
+  - deleteTaskSubStepComment
+  - getTaskSubStepComment
+  - updateTaskSubStepComment
+  - getTaskSubStepExternalWork
+  - updateTaskSubStepExternalWork
+  - listTaskSubStepFields
+  - addStructuredContentToTask
+  - deleteTaskStructuredContent
+  - getTaskStructuredContent
+  - updateTaskStructuredContent
+  - createTaskStructuredContentDraft
+  - addUrlToTask
+  - getTaskVideo
+- category: Library
+  tool_count: 41
+  tools:
+  - getArticle
+  - listAssetLineages
+  - listAssets
+  - createAsset
+  - listAssetFields
+  - updateAssetFields
+  - updateAssetField
+  - createAssetLineage
+  - deleteAssetLineage
+  - listAssetPermissions
+  - addAssetPermissions
+  - removeAssetPermission
+  - updateAssetPermission
+  - listRelatedAssets
+  - replaceRelatedAssets
+  - listAssetRenditions
+  - createAssetVersion
+  - createFileUrls
+  - listFolders
+  - createFolder
+  - deleteFolder
+  - getFolder
+  - updateFolder
+  - listFolderPermissions
+  - addFolderPermissions
+  - removeFolderPermission
+  - updateFolderPermission
+  - deleteImage
+  - getImage
+  - updateImage
+  - deleteRawFile
+  - getRawFile
+  - updateRawFile
+  - getRenditionConfig
+  - getRendition
+  - createStructuredContent
+  - getStructuredContent
+  - updateStructuredContent
+  - deleteVideo
+  - getVideo
+  - updateVideo
+- category: Structured Contents
+  tool_count: 17
+  tools:
+  - listSCContentTypes
+  - createSCContentType
+  - getSCContentType
+  - updateSCContentType
+  - listSCContentTypeManagedMigrations
+  - createSCContentTypeManagedMigration
+  - validateSCContentTypeManagedMigration
+  - deleteSCContentTypeManagedMigration
+  - getSCContentTypeManagedMigration
+  - updateSCContentTypeManagedMigration
+  - startSCContentTypeManagedMigration
+  - listSCContentTypeVersions
+  - createSCContentTypeVersion
+  - getSCContentTypeVersion
+  - migrateSCContent
+  - acknowledgeSCContentPreview
+  - completeSCContentPreview
+- category: Work Requests
+  tool_count: 16
+  tools:
+  - listWorkRequests
+  - createWorkRequest
+  - getWorkRequest
+  - updateWorkRequest
+  - listWorkRequestApprovedAssets
+  - addAttachmentToWorkRequest
+  - createCampaignFromWorkRequest
+  - listWorkRequestComments
+  - addCommentToWorkRequest
+  - createWorkRequestCreativeAsset
+  - listWorkRequestRelatedResources
+  - createTaskFromWorkRequest
+  - deleteWorkRequestAttachment
+  - getWorkRequestComment
+  - deleteWorkRequestCreativeAsset
+  - updateWorkRequestFormField
+- category: Campaigns
+  tool_count: 10
+  tools:
+  - listCampaigns
+  - createCampaign
+  - updateCampaignField
+  - getCampaign
+  - updateCampaign
+  - addAttachmentToCampaign
+  - getCampaignBrief
+  - addCommentToCampaign
+  - listCampaignFields
+  - addFieldToCampaign
+- category: Events
+  tool_count: 6
+  tools:
+  - listEvents
+  - createEvent
+  - getEvent
+  - updateEvent
+  - listEventFields
+  - updateEventFields
+- category: Fields
+  tool_count: 6
+  tools:
+  - listFields
+  - createField
+  - deleteFieldChoice
+  - updateFieldChoice
+  - updateField
+  - createFieldChoices
+- category: Publishing
+  tool_count: 5
+  tools:
+  - listPublishingChannels
+  - getPublishingEvent
+  - getPublishingEventAssetMetadata
+  - listPublishingEventMetadata
+  - bulkCreatePublishingEventMetadata
+- category: Milestones
+  tool_count: 4
+  tools:
+  - listMilestones
+  - createMilestone
+  - getMilestone
+  - updateMilestone
+- category: Uploader
+  tool_count: 4
+  tools:
+  - createMultipartUpload
+  - completeMultipartUpload
+  - getMultipartUploadStatus
+  - getUploadUrl
+- category: Brand Compliance
+  tool_count: 3
+  tools:
+  - listBrandComplianceCategories
+  - getTaskAssetDraftBrandCompliance
+  - updateTaskAssetDraftBrandCompliance
+- category: Users
+  tool_count: 3
+  tools:
+  - listUsers
+  - findUserByEmail
+  - getUser
+- category: Settings
+  tool_count: 2
+  tools:
+  - getSettings
+  - updateSettings
+- category: Teams
+  tool_count: 2
+  tools:
+  - listTeams
+  - getTeam
+- category: Templates
+  tool_count: 2
+  tools:
+  - listTemplates
+  - getTemplate
+- category: Workflows
+  tool_count: 2
+  tools:
+  - listWorkflows
+  - getWorkflow
+- category: Assets
+  tool_count: 1
+  tools:
+  - getAssetUrl
+- category: Labels
+  tool_count: 1
+  tools:
+  - listLabelGroups
+- category: Task Step
+  tool_count: 1
+  tools:
+  - updateTaskStep

@@ -1,0 +1,124 @@
+generated: '2026-08-26'
+method: derived
+source: openapi/newscred-cmp-open-api-openapi.json
+api: Optimizely CMP Open API v3
+format: custom-json
+rfc9457: false
+media_type: application/json
+note: 'Derived from every 4xx/5xx response declared across the 170 operations of the CMP OpenAPI, then
+  reconciled against the documented error schemas. CMP does NOT use RFC 9457 problem+json: the envelope
+  is components.schemas.Error = {message (required), errors (free-form object)}, with a separate FastAPI-style
+  HTTPValidationError = {detail[]{loc,msg,type}} on 422. There is no stable machine-readable error CODE
+  anywhere in the contract — an agent can only branch on the HTTP status and, on 422, on ValidationError.type.
+  Remediation text below is derived from the status semantics and the published auth/permission model,
+  not invented provider copy.'
+envelopes:
+- name: Error
+  schema: components.schemas.Error
+  fields:
+    message: string, required — message describing the error
+    errors: object, free-form additional information
+- name: HTTPValidationError
+  schema: components.schemas.HTTPValidationError
+  fields:
+    detail: array of ValidationError {loc[], msg, type}
+enumerations:
+- name: error_reason
+  values:
+  - REQUIRED_FIELD_ABSENT
+  - LIST_EMPTY
+  - INVALID_STATE
+  - INVALID_SELF_REF
+  - MIN_NOT_MET
+  - MAX_NOT_MET
+  - PATTERN_ERROR
+  note: The only enumerated error vocabulary in the contract. Not returned as a top-level code; it appears
+    inside field-level validation payloads.
+problem_types:
+- status: 400
+  title: Bad Request
+  meaning: The request was malformed or a parameter failed validation.
+  remediation: Fix the request shape or parameter values before retrying; retrying unchanged will fail
+    again.
+  operations_declaring: 140
+  schema: Error
+  retryable: false
+  example_operations:
+  - addAssetPermissions
+  - addAssetToTask
+  - addAttachmentToCampaign
+  - addAttachmentToWorkRequest
+  - addCommentToCampaign
+- status: 401
+  title: Unauthorized
+  meaning: The OAuth 2.0 access token is missing, expired or invalid.
+  remediation: Refresh the access token with the refresh_token at https://accounts.cmp.optimizely.com/o/oauth2/v1/token,
+    then retry once.
+  operations_declaring: 153
+  schema: Error
+  retryable: true
+  example_operations:
+  - addAssetPermissions
+  - addAssetToTask
+  - addAttachmentToCampaign
+  - addAttachmentToWorkRequest
+  - addCommentToCampaign
+- status: 403
+  title: Forbidden
+  meaning: The authenticated user or app lacks permission for this resource in this CMP organization.
+  remediation: Do not retry. Check the org, instance and asset/folder permissions; permission changes
+    are made in CMP admin, not via the API.
+  operations_declaring: 151
+  schema: Error
+  retryable: false
+  example_operations:
+  - addAssetPermissions
+  - addAssetToTask
+  - addAttachmentToCampaign
+  - addAttachmentToWorkRequest
+  - addCommentToCampaign
+- status: 404
+  title: Not Found
+  meaning: The referenced resource does not exist, or is not visible to this organization.
+  remediation: Do not retry. Re-resolve the id from a list endpoint; ids are org-scoped.
+  operations_declaring: 138
+  schema: Error
+  retryable: false
+  example_operations:
+  - addAssetPermissions
+  - addAssetToTask
+  - addAttachmentToCampaign
+  - addAttachmentToWorkRequest
+  - addCommentToCampaign
+- status: 409
+  title: Conflict
+  meaning: The request conflicts with the current state of the resource.
+  remediation: Re-read the resource and reconcile before retrying.
+  operations_declaring: 1
+  schema: Error
+  retryable: true
+  example_operations:
+  - migrateSCContent
+- status: 422
+  title: Unprocessable Entity
+  meaning: Request body validation failed. The body is an HTTPValidationError carrying detail[] of {loc,
+    msg, type}.
+  remediation: Read detail[].loc to find the offending field and detail[].type for the reason; fix and
+    retry.
+  operations_declaring: 63
+  schema: HTTPValidationError
+  retryable: false
+  example_operations:
+  - acknowledgeSCContentPreview
+  - addAssetToTask
+  - addCommentToTaskAsset
+  - addCommentToTaskSubStep
+  - addDraftToTaskAsset
+coverage:
+  operations: 170
+  declared_4xx_5xx_responses: 646
+gaps:
+- No 429 response is declared on any operation even though rate limits are published (10 rps / 200k per
+  month). An agent cannot recognise throttling from the contract.
+- No 5xx response is declared on any operation.
+- No stable error code field; only HTTP status plus a free-text message.

@@ -1,0 +1,31 @@
+generated: '2026-08-26'
+method: searched
+source: https://docs.developers.optimizely.com/content-marketing-platform/docs/rate-limits-1
+docs: https://docs.developers.optimizely.com/content-marketing-platform/docs/rate-limits-1
+api: Optimizely CMP Open API v3
+limit_count: 2
+rate_limits:
+- scope: per-organization
+  window: 1s
+  limit: 10
+  unit: requests
+  note: 10 requests per second per organization.
+  source: https://docs.developers.optimizely.com/content-marketing-platform/docs/rate-limits-1
+- scope: per-organization
+  window: 1mo
+  limit: 200000
+  unit: requests
+  note: >-
+    200,000 requests per month per organization. Organizations may contact Optimizely Support to
+    request a quota increase or a mid-cycle reset.
+  source: https://docs.developers.optimizely.com/content-marketing-platform/docs/rate-limits-1
+headers:
+  published: false
+  note: >-
+    The rate-limit documentation states the numbers but publishes NO runtime signal — no
+    X-RateLimit-*, no RateLimit-*, no Retry-After, and no documented status code on exhaustion.
+    The OpenAPI declares only Location, X-Resource-Location and Content-Encoding response headers
+    across all 170 operations and no 429 response anywhere. An agent cannot detect approach to the
+    limit from the response; it can only be told the numbers up front.
+  observed: []
+exhaustion_status: null

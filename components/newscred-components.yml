@@ -1,0 +1,56 @@
+generated: '2026-08-26'
+method: searched
+source: https://docs.developers.optimizely.com/content-marketing-platform/docs/library-picker
+note: >-
+  Client-side and embeddable surfaces published by Newscred / Welcome / Optimizely CMP. These are
+  distinct from the SDKs in packages/ — they run in the consumer's browser or inside CMP's own UI
+  rather than calling the REST API from a server.
+component_count: 4
+families:
+- family: Digital Asset Management
+  components:
+  - name: DAM asset picker (library picker)
+    kind: hosted picker window
+    endpoint: https://cmp.optimizely.com/cloud/library-picker
+    docs: https://docs.developers.optimizely.com/content-marketing-platform/docs/library-picker
+    loader: none — opened as a standalone browser window/tab from the host application
+    channel: window.postMessage back to the opener
+    origin_check: https://cmp.optimizely.com
+    options:
+      param: pickerOptions (URL-encoded JSON)
+      keys: [assetTypes, multiSelect, instanceIds, parentFolderGuid]
+    payload_fields: [is_rendition, id, original_asset_id, title, url, width, height, type, alt_text]
+    deprecated_fields:
+    - field: guid
+      note: 'Documented as "Deprecated. Will be removed after December 2025."'
+    - field: alt
+      note: 'Documented as "Deprecated. Will be removed after December 2025."'
+    constraint: Usable only in a standalone browser window or tab; it must be opened from a third-party application.
+- family: Content editing extension points
+  components:
+  - name: Remote fields
+    kind: embedded custom field UI hosted by the integrator and rendered inside CMP
+    docs: https://docs.developers.optimizely.com/content-marketing-platform/docs/remote-fields
+    note: Lets a custom application appear as an interactive field inside the CMP content editor.
+  - name: Hosted middleware deployments
+    kind: CMP-hosted integration runtime
+    docs: https://docs.developers.optimizely.com/content-marketing-platform/docs/hosted-middleware-deployments
+    note: Create and deploy middleware hosted by CMP rather than on the integrator's own infrastructure.
+- family: Measurement
+  components:
+  - name: CMP JavaScript snippet (tracking pixel)
+    kind: script tag
+    docs: https://docs.developers.optimizely.com/content-marketing-platform/docs/install-javascript-snippet
+    related_docs:
+    - https://docs.developers.optimizely.com/content-marketing-platform/docs/javascript-pixels-and-user-data
+    - https://docs.developers.optimizely.com/content-marketing-platform/docs/setup-conversion-tracking
+    note: >-
+      Site-side snippet for CMP content analytics and conversion tracking. The docs do not pin a
+      version or publish an immutable CDN URL for the snippet.
+third_party_embedded:
+- name: CreativeEditor SDK (img.ly)
+  host: api.img.ly
+  note: >-
+    Not a Newscred component. CMP requires api.img.ly to be allowlisted because it embeds img.ly's
+    CreativeEditor SDK for in-library template editing. Recorded for completeness, not credited.
+  source: https://docs.developers.optimizely.com/content-marketing-platform/docs/domains-and-ip-address

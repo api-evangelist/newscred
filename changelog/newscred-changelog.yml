@@ -1,0 +1,101 @@
+generated: '2026-08-26'
+method: searched
+source: https://docs.developers.optimizely.com/content-marketing-platform/changelog
+docs: https://docs.developers.optimizely.com/content-marketing-platform/changelog
+api: Optimizely CMP Open API v3
+scheme:
+  style: dated changelog, per-change entries (no semantic version tags)
+  current_version: V3
+  version_in: URL path segment (/v3)
+  cadence: irregular; 64 published entries, most recent 2026-08-20
+machine_readable:
+  available: true
+  endpoint: https://docs.developers.optimizely.com/content-marketing-platform/api-next/v2/changelogs?page=1&per_page=10&visibility=public
+  format: JSON (ReadMe api-next v2), paginated, 64 entries across 7 pages
+  status: 200
+  note: >-
+    Unauthenticated JSON feed of the changelog, discovered from the docs page's own data layer.
+    Each entry carries created_at, updated_at, title, slug and markdown body — an agent can diff
+    releases without scraping.
+entry_count_total: 64
+entries:
+- date: '2026-08-20'
+  title: New endpoints
+  slug: new-endpoints-2
+  kind: additions
+  breaking: false
+  highlights:
+  - Added a Content Graph section with GET /content-graphs and POST /content-graphs/{cg_instance_id}/query.
+  - POST .../query proxies a GraphQL query to an Optimizely Graph instance and returns its response unchanged.
+  - Marked Experimental.
+- date: '2026-07-22'
+  title: API update
+  slug: api-update-15
+  kind: additions
+  breaking: false
+  highlights:
+  - Added optional allow_se_indexing boolean to PATCH /images/{id}, PATCH /videos/{id} and PATCH /raw-files/{id}.
+  - Controls whether a Library asset may be indexed by search engines; echoed on the matching GET/PATCH responses.
+- date: '2026-07-19'
+  title: API update
+  slug: api-update-16
+  kind: additions
+  breaking: false
+  highlights:
+  - Added a repeatable status query parameter to GET /tasks (Archived, Completed, Overdue, Not Started, In Progress, On Hold).
+- date: '2026-07-15'
+  title: API update
+  slug: api-update-17
+  kind: additions
+  breaking: false
+  highlights:
+  - Added is_protected boolean to the marketing work-request form-field response on GET work request and GET template endpoints.
+- date: '2026-07-02'
+  title: API update
+  slug: api-update-14
+  kind: additions
+  breaking: false
+  highlights:
+  - structured_content is now a supported related-asset type on GET /assets/{asset_id}/related-assets.
+  - Such related assets return content.type api_url pointing at the structured-content endpoint.
+- date: '2026-07-01'
+  title: API update
+  slug: api-update-13
+  kind: additions
+  breaking: false
+  highlights:
+  - Added library_guid to the GET /tasks/{id}/assets response; null until the asset is published to the Library.
+- date: '2026-06-07'
+  title: API update and bugfixes
+  slug: api-update-12
+  kind: additions+fixes
+  breaking: false
+  highlights:
+  - Added campaign_id, milestone_id and modified_at to TaskResponse (GET /tasks/{id}) to align it with TaskListResponseItem.
+- date: '2026-05-24'
+  title: New endpoint
+  slug: new-endpoint-25
+  kind: additions
+  breaking: false
+  highlights:
+  - Added GET /assets/{asset_id}/related-assets (paginated list) and PUT /assets/{asset_id}/related-assets (replace all).
+- date: '2026-04-07'
+  title: New endpoint
+  slug: api-update-11
+  kind: additions
+  breaking: false
+  highlights:
+  - Introduced GET /events with start_date, end_date and campaign_id filters.
+- date: '2026-02-25'
+  title: API update
+  slug: api-update-10
+  kind: additions
+  breaking: false
+  highlights:
+  - Added optional inherit_fields_from to POST /work-requests/{id}/tasks; workflow inherits fields from the workflow instead of the work request.
+observations:
+  breaking_changes_in_window: 0
+  note: >-
+    Every entry in the recent window is additive, which is consistent with the published
+    backward-compatibility policy (see lifecycle/). No entry in this window announced a
+    deprecation, a sunset date, or a removal.

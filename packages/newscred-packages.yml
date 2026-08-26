@@ -1,0 +1,54 @@
+generated: '2026-08-26'
+method: searched
+source: https://github.com/newscred
+note: >-
+  Both packages are first-party: they are published from repositories in the newscred GitHub
+  organization (the Newscred/Welcome engineering org, now Optimizely Content Marketing Platform)
+  and carry Optimizely / Welcome authorship. Registries queried unauthenticated on 2026-08-26:
+  registry.npmjs.org. No first-party CMP client was found on PyPI, Maven Central, NuGet,
+  pkg.go.dev, RubyGems, Packagist or crates.io — the SDK surface is JavaScript/TypeScript only.
+official_count: 2
+packages:
+- name: '@optimizely/cmp-sdk'
+  registry: npm
+  url: https://www.npmjs.com/package/@optimizely/cmp-sdk
+  repo: https://github.com/newscred/opti-cmp-sdk
+  language: TypeScript
+  official: true
+  version: 0.0.5
+  published: '2026-08-11'
+  license: MIT
+  api: Optimizely CMP Open API v3
+  note: >-
+    The current, actively developed SDK. Its types are generated from a checked-in OpenAPI
+    document at specification/openapi.json in the same repo — which is the machine-readable
+    contract harvested into openapi/newscred-cmp-open-api-openapi.json. Still 0.0.x, so the
+    package itself signals pre-1.0 stability even though the API is v3.
+- name: '@welcomesoftware/cmp-sdk'
+  registry: npm
+  url: https://www.npmjs.com/package/@welcomesoftware/cmp-sdk
+  repo: https://github.com/newscred/Welcome-Nodejs-SDK
+  language: TypeScript
+  official: true
+  version: 1.2.2
+  published: '2026-08-03'
+  first_published: '2023-06-08'
+  releases: 11
+  license: ISC
+  api: Welcome Open API v3 / Optimizely CMP Open API v3
+  note: >-
+    The Welcome-branded Node SDK, still published and still maintained (latest release
+    2026-08-03). Covers auth, apiCaller, library, task, campaign, label, publishing, uploader and
+    user modules and documents automatic access-token refresh on authorization errors.
+absent:
+  pypi: null
+  maven: null
+  nuget: null
+  go: null
+  rubygems: null
+  packagist: null
+  crates: null
+  note: >-
+    Checked, nothing to record — no first-party Newscred/Welcome/Optimizely-CMP client library
+    exists in these registries. The npm name `newscred` (0.0.2, 2014-11-16) is a THIRD-PARTY
+    wrapper for the old NewsCred content API by an unrelated author and is deliberately excluded.

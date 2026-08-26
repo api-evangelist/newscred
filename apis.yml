@@ -1,23 +1,165 @@
 aid: newscred
 name: Newscred
-description: 'Newscred is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  Newscred is the content marketing platform company that began as a licensed-content syndication
+  API and grew into an enterprise Content Marketing Platform (CMP), Marketing Resource Management
+  and Digital Asset Management suite. The company rebranded to Welcome in 2020 after Industry Dive
+  acquired its content-services business, and Optimizely acquired Welcome in December 2021, where
+  the product now ships as Optimizely Content Marketing Platform. The API lineage is continuous and
+  the vendor documents it: the Open API base URL moved from https://api.newscred.com/v3 to
+  https://api.welcomesoftware.com/v3 (28 March 2021) to https://api.cmp.optimizely.com/v3, and CMP
+  still requires customers to allowlist *.newscred.com. The public contract is a 170-operation
+  OAuth 2.0 REST API published by the newscred GitHub organization, covering library and digital
+  asset management, tasks and workflows, campaigns, publishing, structured content, work requests,
+  templates, teams and settings, plus a webhook event surface.
 url: https://raw.githubusercontent.com/api-evangelist/newscred/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
+x-status: acquired
+x-status-detail: >-
+  NewsCred -> Welcome (2020 rebrand) -> acquired by Optimizely, December 2021; the product ships as
+  Optimizely Content Marketing Platform (CMP). Profiled here under its originating brand; the parent
+  company is profiled separately at all/optimizely.
 specificationVersion: '0.20'
 created: '2026-08-26'
 modified: '2026-08-26'
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/newscred.png
 tags:
 - Company
-apis: []
+- Content Marketing
+- Content Management
+- Digital Asset Management
+- Marketing
+- Marketing Resource Management
+- Workflow
+- Publishing
+- Webhooks
+- Acquired
+apis:
+- name: Optimizely CMP Open API v3
+  description: >-
+    The current Newscred/Welcome content marketing platform REST API, shipping as the Optimizely CMP
+    Open API. 115 paths / 170 operations across Library, Uploader, Labels, Brand Compliance, Tasks,
+    Task Step, Campaigns, Publishing, Templates, Users, Work Requests, Structured Contents, Assets,
+    Events, Fields, Milestones, Teams, Settings and Workflows. OAuth 2.0 (authorization code +
+    client credentials) against accounts.cmp.optimizely.com.
+  humanURL: https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+  baseURL: https://api.cmp.optimizely.com/v3
+  tags:
+  - Content Marketing
+  - Digital Asset Management
+  - Workflow
+  properties:
+  - type: OpenAPI
+    url: openapi/newscred-cmp-open-api-openapi.json
+  - type: Overlay
+    url: overlays/newscred-cmp-open-api-overlay.yaml
+  - type: Webhooks
+    url: asyncapi/newscred-cmp-webhooks.yml
+  - type: Documentation
+    url: https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
+- name: Welcome Open API v3 (legacy)
+  description: >-
+    The prior-generation Newscred/Welcome Open API, published verbatim by the newscred GitHub
+    organization. 31 paths / 48 operations across Uploader, Library, Labels, Tasks, Campaigns, Users
+    and Settings. Its own description records the base-URL lineage: api.newscred.com/v3 ->
+    api.welcomesoftware.com/v3 from 28 March 2021. Still documented as functional; superseded by the
+    Optimizely CMP Open API.
+  humanURL: https://newscred.github.io/settings-ex-im-automation-sample/openapi.html
+  baseURL: https://api.welcomesoftware.com/v3
+  tags:
+  - Content Marketing
+  - Digital Asset Management
+  properties:
+  - type: OpenAPI
+    url: openapi/newscred-welcome-open-api-openapi.yml
+  - type: Overlay
+    url: overlays/newscred-welcome-open-api-overlay.yaml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Security
+  url: security/newscred-vulnerability-disclosure.yml
+- type: VulnerabilityDisclosure
+  url: security/newscred-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/newscred-domain-security.yml
 - type: Website
-  url: https://www.nasdaqprivatemarket.com/
+  url: https://www.optimizely.com/campaigns/acquisition/newscred
+- type: DeveloperPortal
+  url: https://developers.newscred.com/
+- type: Documentation
+  url: https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
+- type: APIReference
+  url: https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+- type: GettingStarted
+  url: https://docs.developers.optimizely.com/content-marketing-platform/reference/get-started
+- type: Authentication
+  url: authentication/newscred-authentication.yml
+- type: OAuthScopes
+  url: scopes/newscred-scopes.yml
+- type: Support
+  url: https://support.optimizely.com/hc/en-us
+- type: Blog
+  url: https://www.optimizely.com/field-notes/articles
+- type: GitHubOrganization
+  url: https://github.com/newscred
+- type: Pricing
+  url: https://www.optimizely.com/plans
+- type: Plans
+  url: plans/newscred-plans-pricing.yml
+- type: Login
+  url: https://cmp.optimizely.com/
+- type: TermsOfService
+  url: https://www.optimizely.com/legal/terms
+- type: PrivacyPolicy
+  url: https://www.optimizely.com/legal/privacy-notice
+- type: TrustCenter
+  url: https://www.optimizely.com/trust-center
+- type: Compliance
+  url: conformance/newscred-conformance.yml
+- type: Conformance
+  url: conformance/newscred-conformance.yml
+- type: ChangeLog
+  url: changelog/newscred-changelog.yml
+- type: Lifecycle
+  url: lifecycle/newscred-lifecycle.yml
+- type: StatusPage
+  url: https://status.optimizely.com/
+- type: Deprecation
+  url: lifecycle/newscred-lifecycle.yml
+- type: RateLimits
+  url: rate-limits/newscred-rate-limits.yml
+- type: Conventions
+  url: conventions/newscred-conventions.yml
+- type: ErrorCatalog
+  url: errors/newscred-problem-types.yml
+- type: DataModel
+  url: data-model/newscred-data-model.yml
+- type: Packages
+  url: packages/newscred-packages.yml
+- type: SDKs
+  url: packages/newscred-packages.yml
+- type: Components
+  url: components/newscred-components.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/newscred-llms.txt
+x-enrichment:
+  date: '2026-08-26'
+  status: enriched
+  artifacts_added: 30
+  pass: local-v1
+x-coverage:
+  state: covered
+  reason: null
+  detail: >-
+    Full contract discovery succeeded. Two real OpenAPI documents were harvested verbatim from the
+    provider's own newscred GitHub organization (170-op Optimizely CMP Open API v3 and the 48-op
+    legacy Welcome Open API v3), plus a served llms.txt, a machine-readable changelog feed, two
+    first-party npm SDKs and a 43-event webhook catalog.
+  checked: '2026-08-26'

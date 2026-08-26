@@ -1,0 +1,86 @@
+generated: '2026-08-26'
+method: searched
+source: https://docs.developers.optimizely.com/content-marketing-platform/docs/backward-compatibility-1
+api: Optimizely CMP Open API v3
+versioning:
+  style: URI path major version
+  current: v3
+  base: https://api.cmp.optimizely.com/v3
+  history:
+  - version: v3
+    host: https://api.newscred.com/v3
+    status: legacy host
+    note: The original NewsCred-branded host. CMP still requires *.newscred.com in customer allowlists.
+  - version: v3
+    host: https://api.welcomesoftware.com/v3
+    status: legacy host, documented as still functional
+    since: '2021-03-28'
+    note: >-
+      The Welcome Open API spec states "From 28th March 2021, we are serving open API through
+      https://api.welcomesoftware.com/v3 ... The previous base URL https://api.newscred.com/v3
+      will remain functional as it used to be until any further notice."
+  - version: v3
+    host: https://api.cmp.optimizely.com/v3
+    status: current
+    note: The Optimizely-branded host after the December 2021 acquisition.
+  docs: https://docs.developers.optimizely.com/content-marketing-platform/docs/domains-and-ip-address
+backward_compatibility:
+  policy_published: true
+  docs: https://docs.developers.optimizely.com/content-marketing-platform/docs/backward-compatibility-1
+  non_breaking_changes:
+  - Add an endpoint or support for an HTTP method
+  - Add a field to the response payload
+  - Add an optional field to the request payload
+  - Add support for an optional query parameter
+  - Add a value to an enum
+  - Add support for an optional request header
+  - Add a response header
+  webhook_non_breaking_changes:
+  - Add a field to the webhook payload
+  - Add a value to an enum
+  - Add a request header
+  webhook_docs: https://docs.developers.optimizely.com/content-marketing-platform/reference/get-started
+  gap: >-
+    The policy enumerates what CMP considers NON-breaking. It does not define what counts as
+    breaking, does not commit to a notice period, and does not state how a breaking change would
+    be announced.
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  note: >-
+    No deprecation or sunset policy is published, and neither the OpenAPI nor the docs mention
+    RFC 8594 Sunset / Deprecation response headers. The only deprecation-shaped signal in the
+    contract is the Experimental badge, which Optimizely describes as pre-release rather than
+    end-of-life: "Experimental APIs are most often NOT operational and the documentation may
+    change until the APIs are fully released." The concrete lifecycle facts that ARE published
+    are the host migrations above, which were announced with an explicit
+    remains-functional-until-further-notice commitment rather than a dated sunset.
+  deprecated_operations_in_spec: 0
+  deprecated_operations_source: openapi/newscred-cmp-open-api-openapi.json
+  actual_deprecations_found:
+  - surface: DAM asset picker (library picker) postMessage payload
+    fields: [guid, alt]
+    notice: 'Documented verbatim as "Deprecated. Will be removed after December 2025."'
+    docs: https://docs.developers.optimizely.com/content-marketing-platform/docs/library-picker
+    note: >-
+      The only dated removal commitment found anywhere on the Newscred/Welcome/CMP developer
+      surface, and it is on an embeddable component rather than the REST API. As of this pass
+      (2026-08-26) that date has passed and the doc still lists the fields as deprecated rather
+      than removed, so consumers cannot tell from the docs whether removal happened.
+experimental:
+  badge: Experimental
+  docs: https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+  note: >-
+    A substantial share of the CMP surface — Fields, Workflows, Task Step, several Structured
+    Content and Publishing operations, and the new Content Graph endpoints — carries the
+    Experimental badge, meaning the shape may change without a version bump.
+status_page:
+  url: https://status.optimizely.com/
+  status: 200
+  scope: Optimizely platform-wide status, including Content Marketing Platform
+sla:
+  published: false
+  note: No public uptime SLA or credit schedule for CMP was found on the developer or trust surfaces.
+changelog: changelog/newscred-changelog.yml

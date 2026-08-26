@@ -1,0 +1,137 @@
+generated: '2026-08-26'
+method: searched
+source: https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
+derived_from: openapi/newscred-cmp-open-api-openapi.json
+api: Optimizely CMP Open API v3
+base_url: https://api.cmp.optimizely.com/v3
+auth:
+  style: OAuth 2.0 bearer access token
+  flows: [authorizationCode, clientCredentials]
+  authorization_server: https://accounts.cmp.optimizely.com
+  authorization_endpoint: https://accounts.cmp.optimizely.com/o/oauth2/v1/auth
+  token_endpoint: https://accounts.cmp.optimizely.com/o/oauth2/v1/token
+  userinfo_endpoint: https://accounts.cmp.optimizely.com/o/oauth2/v1/userinfo
+  scopes: [openid, profile, offline_access]
+  app_registration: In-product only — Admin > Apps and Webhooks > Register App inside a CMP organization.
+  docs: https://docs.developers.optimizely.com/content-marketing-platform/docs/authentication-1
+  detail: authentication/newscred-authentication.yml
+idempotency:
+  supported: false
+  header: null
+  scope: null
+  retention: null
+  note: >-
+    CMP publishes NO request idempotency mechanism. There is no Idempotency-Key (or equivalent)
+    header anywhere in the 170-operation OpenAPI, none in the docs, and no idempotent-retry
+    guidance for writes. The only idempotency the platform discusses is CONSUMER-side: the webhook
+    guide tells you to make YOUR event processing idempotent because CMP may deliver the same
+    event more than once. An agent retrying a failed POST /tasks or POST /assets has no way to
+    avoid creating a duplicate. Because of this, apis.yml deliberately carries NO type Idempotency
+    pointer.
+pagination:
+  style: offset + page_size, with server-rendered next/previous URLs
+  request_params: [offset, page_size, limit]
+  response_envelope:
+    data: array of the requested resources
+    pagination:
+      next: URL to the next page, or null
+      previous: URL to the previous page, or null
+  guidance: >-
+    The docs direct consumers to follow the URLs returned in the links / pagination fields rather
+    than constructing endpoints by hand.
+  source: openapi/newscred-cmp-open-api-openapi.json (components.schemas.Pagination)
+hypermedia:
+  present: true
+  note: >-
+    Resources and webhook payloads carry a links object of absolute CMP Open API URLs
+    (links.self, links.task, links.assets, links.work_request, ...). Webhook bodies are
+    reference-style — id plus links — so a consumer must call back into the REST API for state.
+filtering_and_sorting:
+  filter_params: [search, search_text, search_key, ids, label, campaign_id, folder_id, owner, created_by, status, asset_type, locale]
+  range_params: [created_at__from, created_at__to, modified_at__from, modified_at__to, due_date__from, due_date__to, start_date, end_date]
+  sorting: [order_by, order_as]
+  sparse_fields: fields query parameter on selected list endpoints
+field_expansion:
+  supported: partial
+  note: A fields query parameter narrows the returned representation on some list endpoints; there is no general expand= mechanism.
+metadata:
+  custom_fields: true
+  note: >-
+    Organization-defined custom fields and label groups are first-class (Fields, Labels tags), and
+    are the extension point rather than a free-form metadata bag.
+request_id_tracing:
+  supported: false
+  note: No request-id / correlation-id request or response header is documented or declared in the spec.
+versioning:
+  style: URI path major version (/v3)
+  detail: lifecycle/newscred-lifecycle.yml
+error_envelope:
+  format: custom JSON
+  rfc9457: false
+  content_type: application/json
+  shape:
+    message: string — human-readable message describing the error (required)
+    errors: object — additional information, free-form
+  validation_shape:
+    detail: array of {loc, msg, type} (FastAPI-style HTTPValidationError on 422)
+  detail: errors/newscred-problem-types.yml
+rate_limit_signaling:
+  documented_limits: true
+  runtime_headers: false
+  note: >-
+    Limits are published as numbers (10 rps and 200,000 requests/month per organization) but the
+    API returns no X-RateLimit-*/RateLimit-*/Retry-After headers and the spec declares no 429
+    response, so an agent cannot see the limit approaching.
+  detail: rate-limits/newscred-rate-limits.yml
+dry_run_mode:
+  supported: false
+  note: No preview/dry-run/validate-only mode is documented for any write operation.
+reversibility:
+  state: none
+  grade: none
+  credit: 0.0
+  write_surface: true
+  note: >-
+    CMP has a large write surface — 33 x 201-creating operations, 24 x 204 deletes, and PATCH
+    across Library, Tasks, Campaigns, Work Requests, Fields, Templates and Settings — and
+    publishes NO reversal operation and NO reversal window for any of it. A search of all 170
+    operationIds finds no cancel, refund, void, reverse, undo, rollback, restore or untrash
+    operation; the words restore, trash and recycle do not appear anywhere in the contract. The
+    only reversible-looking semantics are soft states you can read but not always write: tasks and
+    assets carry is_archived (22 occurrences) and it is filterable on GET /tasks via the status
+    parameter, but TaskUpdateRequest exposes only campaign_id, due_at, labels, owner_id, start_at,
+    title and workflow_id — is_archived is NOT in the PATCH body, so un-archiving is not an API
+    action. DELETE operations (deleteImage, deleteVideo, deleteRawFile, deleteFolder,
+    deleteTaskStructuredContent, removeAssetPermission, ...) are documented as deletes with no
+    stated recovery path and no stated grace period.
+  surfaces:
+  - operation: deleteImage
+    reversal: null
+    window: null
+  - operation: deleteVideo
+    reversal: null
+    window: null
+  - operation: deleteRawFile
+    reversal: null
+    window: null
+  - operation: deleteFolder
+    reversal: null
+    window: null
+  - operation: unpublishAsset / asset_unpublished
+    reversal: republish via the publishing endpoints
+    window: null
+    confidence: low
+    note: >-
+      Publishing state is re-assertable (asset_published / asset_unpublished are both real
+      events), but the docs state no window and do not frame republishing as an undo, so this is
+      recorded as unverified rather than counted as a reversal path.
+  warning: >-
+    NO WINDOW IS ASSERTED ANYWHERE IN THIS FILE because the provider states none. An agent should
+    treat every CMP delete as irreversible.
+cross_links:
+  errors: errors/newscred-problem-types.yml
+  lifecycle: lifecycle/newscred-lifecycle.yml
+  authentication: authentication/newscred-authentication.yml
+  scopes: scopes/newscred-scopes.yml
+  rate_limits: rate-limits/newscred-rate-limits.yml
+  webhooks: asyncapi/newscred-cmp-webhooks.yml

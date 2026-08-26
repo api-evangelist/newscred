@@ -1,0 +1,22 @@
+generated: '2026-08-26'
+method: searched
+source: https://www.optimizely.com/plans
+docs: https://www.optimizely.com/plans
+plan_count: 0
+note: >-
+  Newscred / Welcome / Optimizely Content Marketing Platform publishes NO priced tiers. The
+  Optimizely plans page presents the product portfolio (including Content Marketing Platform) as a
+  quote-and-demo motion — "Talk to sales" / "Request a demo" — with no list price, no included
+  quota and no overage schedule for CMP. The only published quantitative limits attached to a CMP
+  subscription are the API rate limits (10 rps and 200,000 requests per month per organization),
+  captured in rate-limits/newscred-rate-limits.yml, and those are documented as adjustable by
+  contacting Optimizely Support. There is no self-serve signup or free tier for the CMP API; API
+  access requires registering an OAuth app inside an existing CMP organization.
+plans: []
+evidence:
+- url: https://www.optimizely.com/plans
+  status: 200
+  finding: portfolio + contact-sales page; no CMP price, tier, or quota published
+- url: https://docs.developers.optimizely.com/content-marketing-platform/docs/rate-limits-1
+  status: 200
+  finding: quota published as a rate limit, not as a plan tier

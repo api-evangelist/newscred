@@ -1,0 +1,23 @@
+generated: '2026-08-26'
+method: generated
+source: openapi/newscred-cmp-open-api-openapi.json + asyncapi/newscred-cmp-webhooks.yml
+provider: Newscred / Welcome / Optimizely Content Marketing Platform
+api: Optimizely CMP Open API v3
+note: >-
+  Packaged agent skills for the marquee CMP flows. Every operationId referenced was grepped out of
+  the published OpenAPI; none is invented. Provider-published skills or an AGENTS.md were searched
+  for on the docs host and in the newscred GitHub organization and none exist, so these are
+  generated rather than harvested.
+skills:
+- name: newscred-upload-asset-to-library
+  file: newscred-upload-asset-to-library.md
+  flow: Get an upload URL (or run multipart), PUT the bytes, register the library asset, set fields and permissions.
+  operations: 13
+- name: newscred-run-content-task-workflow
+  file: newscred-run-content-task-workflow.md
+  flow: Work request -> task -> assets and drafts -> workflow substeps -> brand compliance -> publishing intent.
+  operations: 23
+- name: newscred-subscribe-to-cmp-webhooks
+  file: newscred-subscribe-to-cmp-webhooks.md
+  flow: Register a webhook, validate Callback-Secret, ack within 30s, process at-least-once and out-of-order events by re-reading via REST.
+  operations: 7

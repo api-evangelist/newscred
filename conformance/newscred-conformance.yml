@@ -1,0 +1,93 @@
+generated: '2026-08-26'
+method: searched
+source: https://docs.developers.optimizely.com/content-marketing-platform/docs/authentication-1
+derived_from: openapi/newscred-cmp-open-api-openapi.json
+api: Optimizely CMP Open API v3
+standards:
+- id: oauth2
+  conforms: true
+  evidence: >-
+    components.securitySchemes.OAuth2 declares type oauth2 with authorizationCode
+    (authorizationUrl https://accounts.cmp.optimizely.com/o/oauth2/v1/auth, tokenUrl
+    .../o/oauth2/v1/token) and clientCredentials flows; the docs cite RFC 6749 s4.1 and s4.4 by
+    URL. Global security applies OAuth2 to the whole API.
+  source: openapi/newscred-cmp-open-api-openapi.json
+- id: oidc
+  conforms: partial
+  evidence: >-
+    The openid and profile scopes are offered and a userinfo endpoint
+    (https://accounts.cmp.optimizely.com/o/oauth2/v1/userinfo) is documented, which is OIDC-shaped.
+    But no openIdConnect securityScheme is declared, no openIdConnectUrl is given, and
+    /.well-known/openid-configuration returns 404 on accounts.cmp.optimizely.com — so an OIDC
+    client cannot discover the provider. Scored partial, not conformant.
+  source: well-known/newscred-well-known.yml
+- id: rfc9457
+  conforms: false
+  evidence: >-
+    Errors use a custom envelope (components.schemas.Error = {message, errors}) served as
+    application/json. No application/problem+json media type appears in any of 161 declared
+    response bodies, and neither "problem" nor "rfc9457" appears in the contract.
+  source: openapi/newscred-cmp-open-api-openapi.json
+- id: json:api
+  conforms: false
+  evidence: No application/vnd.api+json media type and no JSON:API document structure; responses are a plain {data, pagination} envelope.
+  source: openapi/newscred-cmp-open-api-openapi.json
+- id: pagination
+  conforms: true
+  evidence: >-
+    Every collection returns a required {data[], pagination{next, previous}} envelope backed by
+    components.schemas.Pagination, with offset/page_size request parameters and server-rendered
+    absolute next/previous URLs.
+  source: openapi/newscred-cmp-open-api-openapi.json
+- id: idempotency
+  conforms: false
+  evidence: >-
+    No Idempotency-Key or equivalent request header exists in any of the 170 operations and none
+    is documented. See conventions/newscred-conventions.yml.
+  source: openapi/newscred-cmp-open-api-openapi.json
+- id: rfc8594
+  conforms: false
+  evidence: No Sunset or Deprecation response headers are declared or documented; no deprecation policy is published.
+  source: lifecycle/newscred-lifecycle.yml
+- id: webhooks
+  conforms: true
+  evidence: >-
+    43 documented events across 7 groups, with published delivery semantics (200/202 ack, 30s
+    timeout, exponential-backoff retry for up to three days, no ordering guarantee, at-least-once
+    delivery) and an optional shared secret echoed in the Callback-Secret header.
+  source: asyncapi/newscred-cmp-webhooks.yml
+- id: asyncapi
+  conforms: false
+  evidence: No AsyncAPI document is published for the webhook surface; the event catalog is prose only.
+  source: asyncapi/newscred-cmp-webhooks.yml
+- id: scim
+  conforms: false
+  evidence: >-
+    No SCIM schema URN, no /scim/v2 surface, and the string "scim" appears nowhere in the contract
+    or the documentation index, despite CMP shipping Users and Teams resources.
+  source: openapi/newscred-cmp-open-api-openapi.json
+domain_standards:
+  market: content marketing platform / marketing resource management / digital asset management
+  declared: []
+  note: >-
+    REWARD-ONLY CHECK, HONEST ZERO. The contract declares no domain standard for its market. Probed
+    for and did not find: SCIM schema URNs (user/team provisioning), OData $metadata, IPTC or XMP
+    embedded-metadata vocabularies (the obvious DAM candidates), Dublin Core, oEmbed as a served
+    surface, ActivityPub, and OpenRTB. The nearest thing to an interop standard in the surface is
+    GraphQL, and it is not native: the 2026-08-20 changelog added POST
+    /content-graphs/{cg_instance_id}/query, which PROXIES a GraphQL query to an Optimizely Graph
+    instance and returns the Graph response unchanged. Those two operations are not yet present in
+    the harvested spec snapshot. Nothing here is invented to fill the slot.
+compliance:
+  certifications: [SOC 2 Type 2, ISO 27001:2022, ISO 27017:2015, ISO 27018:2019, PCI DSS v4.0.1, TISAX, HIPAA]
+  cmp_in_scope:
+  - standard: SOC 2 Type 2
+    scope: >-
+      Explicitly listed as covering CMP alongside CMS, Commerce Connect, Web & Feature
+      Experimentation, Configured Commerce, ODP and Analytics.
+  note: >-
+    The ISO 27001/27017/27018 certificates are scoped on the trust center to CMS, Commerce Connect
+    and Web & Feature Experimentation Services — NOT to CMP. SOC 2 Type 2 is the attestation whose
+    published scope names CMP. Recorded precisely rather than rolled up.
+  source: https://www.optimizely.com/trust-center/compliance
+  detail: security/newscred-trust-center.yml

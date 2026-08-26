@@ -1,0 +1,33 @@
+generated: '2026-08-26'
+method: searched
+source: https://docs.developers.optimizely.com/content-marketing-platform/docs/authentication-1
+api: Optimizely CMP Open API v3
+sandbox_published: false
+console_or_playground: false
+note: >-
+  Newscred / Welcome / Optimizely CMP publishes NO sandbox, test mode, or hosted API console. There
+  is no test host, no separate test base URL, no test-vs-live key prefix, no fixture or trigger
+  tooling, and no time-simulation facility. The only mode switch anywhere in the developer surface
+  is on the OAuth app itself.
+modes:
+- name: app registration Mode
+  values: [Production, Development]
+  where: In-product, Admin > Apps and Webhooks > Register App
+  docs: https://docs.developers.optimizely.com/content-marketing-platform/docs/authentication-1
+  note: >-
+    Documented only as "the preset configuration of the app". The docs do not say that Development
+    mode routes to a separate environment, isolates data, relaxes limits, or produces test-only
+    records — so it must NOT be read as a sandbox. It selects app defaults, nothing more is stated.
+key_prefixes:
+  published: false
+  note: >-
+    Credentials are an OAuth client_id/client_secret pair and a UUID-shaped access_token. No
+    live/test prefix convention exists, so a consumer cannot tell from a credential which
+    environment it belongs to.
+test_data:
+  published: false
+  note: No test assets, test tasks, sample organization or seeded fixtures are published.
+implication: >-
+  Any integration or agent exercising CMP writes does so against the customer's real organization
+  data, with no idempotency key and no reversal operation. That combination is the single most
+  important operational fact about this API.
