@@ -36,51 +36,333 @@ tags:
 - Webhooks
 - Acquired
 apis:
-- name: Optimizely CMP Open API v3
-  description: >-
-    The current Newscred/Welcome content marketing platform REST API, shipping as the Optimizely CMP
-    Open API. 115 paths / 170 operations across Library, Uploader, Labels, Brand Compliance, Tasks,
-    Task Step, Campaigns, Publishing, Templates, Users, Work Requests, Structured Contents, Assets,
-    Events, Fields, Milestones, Teams, Settings and Workflows. OAuth 2.0 (authorization code +
-    client credentials) against accounts.cmp.optimizely.com.
-  humanURL: https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+- aid: newscred:newscred-assets-api
+  name: Newscred Assets API
+  description: The Assets API from Newscred — 1 operation(s) for assets.
+  humanURL: >-
+    https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
   baseURL: https://api.cmp.optimizely.com/v3
   tags:
-  - Content Marketing
-  - Digital Asset Management
-  - Workflow
+  - Assets
   properties:
   - type: OpenAPI
-    url: openapi/newscred-cmp-open-api-openapi.json
-  - type: Overlay
-    url: overlays/newscred-cmp-open-api-overlay.yaml
+    url: openapi/newscred-assets-api-openapi.yml
   - type: Webhooks
     url: asyncapi/newscred-cmp-webhooks.yml
   - type: Documentation
-    url: https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
-- name: Welcome Open API v3 (legacy)
-  description: >-
-    The prior-generation Newscred/Welcome Open API, published verbatim by the newscred GitHub
-    organization. 31 paths / 48 operations across Uploader, Library, Labels, Tasks, Campaigns, Users
-    and Settings. Its own description records the base-URL lineage: api.newscred.com/v3 ->
-    api.welcomesoftware.com/v3 from 28 March 2021. Still documented as functional; superseded by the
-    Optimizely CMP Open API.
-  humanURL: https://newscred.github.io/settings-ex-im-automation-sample/openapi.html
-  baseURL: https://api.welcomesoftware.com/v3
+    url: >-
+      https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
+- aid: newscred:newscred-brand-compliance-api
+  name: Newscred Brand Compliance API
+  description: The Brand Compliance API from Newscred — 2 operation(s) for brand compliance.
+  humanURL: >-
+    https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+  baseURL: https://api.cmp.optimizely.com/v3
   tags:
-  - Content Marketing
-  - Digital Asset Management
+  - Brand Compliance
   properties:
   - type: OpenAPI
-    url: openapi/newscred-welcome-open-api-openapi.yml
-  - type: Overlay
-    url: overlays/newscred-welcome-open-api-overlay.yaml
+    url: openapi/newscred-brand-compliance-api-openapi.yml
+  - type: Webhooks
+    url: asyncapi/newscred-cmp-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
+- aid: newscred:newscred-campaigns-api
+  name: Newscred Campaigns API
+  description: The Campaigns API from Newscred — 7 operation(s) for campaigns.
+  humanURL: >-
+    https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+  baseURL: https://api.cmp.optimizely.com/v3
+  tags:
+  - Campaigns
+  properties:
+  - type: OpenAPI
+    url: openapi/newscred-campaigns-api-openapi.yml
+  - type: Webhooks
+    url: asyncapi/newscred-cmp-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
+- aid: newscred:newscred-events-api
+  name: Newscred Events API
+  description: The Events API from Newscred — 3 operation(s) for events.
+  humanURL: >-
+    https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+  baseURL: https://api.cmp.optimizely.com/v3
+  tags:
+  - Events
+  properties:
+  - type: OpenAPI
+    url: openapi/newscred-events-api-openapi.yml
+  - type: Webhooks
+    url: asyncapi/newscred-cmp-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
+- aid: newscred:newscred-fields-api
+  name: Newscred Fields API
+  description: The Fields API from Newscred — 4 operation(s) for fields.
+  humanURL: >-
+    https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+  baseURL: https://api.cmp.optimizely.com/v3
+  tags:
+  - Fields
+  properties:
+  - type: OpenAPI
+    url: openapi/newscred-fields-api-openapi.yml
+  - type: Webhooks
+    url: asyncapi/newscred-cmp-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
+- aid: newscred:newscred-labels-api
+  name: Newscred Labels API
+  description: The Labels API from Newscred — 1 operation(s) for labels.
+  humanURL: >-
+    https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+  baseURL: https://api.cmp.optimizely.com/v3
+  tags:
+  - Labels
+  properties:
+  - type: OpenAPI
+    url: openapi/newscred-labels-api-openapi.yml
+  - type: Webhooks
+    url: asyncapi/newscred-cmp-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
+- aid: newscred:newscred-library-api
+  name: Newscred Library API
+  description: The Library API from Newscred — 24 operation(s) for library.
+  humanURL: >-
+    https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+  baseURL: https://api.cmp.optimizely.com/v3
+  tags:
+  - Library
+  properties:
+  - type: OpenAPI
+    url: openapi/newscred-library-api-openapi.yml
+  - type: Webhooks
+    url: asyncapi/newscred-cmp-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
+- aid: newscred:newscred-milestones-api
+  name: Newscred Milestones API
+  description: The Milestones API from Newscred — 2 operation(s) for milestones.
+  humanURL: >-
+    https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+  baseURL: https://api.cmp.optimizely.com/v3
+  tags:
+  - Milestones
+  properties:
+  - type: OpenAPI
+    url: openapi/newscred-milestones-api-openapi.yml
+  - type: Webhooks
+    url: asyncapi/newscred-cmp-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
+- aid: newscred:newscred-publishing-api
+  name: Newscred Publishing API
+  description: The Publishing API from Newscred — 4 operation(s) for publishing.
+  humanURL: >-
+    https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+  baseURL: https://api.cmp.optimizely.com/v3
+  tags:
+  - Publishing
+  properties:
+  - type: OpenAPI
+    url: openapi/newscred-publishing-api-openapi.yml
+  - type: Webhooks
+    url: asyncapi/newscred-cmp-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
+- aid: newscred:newscred-settings-api
+  name: Newscred Settings API
+  description: The Settings API from Newscred — 1 operation(s) for settings.
+  humanURL: >-
+    https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+  baseURL: https://api.cmp.optimizely.com/v3
+  tags:
+  - Settings
+  properties:
+  - type: OpenAPI
+    url: openapi/newscred-settings-api-openapi.yml
+  - type: Webhooks
+    url: asyncapi/newscred-cmp-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
+- aid: newscred:newscred-structured-contents-api
+  name: Newscred Structured Contents API
+  description: The Structured Contents API from Newscred — 11 operation(s) for structured contents.
+  humanURL: >-
+    https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+  baseURL: https://api.cmp.optimizely.com/v3
+  tags:
+  - Structured Contents
+  properties:
+  - type: OpenAPI
+    url: openapi/newscred-structured-contents-api-openapi.yml
+  - type: Webhooks
+    url: asyncapi/newscred-cmp-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
+- aid: newscred:newscred-task-step-api
+  name: Newscred Task Step API
+  description: The Task Step API from Newscred — 1 operation(s) for task step.
+  humanURL: >-
+    https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+  baseURL: https://api.cmp.optimizely.com/v3
+  tags:
+  - Task Step
+  properties:
+  - type: OpenAPI
+    url: openapi/newscred-task-step-api-openapi.yml
+  - type: Webhooks
+    url: asyncapi/newscred-cmp-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
+- aid: newscred:newscred-tasks-api
+  name: Newscred Tasks API
+  description: >-
+    Facilitates the integration of external systems with Optimizely CMP through the following use cases:
+
+    1. **External Work Management** – Use the endpoints to link Optimizely CMP with an external system
+    (such as Jira or Aha). The external system can send status updates back to Optimizely CMP so that
+    the Optimizely CMP user receives in-app updates for the status of the 'ticket' in the external system.
+
+    2. **External Document Approval** – (a.k.a. Marketing Legal Review) Use the endpoints to link Optimizely
+    CMP with an external system (such as Veeva PromoMats) to review, annotate, update, and approve marketing
+    assets through the external system. The approval status can be sent back to Optimizely CMP so that
+    the Optimizely CMP user receives in-app updates for the final approval status of the documents from
+    the external system.
+
+    For information on these use cases, contact Optimizely CMP Support.
+  humanURL: >-
+    https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+  baseURL: https://api.cmp.optimizely.com/v3
+  tags:
+  - Tasks
+  properties:
+  - type: OpenAPI
+    url: openapi/newscred-tasks-api-openapi.yml
+  - type: Webhooks
+    url: asyncapi/newscred-cmp-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
+- aid: newscred:newscred-teams-api
+  name: Newscred Teams API
+  description: The Teams API from Newscred — 2 operation(s) for teams.
+  humanURL: >-
+    https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+  baseURL: https://api.cmp.optimizely.com/v3
+  tags:
+  - Teams
+  properties:
+  - type: OpenAPI
+    url: openapi/newscred-teams-api-openapi.yml
+  - type: Webhooks
+    url: asyncapi/newscred-cmp-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
+- aid: newscred:newscred-templates-api
+  name: Newscred Templates API
+  description: The Templates API from Newscred — 2 operation(s) for templates.
+  humanURL: >-
+    https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+  baseURL: https://api.cmp.optimizely.com/v3
+  tags:
+  - Templates
+  properties:
+  - type: OpenAPI
+    url: openapi/newscred-templates-api-openapi.yml
+  - type: Webhooks
+    url: asyncapi/newscred-cmp-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
+- aid: newscred:newscred-uploader-api
+  name: Newscred Uploader API
+  description: The Uploader API from Newscred — 4 operation(s) for uploader.
+  humanURL: >-
+    https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+  baseURL: https://api.cmp.optimizely.com/v3
+  tags:
+  - Uploader
+  properties:
+  - type: OpenAPI
+    url: openapi/newscred-uploader-api-openapi.yml
+  - type: Webhooks
+    url: asyncapi/newscred-cmp-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
+- aid: newscred:newscred-users-api
+  name: Newscred Users API
+  description: The Users API from Newscred — 3 operation(s) for users.
+  humanURL: >-
+    https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+  baseURL: https://api.cmp.optimizely.com/v3
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/newscred-users-api-openapi.yml
+  - type: Webhooks
+    url: asyncapi/newscred-cmp-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
+- aid: newscred:newscred-work-requests-api
+  name: Newscred Work Requests API
+  description: The Work Requests API from Newscred — 13 operation(s) for work requests.
+  humanURL: >-
+    https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+  baseURL: https://api.cmp.optimizely.com/v3
+  tags:
+  - Work Requests
+  properties:
+  - type: OpenAPI
+    url: openapi/newscred-work-requests-api-openapi.yml
+  - type: Webhooks
+    url: asyncapi/newscred-cmp-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
+- aid: newscred:newscred-workflows-api
+  name: Newscred Workflows API
+  description: The Workflows API from Newscred — 2 operation(s) for workflows.
+  humanURL: >-
+    https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference
+  baseURL: https://api.cmp.optimizely.com/v3
+  tags:
+  - Workflows
+  properties:
+  - type: OpenAPI
+    url: openapi/newscred-workflows-api-openapi.yml
+  - type: Webhooks
+    url: asyncapi/newscred-cmp-webhooks.yml
+  - type: Documentation
+    url: >-
+      https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/newscred-cmp-open-api-overlay.yaml
+- type: Overlay
+  url: overlays/newscred-welcome-open-api-overlay.yaml
 - type: Security
   url: security/newscred-vulnerability-disclosure.yml
 - type: VulnerabilityDisclosure
