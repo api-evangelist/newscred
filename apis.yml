@@ -20,6 +20,18 @@ x-status-detail: >-
   NewsCred -> Welcome (2020 rebrand) -> acquired by Optimizely, December 2021; the product ships as
   Optimizely Content Marketing Platform (CMP). Profiled here under its originating brand; the parent
   company is profiled separately at all/optimizely.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 specificationVersion: '0.20'
 created: '2026-08-26'
 modified: '2026-08-26'
