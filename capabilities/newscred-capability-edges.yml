@@ -1,0 +1,50 @@
+slug: newscred
+provider: Newscred
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Media, Entertainment & Telecom Content
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 3
+edges:
+- tag: Brand Compliance
+  spec_file: newscred-brand-compliance-api-openapi.yml
+  capability_id: BC-400.20
+  capability_id_l1: BC-400
+  capability_name: Brand Management
+  confidence: 0.75
+  evidence: GET /brand-compliance/categories listBrandComplianceCategories; PUT /tasks/{task_id}/assets/{asset_id}/drafts/{draft_id}/brand-compliance;
+    schema TaskAssetDraftBrandComplianceResponse
+  reason: Operations score and record brand-compliance categories against content drafts in a marketing
+    content platform — brand governance over marketing output, which sits under Brand Management. Some
+    chance it is better read as editorial/quality review, hence not top confidence.
+- tag: Campaigns
+  spec_file: newscred-campaigns-api-openapi.yml
+  capability_id: BC-400
+  capability_id_l1: BC-400
+  capability_name: Marketing Management
+  confidence: 0.75
+  evidence: GET /campaigns/{id}/brief getCampaignBrief; POST /campaigns/{id}/comments addCommentToCampaign;
+    schema CampaignListResponseItem
+  reason: Marketing campaign records with briefs, custom fields, attachments and comments in an enterprise
+    Content Marketing Platform — clearly Marketing Management, but the surface is generic campaign CRUD
+    so it does not name whether it is demand generation, marketing operations or content marketing; L2
+    withheld.
+- tag: Library
+  spec_file: newscred-library-api-openapi.yml
+  capability_id: BC-3710
+  capability_id_l1: BC-3710
+  capability_name: Media Asset Management
+  confidence: 0.75
+  evidence: 'GET /assets  listAssets; POST /assets  createAsset; GET /asset-lineages  listAssetLineages;
+    GET /assets/{asset_id}/fields  listAssetFields; schemas: DetailedAssetRenditionResponse, LibraryAssetVersionResponse,
+    LibraryRawFile'
+  reason: 'The operations are a digital asset library: create/list assets, asset field (metadata) authoring,
+    asset lineage/version records, renditions and permissions. That is Media Asset Management at L1; the
+    surface spans ingest, metadata, versioning and renditions so no single L2 is named clearly enough.'
