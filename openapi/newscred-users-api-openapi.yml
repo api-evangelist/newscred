@@ -1,0 +1,446 @@
+openapi: 3.2.0
+info:
+  title: Newscred Users API
+  version: V3
+  description: 'Operations tagged Users across 2 of this provider''s published API definitions: newscred-cmp-open-api-openapi.json, newscred-welcome-open-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- description: v3 version of Optimizely CMP Open API
+  url: https://api.cmp.optimizely.com/v3
+- url: https://api.welcomesoftware.com/v3
+  description: v3 version of _Welcome_ Open API
+tags:
+- name: Users
+paths:
+  /userlist:
+    get:
+      description: Get list of users.
+      operationId: listUsers
+      parameters:
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/page_size'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserListResponse'
+          description: List of users
+        '400':
+          $ref: '#/components/responses/ClientError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      summary: GET /userlist
+      tags:
+      - Users
+      security:
+      - OAuth2:
+        - openid
+        - profile
+        - offline_access
+    servers:
+    - description: v3 version of Optimizely CMP Open API
+      url: https://api.cmp.optimizely.com/v3
+  /users:
+    get:
+      description: Find a user by email address
+      operationId: findUserByEmail
+      parameters:
+      - example: john.doe@example.com
+        in: query
+        name: email
+        required: true
+        schema:
+          description: Email address of the user
+          type: string
+      responses:
+        '302':
+          description: Redirect to the discovered user
+          headers:
+            Location:
+              description: URL of the discovered user
+              example: https://api.cmp.optimizely.com/v3/users/5fe4925ef8a9378056bf4e37
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/ClientError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      summary: GET /users
+      tags:
+      - Users
+      security:
+      - OAuth2:
+        - openid
+        - profile
+        - offline_access
+    servers:
+    - description: v3 version of Optimizely CMP Open API
+      url: https://api.cmp.optimizely.com/v3
+  /users/{id}:
+    get:
+      description: Get a user
+      operationId: getUser
+      parameters:
+      - example: 5fe4925ef8a9378056bf4e37
+        in: path
+        name: id
+        required: true
+        schema:
+          description: Unique identifier of the user
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+          description: Fetched user
+        '400':
+          $ref: '#/components/responses/ClientError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      summary: GET /users/{id}
+      tags:
+      - Users
+      security:
+      - OAuth2:
+        - openid
+        - profile
+        - offline_access
+    servers:
+    - description: v3 version of Optimizely CMP Open API
+      url: https://api.cmp.optimizely.com/v3
+components:
+  responses:
+    Forbidden:
+      content:
+        application/json:
+          example:
+            message: You do not have the permission to perform this operation
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Permission error
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
+    ClientError:
+      content:
+        application/json:
+          example:
+            message: 'Unsupported arguments: a,b,c'
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client error
+    Unauthorized:
+      content:
+        application/json:
+          example:
+            message: Unauthorized
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Authorization error
+    Forbidden_2:
+      description: Permission error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: User does not have the permission to perform this operation
+  parameters:
+    page_size:
+      description: Number of results to return per page
+      example: 15
+      in: query
+      name: page_size
+      schema:
+        default: 10
+        maximum: 100
+        minimum: 1
+        type: integer
+    offset:
+      description: Starting index of results (zero indexed)
+      example: 5
+      in: query
+      name: offset
+      schema:
+        default: 0
+        minimum: 0
+        type: integer
+  schemas:
+    UserListResponse:
+      additionalProperties: false
+      properties:
+        data:
+          description: List of users
+          items:
+            allOf:
+            - $ref: '#/components/schemas/UserListResponseItem'
+            - properties:
+                links:
+                  description: Meta links
+                  properties:
+                    self:
+                      description: URL of the user
+                      example: https://api.cmp.optimizely.com/v3/users/9119a313057e401189407116fcd3aa24
+                      type: string
+                  required:
+                  - self
+                  type: object
+              required:
+              - links
+              type: object
+          type: array
+        pagination:
+          allOf:
+          - $ref: '#/components/schemas/Pagination'
+          - properties:
+              next:
+                example: https://api.cmp.optimizely.com/v3/users?offset=10&page_size=10
+                type:
+                - string
+                - 'null'
+            type: object
+      required:
+      - data
+      - pagination
+      type: object
+    UserListResponseItem:
+      additionalProperties: false
+      properties:
+        first_name:
+          description: First name of the user
+          example: John
+          type: string
+        full_name:
+          description: Full name of the user
+          example: John Doe
+          type: string
+        id:
+          description: Unique identifier of the user
+          example: 5fe4925ef8a9378056bf4e37
+          type: string
+        image_url:
+          description: URL of the profile picture of the user - null if the user has not provided an image
+          example: https://images.cmp.optimizely.com/6a485f72ba424f9397c71ddf0cfb8f59
+          type:
+          - string
+          - 'null'
+        last_name:
+          description: Last name of the user
+          example: Doe
+          type: string
+        links:
+          additionalProperties: false
+          description: Meta links
+          properties:
+            self:
+              description: URL of the user
+              example: https://api.cmp.optimizely.com/v3/users/5fe4925ef8a9378056bf4e37
+              type: string
+          required:
+          - self
+          type: object
+        roles:
+          description: List of roles assigned to the user
+          items:
+            additionalProperties: false
+            properties:
+              name:
+                description: Name of the role
+                example: Creator
+                type: string
+            required:
+            - name
+            type: object
+          type: array
+      required:
+      - id
+      - roles
+      - first_name
+      - last_name
+      - full_name
+      - image_url
+      - links
+      type: object
+    Pagination:
+      additionalProperties: false
+      description: Pagination related information
+      properties:
+        next:
+          description: URL to the next page
+          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
+          type:
+          - string
+          - 'null'
+        previous:
+          description: URL to the previous page
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - next
+      - previous
+      type: object
+    UserResponse:
+      additionalProperties: false
+      properties:
+        email:
+          description: Email of the user – null unless the application is configured to expose the user email
+          example: john.doe@example.com
+          type:
+          - string
+          - 'null'
+        first_name:
+          description: First name of the user
+          example: John
+          type: string
+        full_name:
+          description: Full name of the user
+          example: John Doe
+          type: string
+        id:
+          description: Unique identifier of the user
+          example: 5fe4925ef8a9378056bf4e37
+          type: string
+        image_url:
+          description: URL of the profile picture of the user – null if the user has not provided an image
+          example: https://images.cmp.optimizely.com/6a485f72ba424f9397c71ddf0cfb8f59
+          type:
+          - string
+          - 'null'
+        last_name:
+          description: Last name of the user
+          example: Doe
+          type: string
+        links:
+          additionalProperties: false
+          description: Meta links
+          properties:
+            self:
+              description: URL of the user
+              example: https://api.cmp.optimizely.com/v3/users/5fe4925ef8a9378056bf4e37
+              type: string
+          type: object
+      required:
+      - id
+      - first_name
+      - last_name
+      - full_name
+      - email
+      - image_url
+      type: object
+    Error:
+      additionalProperties: true
+      description: Error payload
+      properties:
+        errors:
+          additionalProperties: true
+          description: Additional information
+          properties: {}
+          type: object
+        message:
+          description: Message describing the error
+          example: Not found
+          type: string
+      required:
+      - message
+      type: object
+    UserResponse_2:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the user
+          example: 5fe4925ef8a9378056bf4e37
+        first_name:
+          type: string
+          description: First name of the user
+          example: John
+        last_name:
+          type: string
+          description: Last name of the user
+          example: Doe
+        full_name:
+          type: string
+          description: Full name of the user
+          example: John Doe
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email of the user, null unless the application is configured expose user email
+          example: john.doe@example.com
+        links:
+          type: object
+          additionalProperties: false
+          description: Meta links
+          properties:
+            self:
+              type: string
+              description: URL of the user
+              example: https://api.welcomesoftware.com/v3/users/5fe4925ef8a9378056bf4e37
+      required:
+      - id
+      - first_name
+      - last_name
+      - full_name
+      - email
+  securitySchemes:
+    OAuth2:
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/auth
+          scopes:
+            offline_access: Grants the ability to refresh access_token using the refresh token even when user is not present (not logged in).
+            openid: Grants the ability to receive a unique identifier for the user.
+            profile: Grants access to user profile information.
+          tokenUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/token
+        clientCredentials:
+          scopes: {}
+          tokenUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/token
+      type: oauth2
+x-refined-from:
+- newscred-cmp-open-api-openapi.json
+- newscred-welcome-open-api-openapi.yml
+x-tagGroups:
+- name: API
+  tags:
+  - Uploader
+  - Library
+  - Labels
+  - Brand Compliance
+  - Tasks
+  - Task Step
+  - Campaigns
+  - Publishing
+  - Templates
+  - Users
+  - Work Requests
+  - Structured Contents
+  - Assets
+  - Milestones
+  - Teams
+  - Settings
+  - Workflows
+  - Fields
+  - Events

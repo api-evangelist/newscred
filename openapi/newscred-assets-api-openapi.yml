@@ -1,0 +1,141 @@
+openapi: 3.2.0
+info:
+  title: Optimizely CMP Open API Documentation Assets API
+  version: V3
+servers:
+- description: v3 version of Optimizely CMP Open API
+  url: https://api.cmp.optimizely.com/v3
+security:
+- OAuth2:
+  - openid
+  - profile
+  - offline_access
+tags:
+- name: Assets
+paths:
+  /asset-urls/{asset_id}:
+    get:
+      description: Find URL of an asset by ID
+      operationId: getAssetUrl
+      parameters:
+      - in: path
+        name: asset_id
+        required: true
+        schema:
+          description: Unique identifier of the asset
+          type: string
+      responses:
+        '302':
+          description: Redirect to the discovered asset URL
+          headers:
+            Location:
+              description: URL of the discovered asset
+              example: https://api.cmp.optimizely.com/v3/raw-files/5fe4925ef8a9378056bf4e37
+              schema:
+                type: string
+            X-Resource-Location:
+              description: Location of the asset
+              example: library
+              schema:
+                enum:
+                - library
+                - task
+                type: string
+        '400':
+          $ref: '#/components/responses/ClientError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      summary: GET /asset-urls/{asset_id}
+      tags:
+      - Assets
+components:
+  responses:
+    Forbidden:
+      content:
+        application/json:
+          example:
+            message: You do not have the permission to perform this operation
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Permission error
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
+    ClientError:
+      content:
+        application/json:
+          example:
+            message: 'Unsupported arguments: a,b,c'
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client error
+    Unauthorized:
+      content:
+        application/json:
+          example:
+            message: Unauthorized
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Authorization error
+  schemas:
+    Error:
+      additionalProperties: true
+      description: Error payload
+      properties:
+        errors:
+          additionalProperties: true
+          description: Additional information
+          properties: {}
+          type: object
+        message:
+          description: Message describing the error
+          example: Not found
+          type: string
+      required:
+      - message
+      type: object
+  securitySchemes:
+    OAuth2:
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/auth
+          scopes:
+            offline_access: Grants the ability to refresh access_token using the refresh token even when user is not present (not logged in).
+            openid: Grants the ability to receive a unique identifier for the user.
+            profile: Grants access to user profile information.
+          tokenUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/token
+        clientCredentials:
+          scopes: {}
+          tokenUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/token
+      type: oauth2
+x-tagGroups:
+- name: API
+  tags:
+  - Uploader
+  - Library
+  - Labels
+  - Brand Compliance
+  - Tasks
+  - Task Step
+  - Campaigns
+  - Publishing
+  - Templates
+  - Users
+  - Work Requests
+  - Structured Contents
+  - Assets
+  - Milestones
+  - Teams
+  - Settings
+  - Workflows
+  - Fields
+  - Events

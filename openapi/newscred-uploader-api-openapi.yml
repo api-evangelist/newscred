@@ -1,0 +1,433 @@
+openapi: 3.2.0
+info:
+  title: Newscred Uploader API
+  version: V3
+  description: 'Operations tagged Uploader across 2 of this provider''s published API definitions: newscred-cmp-open-api-openapi.json, newscred-welcome-open-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- description: v3 version of Optimizely CMP Open API
+  url: https://api.cmp.optimizely.com/v3
+- url: https://api.welcomesoftware.com/v3
+  description: v3 version of _Welcome_ Open API
+tags:
+- name: Uploader
+paths:
+  /multipart-uploads:
+    post:
+      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Create pre-signed URLs for multipart upload of large files
+      operationId: createMultipartUpload
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                file_size:
+                  description: Size of the file in bytes
+                  example: 104857600
+                  maximum: 5497558138880
+                  minimum: 1
+                  type: integer
+                part_size:
+                  default: 5242880
+                  description: The size of each part of the file to be uploaded. The size of the last part can be smaller and hence can be ignored. `upload_part_count` is calculated based on `file_size` and `part_size`. **The maximum allowed `upload_part_count` is 10000.** So use larger `part_size` for larger files to keep `upload_part_count` under 10000.
+                  example: 6000000
+                  maximum: 5368709120
+                  minimum: 5242880
+                  type: integer
+              required:
+              - file_size
+              type: object
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  expires_at:
+                    description: Expiration time of the upload URLs
+                    example: '2025-03-03T12:00:00Z'
+                    format: date-time
+                    type: string
+                  id:
+                    description: ID of the multipart upload
+                    example: abcdef1234567890
+                    type: string
+                  links:
+                    properties:
+                      complete:
+                        description: URL to complete the upload
+                        example: https://api.cmp.optimizely.com/v3/multipart-uploads/abcdef1234567890/complete
+                        format: uri
+                        type: string
+                      status:
+                        description: URL to check the upload status
+                        example: https://api.cmp.optimizely.com/v3/multipart-uploads/abcdef1234567890/status
+                        format: uri
+                        type: string
+                    required:
+                    - complete
+                    - status
+                    type: object
+                  upload_part_count:
+                    description: Number of parts for the upload
+                    example: 10
+                    type: integer
+                  upload_part_urls:
+                    description: Array of pre-signed URLs for each part. **Each file part must be uploaded to the URL using PUT requests following the order of the URLs**
+                    example:
+                    - https://s3.amazonaws.com/xyz/abcdef1234567890/0
+                    - https://s3.amazonaws.com/xyz/abcdef1234567890/1
+                    items:
+                      format: uri
+                      type: string
+                    type: array
+                required:
+                - id
+                - expires_at
+                - upload_part_count
+                - upload_part_urls
+                - links
+                type: object
+          description: Successful operation
+          headers:
+            Content-Encoding:
+              example: gzip
+              schema:
+                description: Response is always gzip compressed
+                enum:
+                - gzip
+                type: string
+        '400':
+          $ref: '#/components/responses/ClientError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      summary: POST /v3/multipart-uploads
+      tags:
+      - Uploader
+      security:
+      - OAuth2:
+        - openid
+        - profile
+        - offline_access
+    servers:
+    - description: v3 version of Optimizely CMP Open API
+      url: https://api.cmp.optimizely.com/v3
+  /multipart-uploads/{id}/complete:
+    post:
+      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Initiate completion of a multipart upload after all parts have been uploaded
+      operationId: completeMultipartUpload
+      parameters:
+      - description: ID of the multipart upload to complete
+        example: abcdef1234567890
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                properties:
+                  key:
+                    description: Unique identifier of the file combining all parts. **This key will be needed for various file / attachment addition to different CMP resources using endpoints e.g. `POST /v3/assets`, `POST /v3/campaigns/{id}/attachments` etc.**
+                    example: ce8995aea58b11ea8cd90242ac120005/abcdef1234567890
+                    type: string
+                  links:
+                    properties:
+                      status:
+                        description: URL to check upload status
+                        example: https://api.cmp.optimizely.com/v3/multipart-uploads/abcdef1234567890/status
+                        format: uri
+                        type: string
+                    required:
+                    - status
+                    type: object
+                required:
+                - key
+                - links
+                type: object
+          description: Upload completion initiated successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      summary: POST /v3/multipart-uploads/{id}/complete
+      tags:
+      - Uploader
+      security:
+      - OAuth2:
+        - openid
+        - profile
+        - offline_access
+    servers:
+    - description: v3 version of Optimizely CMP Open API
+      url: https://api.cmp.optimizely.com/v3
+  /multipart-uploads/{id}/status:
+    get:
+      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Retrieve the current status of a multipart upload
+      operationId: getMultipartUploadStatus
+      parameters:
+      - description: ID of the multipart upload to check status for
+        example: abcdef1234567890
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  expires_at:
+                    description: Expiration time of the upload
+                    example: '2025-03-03T12:00:00Z'
+                    format: date-time
+                    type: string
+                  id:
+                    description: ID of the multipart upload
+                    example: abcdef1234567890
+                    type: string
+                  key:
+                    description: Unique identifier of the file combining all parts. **This key will be needed for various file / attachment addition to different CMP resources using endpoints e.g. `POST /v3/assets`, `POST /v3/campaigns/{id}/attachments` etc.**
+                    example: ce8995aea58b11ea8cd90242ac120005/abcdef1234567890
+                    type: string
+                  links:
+                    properties:
+                      self:
+                        description: URL to this status endpoint
+                        example: https://api.cmp.optimizely.com/v3/multipart-uploads/abcdef1234567890/status
+                        format: uri
+                        type: string
+                    required:
+                    - self
+                    type: object
+                  status:
+                    description: Current status of the upload
+                    enum:
+                    - UPLOAD_COMPLETION_NOT_STARTED
+                    - UPLOAD_COMPLETION_IN_PROGRESS
+                    - UPLOAD_COMPLETION_SUCCEEDED
+                    - UPLOAD_COMPLETION_FAILED
+                    example: UPLOAD_COMPLETION_IN_PROGRESS
+                    type: string
+                  status_message:
+                    description: Detailed status message
+                    example: Some error message related to the status
+                    type:
+                    - string
+                    - 'null'
+                required:
+                - id
+                - key
+                - status
+                - status_message
+                - expires_at
+                - links
+                type: object
+          description: Successfully retrieved upload status
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      summary: GET /v3/multipart-uploads/{id}/status
+      tags:
+      - Uploader
+      security:
+      - OAuth2:
+        - openid
+        - profile
+        - offline_access
+    servers:
+    - description: v3 version of Optimizely CMP Open API
+      url: https://api.cmp.optimizely.com/v3
+  /upload-url:
+    get:
+      description: Get a presigned URL and related meta fields to upload a file. **The validity time for this URL is 60 minutes**.
+      operationId: getUploadUrl
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties: false
+                properties:
+                  upload_meta_fields:
+                    additionalProperties: false
+                    description: Related meta fields to upload a file. **Items within this field must be sent along as paylod of the POST request, along with the file, to the presigned upload URL**
+                    properties:
+                      key:
+                        description: Unique identifier of the file. **This key will be needed for various file / attachment addition to different CMP resources using endpoints e.g. `POST /v3/assets`, `POST /v3/campaigns/{id}/attachments` etc.**
+                        example: ce8995aea58b11ea8cd90242ac120005
+                        type: string
+                      policy:
+                        example: eyJleHBpcmF0aW9uIjogIjIwMjAtMDYtMDNUMTY6MTc6NTbbbbbbImNvbmRpdGlvbnMiOiBbeyJidWNrZXQiOiAibmV3c2NyZWQtY21wLWZpbGVzIn0sIHsia2V5IjogIjY3Y2NhMzcxYTVhZDExZWFiNDNhMGExMjlmMDhlZWQ5In0sIHsieC1hbXotYWxnb3JpdGhtIjogIkFXUzQtSE1BQy1TSEEyNTYifSwgeyJ4LWFtei1jcmVkZW50aWFsIjogIkFTSUFVTlVMQkwzV082RDdSWkZILzIwMjAwNjAzL3VzLWVhc3QtMS9zMy9hd3M0X3JlcXVlc3QifSwgeyJ4LWFtei1kYXRlIjogIjIwMjAwNjAzVDE1MTc1N1oifSwgeyJ4LWFtei1zZWN1cml0eS10b2tlbiI6ICJJUW9KYjNKcFoybHVYMlZqRUE4YUNYVnpMV1ZoYzNRdE1TSkhNRVVDSUQrc2FrelZIK05zN0Z4UmtsaW9CZFdldjdZRXlIcHBoVjEyNnRsL0ZadjNBaUVBODFOV1l5TUt1L0UvZ1FyaUlhaVhMaXpxSFFuNnlxTWlWSzQzeU9xYTUaaaaaaU1JZHhBQUdnd3pNRFF4TmpBMU16QXhOVFlpRERxMlN3dVJTR2ZGL2hGRXpDcVJBMlo4NmpkRzNQczMzY3c5bFpFeVBpbmdWSnV0WUQ0RXZuU291NFR1NG9WaGhEZUwyS0QxdFREZmMrNHJmVWRMQ2Y1SWpzb3VRYldMekIzczRXZ2xMQUJFOFJ0VUM5K0o1bVpJUTlYNzJVa0xOUjA0UURpVlliSjdxNS95S25VNUFSZWUzQXdqVHp3UWZPS3dsTnRFODYyVWo4MXlWbDhMdS81d3kwaU5hZFpvbkZPcVBONldJWURpdi9MVzlLKzhWNjRNS2E5bDhtcG1kVll3RWJ2dTRiMENJVFIxQ0tjUHlzVkFNODBKdnZ0aklvQTZXc3RDcWxiM0ZHZEFGVmlnaDdId3JKL3greFNZVU5YVzFvaFNlUExDNXFPSCtoZ2ZqRFVOSDMvbXhEV2V4dWhQbDFGSjF6VlpZQzBMY2U0Y1F6dEtPbTgzZFBqcWI4a09pQVBUWVB3MGFmYnl0QUQyVE8vTmhZdHlvU1BzL0xWS1FYWXhyYk5MZ3N6azRMUjdLeUEydlA5NkJRMll6aVhnWDhTTm13bklDcWRiY2dzZitvNnBWOXRlTlJIczdIS3N2Qm9HYVFESTVhUDQrcmQ1K0h0aWM3RUZqSDlDUkk1bnBpL3cvTVlodkc0dXljWDR4cEJSeE5iSURWbFpuYTBEaUkvVkxmV3JjOWtkUFBhdm10QVhtVHR1U2c4aFFVMnNzMSt0dEJqaE1NRGkzdllGT3VzQnJEMDMyc1BlMWx0QUNRSzlVQUxEUmFYT2VIWjNXbThTVjZlMTErWVhnd3JKZkloQlp2a053OGxHdkRuN2FSK2hXUkpPazljY3pHOC9DTzRqZk8xVlpkZ3N2YU5PaEhpc01sQXVOMVJXallXUGJWRkRoajV3ekZ0OTQrcmJwdFd3dk9vamtXVElUM0o5SWtSNTF6SWJhc1VqTW4rOHRiSjFJbHJnWVFOaDVaaUVPTGZ1bFVHZWl1L2xXdERFbFhKUy9sS0pUTnV1YU1DRnU0NnBocTlvVE9EMWtmSVYrUEFxZEZYV2xQbVZKK3lXeGRLellSV1creDdERjJ6dnZmZm1nc0JBWU01eDh6aEJ3YWIrSXkvTGR6eWdQVUFnaTFTUE9oSktFRjNBejU4aVArdGFDbUxhdmo5cGFRPT0ifV19
+                        type: string
+                      x-amz-algorithm:
+                        example: AWS4-HMAC-SHA256
+                        type: string
+                      x-amz-credential:
+                        example: REDACTED_AWS_ACCESS_KEY_ID/20343603/us-east-1/s3/aws4_request
+                        type: string
+                      x-amz-date:
+                        example: 20200603T151757Z
+                        type: string
+                      x-amz-security-token:
+                        example: IQoJb3JpZ2luX2VjEA8ccccccWVhc3QtMSJHMEUCID+sakzVH+Ns7FxRklioBdWev7YEyHpphV126tl/FZv3AiEA81NWYyMKu/E/gQriIaiXLizqHQn6yqMiVK43yOqa52AqtAMIdxAAGgwzMDQxNjA1MzAxNTYiDDq2SwuRSGfFddddddqRA2Z86jdG3Ps33cw9lZEyPingVJutYD4EvnSou4Tu4oVhhDeL2KD1tTDfc+4rfUdLCf5IjsouQbWLzB3s4WglLABE8RtUC9+J5mZIQ9X72UkLNR04QDiVYbJ7q5/yKnU5ARee3AwjTzwQfOKwlNtE862Uj81yVl8Lu/5wy0iNadZonFOqPN6WIYDiv/LW9K+8V64MKa9l8mpmdVYwEbvu4b0CITR1CKcPysVAM80JvvtjIoA6WstCqlb3FGdAFVigh7HwrJ/x+xSYUNXW1ohSePLC5qOH+hgfjDUNH3/mxDWexuhPl1FJ1zVZYC0Lce4cQztKOm83dPjqb8kOiAPTYPw0afbytAD2TO/NhYtyoSPs/LVKQXYxrbNLgszk4LR7KyA2vP96BQ2YziXgX8SNmwnICqdbcgsf+o6pV9teNRHs7HKsvBoGaQDI5aP4+rd5+Htic7EFjH9CRI5npi/w/MYhvG4uycX4xpBRxNbIDVlZna0DiI/VLfWrc9kdPPavmtAXmTtuSg8hQU2ss1+ttBjhMMDi3vYFOusBrD032sPe1ltACQK9UALDRaXOeHZ3Wm8SV6e11+YXgwrJfIhBZvkNw8lGvDn7aR+hWRJOk9cczG8/CO4jfO1VZdgsvaNOhHisMlAuN1RWjYWPbVFDhj5wzFt94+rbptWwvOojkWTIT3J9IkR51zIbasUjMn+8tbJ1IlrgYQNh5ZiEOLfulUGeiu/lWtDElXJS/lKJTNuuaMCFu46phq9oTOD1kfIV+PAqdFXWlPmVJ+yWxdKzYRWW+x7DF2zvvffmgsBAYM5x8zhBwab+Iy/LdzygPUAgi1SPOhJKEF3Az58iP+taCmLavj9paQ==
+                        type: string
+                      x-amz-signature:
+                        example: 0e67ede744d4aed62aaaaaa8e87648b3e98a3e611ccccccc89963bcf70bd02f9
+                        type: string
+                    required:
+                    - key
+                    - policy
+                    - x-amz-algorithm
+                    - x-amz-credential
+                    - x-amz-date
+                    - x-amz-signature
+                    type: object
+                  url:
+                    description: Presigned URL to use for uploading a file with an **HTTP POST** request as `multipart/form-data`
+                    example: https://cmp-files.s3-accelerate.amazonaws.com/
+                    type: string
+                required:
+                - url
+                - upload_meta_fields
+                type: object
+          description: Fetched presigned upload URL and related meta fields
+        '400':
+          $ref: '#/components/responses/ClientError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      summary: GET /upload-url
+      tags:
+      - Uploader
+      security:
+      - OAuth2:
+        - openid
+        - profile
+        - offline_access
+    servers:
+    - description: v3 version of Optimizely CMP Open API
+      url: https://api.cmp.optimizely.com/v3
+components:
+  responses:
+    Forbidden:
+      content:
+        application/json:
+          example:
+            message: You do not have the permission to perform this operation
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Permission error
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
+    ClientError:
+      content:
+        application/json:
+          example:
+            message: 'Unsupported arguments: a,b,c'
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client error
+    UnprocessableEntity:
+      content:
+        application/json:
+          example:
+            message: Resource cannot be processed
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Unprocessable entity error
+    Unauthorized:
+      content:
+        application/json:
+          example:
+            message: Unauthorized
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Authorization error
+    Forbidden_2:
+      description: Permission error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: User does not have the permission to perform this operation
+  schemas:
+    Error:
+      additionalProperties: true
+      description: Error payload
+      properties:
+        errors:
+          additionalProperties: true
+          description: Additional information
+          properties: {}
+          type: object
+        message:
+          description: Message describing the error
+          example: Not found
+          type: string
+      required:
+      - message
+      type: object
+  securitySchemes:
+    OAuth2:
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/auth
+          scopes:
+            offline_access: Grants the ability to refresh access_token using the refresh token even when user is not present (not logged in).
+            openid: Grants the ability to receive a unique identifier for the user.
+            profile: Grants access to user profile information.
+          tokenUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/token
+        clientCredentials:
+          scopes: {}
+          tokenUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/token
+      type: oauth2
+x-refined-from:
+- newscred-cmp-open-api-openapi.json
+- newscred-welcome-open-api-openapi.yml
+x-tagGroups:
+- name: API
+  tags:
+  - Uploader
+  - Library
+  - Labels
+  - Brand Compliance
+  - Tasks
+  - Task Step
+  - Campaigns
+  - Publishing
+  - Templates
+  - Users
+  - Work Requests
+  - Structured Contents
+  - Assets
+  - Milestones
+  - Teams
+  - Settings
+  - Workflows
+  - Fields
+  - Events

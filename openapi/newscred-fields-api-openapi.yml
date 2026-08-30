@@ -1,0 +1,958 @@
+openapi: 3.2.0
+info:
+  title: Optimizely CMP Open API Documentation Fields API
+  version: V3
+servers:
+- description: v3 version of Optimizely CMP Open API
+  url: https://api.cmp.optimizely.com/v3
+security:
+- OAuth2:
+  - openid
+  - profile
+  - offline_access
+tags:
+- name: Fields
+paths:
+  /fields:
+    get:
+      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Get the list of fields of an Organization.
+      operationId: listFields
+      parameters:
+      - example: 12p5ca474ba9i7cc92y164aa7
+        in: query
+        name: ids
+        schema:
+          description: Unique identifier of the field. Can be appended multiple times, such as `ids=fieldId1&ids=fieldId2`
+          type: string
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/page_size'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties: false
+                properties:
+                  data:
+                    description: List of fields
+                    items:
+                      discriminator:
+                        mapping:
+                          checkbox: '#/components/schemas/CheckboxAndRadioTypeSettingsFieldResponse'
+                          currency_number: '#/components/schemas/CurrencyNumberTypeSettingsFieldResponse'
+                          date: '#/components/schemas/BaseSettingsFieldsResponse'
+                          dropdown: '#/components/schemas/DropdownTypeSettingsFieldResponse'
+                          image: '#/components/schemas/BaseSettingsFieldsResponse'
+                          label: '#/components/schemas/LabelTypeSettingsFieldResponse'
+                          percentage_number: '#/components/schemas/GenericNumberTypeSettingsFieldResponse'
+                          radio_button: '#/components/schemas/CheckboxAndRadioTypeSettingsFieldResponse'
+                          rich_text: '#/components/schemas/BaseSettingsFieldsResponse'
+                          simple_number: '#/components/schemas/GenericNumberTypeSettingsFieldResponse'
+                          text: '#/components/schemas/BaseSettingsFieldsResponse'
+                          text_area: '#/components/schemas/BaseSettingsFieldsResponse'
+                          video: '#/components/schemas/BaseSettingsFieldsResponse'
+                        propertyName: type
+                      oneOf:
+                      - $ref: '#/components/schemas/BaseSettingsFieldsResponse'
+                      - $ref: '#/components/schemas/LabelTypeSettingsFieldResponse'
+                      - $ref: '#/components/schemas/DropdownTypeSettingsFieldResponse'
+                      - $ref: '#/components/schemas/CheckboxAndRadioTypeSettingsFieldResponse'
+                      - $ref: '#/components/schemas/GenericNumberTypeSettingsFieldResponse'
+                      - $ref: '#/components/schemas/CurrencyNumberTypeSettingsFieldResponse'
+                    type: array
+                  pagination:
+                    allOf:
+                    - $ref: '#/components/schemas/Pagination'
+                    - properties:
+                        next:
+                          example: https://api.cmp.optimizely.com/v3/fields?offset=10&page_size=10
+                          type:
+                          - string
+                          - 'null'
+                      type: object
+                required:
+                - data
+                - pagination
+                type: object
+          description: List of fetched fields
+        '400':
+          $ref: '#/components/responses/ClientError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      summary: GET /fields
+      tags:
+      - Fields
+    post:
+      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Add a new field to an Organization.
+      operationId: createField
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SettingsFieldCreateRequest'
+        description: Payload to create a new field in an Organization
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                additionalProperties: false
+                properties:
+                  id:
+                    description: Identifier of the field that has been created.
+                    example: 6ceee2f4fa3411ecb37802420ac8001b
+                    type: string
+                required:
+                - id
+                type: object
+          description: Created new field in an Organization
+        '400':
+          $ref: '#/components/responses/ClientError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      summary: POST /fields
+      tags:
+      - Fields
+  /fields/{field_id}/choices/{choice_id}:
+    delete:
+      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Delete a choice from a field.
+      operationId: deleteFieldChoice
+      parameters:
+      - example: 8a7f91p551b00i722e04y8830cae6612
+        in: path
+        name: field_id
+        required: true
+        schema:
+          description: Unique identifier of the field
+          type: string
+      - example: 8a7b910551b00a722e0418860cee6612
+        in: path
+        name: choice_id
+        required: true
+        schema:
+          description: Unique identifier of the choice to be deleted
+          type: string
+      responses:
+        '204':
+          description: Successful response
+        '400':
+          $ref: '#/components/responses/ClientError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      summary: DELETE /fields/{field_id}/choices/{choice_id}
+      tags:
+      - Fields
+    patch:
+      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Update a choice of a field.
+      operationId: updateFieldChoice
+      parameters:
+      - example: 8a7f91p551b00i722e04y8830cae6612
+        in: path
+        name: field_id
+        required: true
+        schema:
+          description: Unique identifier of the field
+          type: string
+      - example: 8a7b91p51b00i722e041y860aee6612
+        in: path
+        name: choice_id
+        required: true
+        schema:
+          description: Unique identifier of the choice to be updated
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SettingsFieldChoiceUpdateRequest'
+        description: Payload to update a choice in the field
+        required: true
+      responses:
+        '204':
+          description: Successful response
+        '400':
+          $ref: '#/components/responses/ClientError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      summary: PATCH /fields/{field_id}/choices/{choice_id}
+      tags:
+      - Fields
+  /fields/{id}:
+    patch:
+      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Update a field in an Organization.
+      operationId: updateField
+      parameters:
+      - example: 8q7f910551b00a722e0418830cee6612
+        in: path
+        name: id
+        required: true
+        schema:
+          description: Unique identifier of the field
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SettingsFieldUpdateRequest'
+        description: Payload to update in an Organization.
+        required: true
+      responses:
+        '204':
+          description: Updated field in an Organization
+        '400':
+          $ref: '#/components/responses/ClientError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      summary: PATCH /fields/{id}
+      tags:
+      - Fields
+  /fields/{id}/choices:
+    post:
+      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Create choices in a field.
+      operationId: createFieldChoices
+      parameters:
+      - example: 8a7f910551b00a722e0418830cee6612
+        in: path
+        name: id
+        required: true
+        schema:
+          description: Unique identifier of the field
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SettingsFieldChoiceCreateRequest'
+        description: Payload to create new choices in the field
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SettingsFieldChoiceCreateResponse'
+          description: Field with all the choices including the newly created ones
+        '400':
+          $ref: '#/components/responses/ClientError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      summary: POST /fields/{id}/choices
+      tags:
+      - Fields
+components:
+  schemas:
+    BaseSettingsFieldsResponse:
+      properties:
+        helper_text:
+          description: Used to help understand functionality of field
+          example: This field is used to check options
+          type: string
+        id:
+          description: Identifier of the field
+          example: 6ceee2f4fa3411ecb37802420ac8001b
+          type: string
+        is_active:
+          description: Indicates active status of field. Inactive fields cannot be accessed in tasks, campaigns or workflows.
+          example: true
+          type: boolean
+        links:
+          additionalProperties: false
+          description: Meta links
+          properties:
+            source:
+              description: URL of the list of fields filtered only with the field
+              example: https://api.cmp.optimizely.com/v3/fields?ids=8p7f910551i00722y0418830aee6612
+              type: string
+          required:
+          - source
+          type: object
+        name:
+          description: Name of the field
+          example: Sample Checkbox
+          type: string
+        type:
+          description: Type of the field
+          example: checkbox
+          type: string
+      required:
+      - id
+      - name
+      - helper_text
+      - is_active
+      - type
+      - links
+      type: object
+    DropdownTypeSettingsFieldResponse:
+      allOf:
+      - $ref: '#/components/schemas/BaseSettingsFieldsResponse'
+      - properties:
+          choices:
+            description: Choices of the field
+            items:
+              properties:
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              type: object
+            type: array
+          is_multi_select:
+            description: Allow users to select multiple values
+            type: boolean
+        required:
+        - is_multi_select
+        - choices
+        type: object
+    SettingsFieldCreateRequest:
+      additionalProperties: false
+      discriminator:
+        mapping:
+          checkbox: '#/components/schemas/CheckboxAndRadioTypeSettingsFieldCreatePayload'
+          currency_number: '#/components/schemas/CurrencyNumberTypeSettingsFieldCreatePayload'
+          date: '#/components/schemas/BaseSettingsFieldCreatePayload'
+          dropdown: '#/components/schemas/DropdownTypeSettingsFieldCreatePayload'
+          image: '#/components/schemas/BaseSettingsFieldCreatePayload'
+          label: '#/components/schemas/LabelTypeSettingsFieldCreatePayload'
+          percentage_number: '#/components/schemas/GenericNumberTypeSettingsFieldCreatePayload'
+          radio_button: '#/components/schemas/CheckboxAndRadioTypeSettingsFieldCreatePayload'
+          rich_text: '#/components/schemas/BaseSettingsFieldCreatePayload'
+          simple_number: '#/components/schemas/GenericNumberTypeSettingsFieldCreatePayload'
+          text: '#/components/schemas/BaseSettingsFieldCreatePayload'
+          text_area: '#/components/schemas/BaseSettingsFieldCreatePayload'
+          video: '#/components/schemas/BaseSettingsFieldCreatePayload'
+        propertyName: type
+      oneOf:
+      - $ref: '#/components/schemas/BaseSettingsFieldCreatePayload'
+      - $ref: '#/components/schemas/LabelTypeSettingsFieldCreatePayload'
+      - $ref: '#/components/schemas/DropdownTypeSettingsFieldCreatePayload'
+      - $ref: '#/components/schemas/CheckboxAndRadioTypeSettingsFieldCreatePayload'
+      - $ref: '#/components/schemas/GenericNumberTypeSettingsFieldCreatePayload'
+      - $ref: '#/components/schemas/CurrencyNumberTypeSettingsFieldCreatePayload'
+      type: object
+    CurrencyNumberTypeSettingsFieldUpdatePayload:
+      allOf:
+      - $ref: '#/components/schemas/GenericNumberTypeSettingsFieldUpdatePayload'
+      - properties:
+          currency_code:
+            default: USD
+            description: Currency code of the numerical field. This must be a valid currency code. If this field is empty, `USD` is set as the default.
+            example: USD
+            type: string
+        type: object
+    BaseSettingsFieldUpdatePayload:
+      properties:
+        helper_text:
+          description: Used to help understand the functionality of the field.
+          example: This is a helper text
+          maxLength: 120
+          type: string
+        is_active:
+          description: Indicates active status of field. Inactive fields cannot be accessed in tasks, campaigns or workflows.
+          example: true
+          type: boolean
+        name:
+          description: Name of the field
+          example: Sample Field
+          minLength: 1
+          type: string
+        type:
+          description: Type of the field. This field is required but not updateable. Type of a field will always stay the same. Update request body must contain atleast one other updateable field.
+          type: string
+      required:
+      - type
+      type: object
+    SettingsFieldUpdateRequest:
+      additionalProperties: false
+      discriminator:
+        mapping:
+          checkbox: '#/components/schemas/BaseSettingsFieldUpdatePayload'
+          currency_number: '#/components/schemas/CurrencyNumberTypeSettingsFieldUpdatePayload'
+          date: '#/components/schemas/BaseSettingsFieldUpdatePayload'
+          dropdown: '#/components/schemas/LabelAndDropdownTypeSettingsFieldUpdatePayload'
+          image: '#/components/schemas/BaseSettingsFieldUpdatePayload'
+          label: '#/components/schemas/LabelAndDropdownTypeSettingsFieldUpdatePayload'
+          percentage_number: '#/components/schemas/GenericNumberTypeSettingsFieldUpdatePayload'
+          radio_button: '#/components/schemas/BaseSettingsFieldUpdatePayload'
+          rich_text: '#/components/schemas/BaseSettingsFieldUpdatePayload'
+          simple_number: '#/components/schemas/GenericNumberTypeSettingsFieldUpdatePayload'
+          text: '#/components/schemas/BaseSettingsFieldUpdatePayload'
+          text_area: '#/components/schemas/BaseSettingsFieldUpdatePayload'
+          video: '#/components/schemas/BaseSettingsFieldUpdatePayload'
+        propertyName: type
+      oneOf:
+      - $ref: '#/components/schemas/BaseSettingsFieldUpdatePayload'
+      - $ref: '#/components/schemas/LabelAndDropdownTypeSettingsFieldUpdatePayload'
+      - $ref: '#/components/schemas/GenericNumberTypeSettingsFieldUpdatePayload'
+      - $ref: '#/components/schemas/CurrencyNumberTypeSettingsFieldUpdatePayload'
+      type: object
+    CurrencyNumberTypeSettingsFieldCreatePayload:
+      allOf:
+      - $ref: '#/components/schemas/GenericNumberTypeSettingsFieldCreatePayload'
+      - properties:
+          currency_code:
+            default: USD
+            description: Currency code of the numerical field. This must be a valid currency code. If this field is empty, `USD` is set as the default.
+            example: USD
+            type: string
+        type: object
+    Pagination:
+      additionalProperties: false
+      description: Pagination related information
+      properties:
+        next:
+          description: URL to the next page
+          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
+          type:
+          - string
+          - 'null'
+        previous:
+          description: URL to the previous page
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - next
+      - previous
+      type: object
+    GenericNumberTypeSettingsFieldCreatePayload:
+      allOf:
+      - $ref: '#/components/schemas/BaseSettingsFieldCreatePayload'
+      - properties:
+          decimal_places:
+            default: 2
+            description: Decimal place of the numerical field. This must be greather than 0. If this field is empty, 2 is set as the default.
+            example: 2
+            type: integer
+          has_thousand_separator:
+            default: false
+            description: Whether the numerical field has a thousand separator
+            example: true
+            type: boolean
+        type: object
+    LabelTypeSettingsFieldCreatePayload:
+      allOf:
+      - $ref: '#/components/schemas/BaseSettingsFieldCreatePayload'
+      - properties:
+          choices:
+            description: Choices of the field
+            items:
+              properties:
+                color:
+                  description: 'Code of choice color. Colors are limited to the following:
+
+                    - Electric Blue (#4ECFD5)
+
+                    - Golden Rod (#FFC700)
+
+                    - Salmon Pink (#FF98A7)
+
+                    - Blue Violet (#702BD5)
+
+                    - Spring Green (#5FEEAD)
+
+                    - Lavender Blue (#D6C4F2)
+
+                    - Sky (#5F9FF6)
+
+                    - Persian blue (#CB5DEB)
+
+                    - Cool Gray (#9694B3)
+
+                    '
+                  example: '#FFC700'
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Choice 1
+                  minLength: 1
+                  type: string
+              required:
+              - name
+              - color
+              type: object
+            minItems: 1
+            type: array
+          is_multi_select:
+            description: Allow users to select multiple values
+            type: boolean
+        required:
+        - is_multi_select
+        - choices
+        type: object
+    SettingsFieldChoiceCreateResponse:
+      description: Choices of the field
+      items:
+        properties:
+          id:
+            description: Identifier of the field choice
+            example: 675ca12f4fa3411ecb37802420ac82ab7
+            type: string
+          name:
+            description: Name of the choice
+            example: Choice 1
+            minLength: 1
+            type: string
+        required:
+        - id
+        - name
+        type: object
+      minItems: 1
+      type: array
+    CheckboxAndRadioTypeSettingsFieldCreatePayload:
+      allOf:
+      - $ref: '#/components/schemas/BaseSettingsFieldCreatePayload'
+      - properties:
+          choices:
+            description: Choices of the field
+            items:
+              properties:
+                name:
+                  description: Name of the choice
+                  example: Choice 1
+                  minLength: 1
+                  type: string
+              required:
+              - name
+              type: object
+            minItems: 1
+            type: array
+        required:
+        - choices
+        type: object
+    LabelTypeSettingsFieldResponse:
+      allOf:
+      - $ref: '#/components/schemas/BaseSettingsFieldsResponse'
+      - properties:
+          choices:
+            description: Choices of the field
+            items:
+              properties:
+                color:
+                  description: 'Code of choice color. Colors are limited to the following:
+
+                    - Electric Blue (#4ECFD5)
+
+                    - Golden Rod (#FFC700)
+
+                    - Salmon Pink (#FF98A7)
+
+                    - Blue Violet (#702BD5)
+
+                    - Spring Green (#5FEEAD)
+
+                    - Lavender Blue (#D6C4F2)
+
+                    - Sky (#5F9FF6)
+
+                    - Persian blue (#CB5DEB)
+
+                    - Cool Gray (#9694B3)
+
+                    '
+                  example: '#4ECFD5'
+                  type:
+                  - string
+                  - 'null'
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              - color
+              type: object
+            type: array
+          is_multi_select:
+            description: Allow users to select multiple values
+            type: boolean
+        required:
+        - is_multi_select
+        - choices
+        type: object
+    LabelAndDropdownTypeSettingsFieldUpdatePayload:
+      allOf:
+      - $ref: '#/components/schemas/BaseSettingsFieldUpdatePayload'
+      - properties:
+          is_multi_select:
+            description: Allow users to select multiple values
+            type: boolean
+        type: object
+    GenericNumberTypeSettingsFieldUpdatePayload:
+      allOf:
+      - $ref: '#/components/schemas/BaseSettingsFieldUpdatePayload'
+      - properties:
+          decimal_places:
+            default: 2
+            description: Decimal place of the numerical field. This must be greather than 0. If this field is empty, 2 is set as the default.
+            example: 2
+            type: integer
+          has_thousand_separator:
+            default: false
+            description: Whether the numerical field has a thousand separator
+            example: true
+            type: boolean
+        type: object
+    DropdownTypeSettingsFieldCreatePayload:
+      allOf:
+      - $ref: '#/components/schemas/BaseSettingsFieldCreatePayload'
+      - properties:
+          choices:
+            description: Choices of the field
+            items:
+              properties:
+                name:
+                  description: Name of the choice
+                  example: Choice 1
+                  minLength: 1
+                  type: string
+              required:
+              - name
+              type: object
+            minItems: 1
+            type: array
+          is_multi_select:
+            description: Allow users to select multiple values
+            type: boolean
+        required:
+        - is_multi_select
+        - choices
+        type: object
+    LabelTypeSettingsFieldChoiceCreatePayload:
+      allOf:
+      - $ref: '#/components/schemas/GenericSettingsFieldChoiceCreatePayload'
+      - description: Choice for field type of `label`
+        properties:
+          color:
+            description: 'Code of choice color. Colors are limited to the following:
+
+              - Electric Blue (#4ECFD5)
+
+              - Golden Rod (#FFC700)
+
+              - Salmon Pink (#FF98A7)
+
+              - Blue Violet (#702BD5)
+
+              - Spring Green (#5FEEAD)
+
+              - Lavender Blue (#D6C4F2)
+
+              - Sky (#5F9FF6)
+
+              - Persian blue (#CB5DEB)
+
+              - Cool Gray (#9694B3)
+
+              '
+            example: '#FFC700'
+            type: string
+        required:
+        - color
+        type: object
+    GenericNumberTypeSettingsFieldResponse:
+      allOf:
+      - $ref: '#/components/schemas/BaseSettingsFieldsResponse'
+      - properties:
+          decimal_places:
+            description: Decimal place of the numerical field
+            example: 2
+            type: integer
+          has_thousand_separator:
+            description: Whether the numerical field has a thousand separator
+            example: true
+            type: boolean
+        required:
+        - has_thousand_separator
+        - decimal_places
+        type: object
+    SettingsFieldChoiceUpdateRequest:
+      additionalProperties: false
+      description: Payload for updating choice
+      oneOf:
+      - $ref: '#/components/schemas/GenericSettingsFieldChoiceUpdatePayload'
+      - $ref: '#/components/schemas/LabelTypeSettingsFieldChoiceUpdatePayload'
+      type: object
+    Error:
+      additionalProperties: true
+      description: Error payload
+      properties:
+        errors:
+          additionalProperties: true
+          description: Additional information
+          properties: {}
+          type: object
+        message:
+          description: Message describing the error
+          example: Not found
+          type: string
+      required:
+      - message
+      type: object
+    CheckboxAndRadioTypeSettingsFieldResponse:
+      allOf:
+      - $ref: '#/components/schemas/BaseSettingsFieldsResponse'
+      - properties:
+          choices:
+            description: Choices of the field
+            items:
+              properties:
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              type: object
+            type: array
+        required:
+        - choices
+        type: object
+    GenericSettingsFieldChoiceCreatePayload:
+      description: Choice for field types other than `label`
+      properties:
+        name:
+          description: Name of the choice
+          example: Choice 1
+          minLength: 1
+          type: string
+      required:
+      - name
+      type: object
+    BaseSettingsFieldCreatePayload:
+      properties:
+        helper_text:
+          description: Used to help understand the functionality of the field.
+          example: This field is used to check options
+          maxLength: 120
+          type: string
+        is_active:
+          description: Indicates active status of field. Inactive fields cannot be accessed in tasks, campaigns or workflows.
+          example: true
+          type: boolean
+        name:
+          description: Name of the field
+          example: Sample Checkbox
+          minLength: 1
+          type: string
+        type:
+          description: Type of the field
+          example: checkbox
+          type: string
+      required:
+      - name
+      - is_active
+      - type
+      type: object
+    CurrencyNumberTypeSettingsFieldResponse:
+      allOf:
+      - $ref: '#/components/schemas/GenericNumberTypeSettingsFieldResponse'
+      - properties:
+          currency_code:
+            description: Currency code of the numerical field
+            example: USD
+            type: string
+        required:
+        - currency_code
+        type: object
+    GenericSettingsFieldChoiceUpdatePayload:
+      description: Choice for field types other than `label`
+      properties:
+        name:
+          description: Name of the choice
+          example: Choice 1
+          minLength: 1
+          type: string
+      required:
+      - name
+      type: object
+    LabelTypeSettingsFieldChoiceUpdatePayload:
+      description: Choice for field type of `label`
+      properties:
+        color:
+          description: 'Code of choice color. Colors are limited to the following:
+
+            - Electric Blue (#4ECFD5)
+
+            - Golden Rod (#FFC700)
+
+            - Salmon Pink (#FF98A7)
+
+            - Blue Violet (#702BD5)
+
+            - Spring Green (#5FEEAD)
+
+            - Lavender Blue (#D6C4F2)
+
+            - Sky (#5F9FF6)
+
+            - Persian blue (#CB5DEB)
+
+            - Cool Gray (#9694B3)
+
+            '
+          example: '#FFC700'
+          type: string
+        name:
+          description: Name of the choice
+          example: Choice 1
+          minLength: 1
+          type: string
+      type: object
+    SettingsFieldChoiceCreateRequest:
+      description: Choices of the field
+      items:
+        oneOf:
+        - $ref: '#/components/schemas/GenericSettingsFieldChoiceCreatePayload'
+        - $ref: '#/components/schemas/LabelTypeSettingsFieldChoiceCreatePayload'
+      minItems: 1
+      type: array
+  responses:
+    Forbidden:
+      content:
+        application/json:
+          example:
+            message: You do not have the permission to perform this operation
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Permission error
+    ClientError:
+      content:
+        application/json:
+          example:
+            message: 'Unsupported arguments: a,b,c'
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client error
+    UnprocessableEntity:
+      content:
+        application/json:
+          example:
+            message: Resource cannot be processed
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Unprocessable entity error
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
+    Unauthorized:
+      content:
+        application/json:
+          example:
+            message: Unauthorized
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Authorization error
+  parameters:
+    page_size:
+      description: Number of results to return per page
+      example: 15
+      in: query
+      name: page_size
+      schema:
+        default: 10
+        maximum: 100
+        minimum: 1
+        type: integer
+    offset:
+      description: Starting index of results (zero indexed)
+      example: 5
+      in: query
+      name: offset
+      schema:
+        default: 0
+        minimum: 0
+        type: integer
+  securitySchemes:
+    OAuth2:
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/auth
+          scopes:
+            offline_access: Grants the ability to refresh access_token using the refresh token even when user is not present (not logged in).
+            openid: Grants the ability to receive a unique identifier for the user.
+            profile: Grants access to user profile information.
+          tokenUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/token
+        clientCredentials:
+          scopes: {}
+          tokenUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/token
+      type: oauth2
+x-tagGroups:
+- name: API
+  tags:
+  - Uploader
+  - Library
+  - Labels
+  - Brand Compliance
+  - Tasks
+  - Task Step
+  - Campaigns
+  - Publishing
+  - Templates
+  - Users
+  - Work Requests
+  - Structured Contents
+  - Assets
+  - Milestones
+  - Teams
+  - Settings
+  - Workflows
+  - Fields
+  - Events

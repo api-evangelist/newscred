@@ -1,0 +1,1987 @@
+openapi: 3.2.0
+info:
+  title: Optimizely CMP Open API Documentation Structured Contents API
+  version: V3
+servers:
+- description: v3 version of Optimizely CMP Open API
+  url: https://api.cmp.optimizely.com/v3
+security:
+- OAuth2:
+  - openid
+  - profile
+  - offline_access
+tags:
+- name: Structured Contents
+paths:
+  /structured-content/content-types:
+    get:
+      description: '<span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Get content types. '
+      operationId: listSCContentTypes
+      parameters:
+      - in: query
+        name: source
+        required: false
+        schema:
+          description: Source of the content type
+          type: string
+      - in: query
+        name: disabled
+        required: false
+        schema:
+          default: true
+          description: Disabled status of the content type
+          type: boolean
+      - in: query
+        name: list
+        required: false
+        schema:
+          $ref: '#/components/schemas/ContentTypeListingOption'
+          default: '3'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/BaseContentTypeModel'
+                type: array
+          description: Successful response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation error
+      summary: GET /structured-content/content-types
+      tags:
+      - Structured Contents
+    post:
+      description: '<span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Create content type. '
+      operationId: createSCContentType
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SCContentTypeCreateRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCContentTypeCreateResponse'
+          description: Successful response
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCContentTypeCreateResponse'
+          description: Created
+          headers:
+            Location:
+              description: URL to get the created resource
+              schema:
+                type: string
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation error
+      summary: POST /structured-content/content-types
+      tags:
+      - Structured Contents
+  /structured-content/content-types/{content_type_id}:
+    get:
+      description: '<span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Get content type. '
+      operationId: getSCContentType
+      parameters:
+      - in: path
+        name: content_type_id
+        required: true
+        schema:
+          description: Unique identifier of the content type
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCContentType'
+          description: Successful response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation error
+      summary: GET /structured-content/content-types/{content_type_id}
+      tags:
+      - Structured Contents
+    post:
+      description: '<span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Update content type. '
+      operationId: updateSCContentType
+      parameters:
+      - in: path
+        name: content_type_id
+        required: true
+        schema:
+          description: Unique identifier of the content type
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SCContentTypeUpdateRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCContentTypeUpdateResponse'
+          description: Successful response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation error
+      summary: POST /structured-content/content-types/{content_type_id}
+      tags:
+      - Structured Contents
+  /structured-content/content-types/{content_type_id}/managed-migrations:
+    get:
+      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Retrieves a list of managed migration jobs for a specific content type.
+      operationId: listSCContentTypeManagedMigrations
+      parameters:
+      - example: 645cb61c966d0c591320f636
+        in: path
+        name: content_type_id
+        required: true
+        schema:
+          description: Unique identifier of the content type.
+          type: string
+      - description: Whether include a summary of content migration status (total, not started, succeeded, errored).
+        example: true
+        in: query
+        name: content_migration_summary
+        required: false
+        schema:
+          default: false
+          type: boolean
+      - description: Pagination offset (number of jobs to skip).
+        example: 10
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+      - description: Pagination limit (number of jobs to return).
+        example: 25
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 100
+          minimum: 1
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/SCContentTypeManagedMigrationResponse'
+                type: array
+          description: List of managed migration jobs for the content type.
+      summary: GET /structured-content/content-types/{content_type_id}/managed-migrations
+      tags:
+      - Structured Contents
+    post:
+      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Create a new managed migration job.
+      operationId: createSCContentTypeManagedMigration
+      parameters:
+      - example: 645cb61c966d0c591320f636
+        in: path
+        name: content_type_id
+        required: true
+        schema:
+          description: Unique identifier of the content type.
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SCContentTypeManagedMigrationCreateRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  created:
+                    description: False if the managed migration job is not created.
+                    type: boolean
+                required:
+                - created
+                type: object
+          description: Successful response.
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  created:
+                    description: True if the managed migration job is created.
+                    type: boolean
+                  job_id:
+                    description: The ID of the created managed migration job.
+                    type: string
+                required:
+                - created
+                type: object
+          description: Created.
+        '400':
+          $ref: '#/components/responses/ClientError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      summary: POST /structured-content/content-types/{content_type_id}/managed-migrations
+      tags:
+      - Structured Contents
+  /structured-content/content-types/{content_type_id}/managed-migrations/validate:
+    post:
+      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Check managed migration possible or not.
+      operationId: validateSCContentTypeManagedMigration
+      parameters:
+      - example: 645cb61c966d0c591320f636
+        in: path
+        name: content_type_id
+        required: true
+        schema:
+          description: Unique identifier of the content type.
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SCContentTypeManagedMigrationValidateRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  is_managed_migration_possible:
+                    description: False if the managed migration not possible
+                    type: boolean
+                required:
+                - is_managed_migration_possible
+                type: object
+          description: Successful response.
+        '404':
+          content:
+            application/json:
+              example:
+                detail: Could not find the content type
+              schema:
+                properties:
+                  detail:
+                    description: error message details
+                    type: string
+                required:
+                - detail
+                type: object
+          description: Error response when no content type found by content_type_id and instance_id
+      summary: POST /structured-content/content-types/{content_type_id}/managed-migrations/validate
+      tags:
+      - Structured Contents
+  /structured-content/content-types/{content_type_id}/managed-migrations/{job_id}:
+    delete:
+      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Delete a managed migration job with not_started status.
+      operationId: deleteSCContentTypeManagedMigration
+      parameters:
+      - example: 645cb61c966d0c591320f636
+        in: path
+        name: content_type_id
+        required: true
+        schema:
+          description: Unique identifier of the content type.
+          type: string
+      - in: path
+        name: job_id
+        required: true
+        schema:
+          description: Unique identifier of the managed migration job.
+          type: string
+      responses:
+        '204':
+          description: Successful response
+        '400':
+          $ref: '#/components/responses/ClientError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      summary: DELETE /structured-content/content-types/{content_type_id}/managed-migrations/{job_id}
+      tags:
+      - Structured Contents
+    get:
+      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Get details of a specific managed migration job.
+      operationId: getSCContentTypeManagedMigration
+      parameters:
+      - example: 645cb61c966d0c591320f636
+        in: path
+        name: content_type_id
+        required: true
+        schema:
+          description: Unique identifier of the content type.
+          type: string
+      - in: path
+        name: job_id
+        required: true
+        schema:
+          description: The ID of the managed migration job.
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCContentTypeManagedMigrationResponse'
+          description: Successful response.
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  detail:
+                    description: The error message.
+                    type: string
+                type: object
+          description: Not Found.
+      summary: GET /structured-content/content-types/{content_type_id}/managed-migrations/{job_id}
+      tags:
+      - Structured Contents
+    patch:
+      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Update a managed migration job.
+      operationId: updateSCContentTypeManagedMigration
+      parameters:
+      - example: 645cb61c966d0c591320f636
+        in: path
+        name: content_type_id
+        required: true
+        schema:
+          description: Unique identifier of the content type.
+          type: string
+      - in: path
+        name: job_id
+        required: true
+        schema:
+          description: Unique identifier of the managed migration job.
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              description: Default values for the managed migration job content.
+              properties:
+                default_values:
+                  $ref: '#/components/schemas/LocalizedFieldValues'
+              required:
+              - default_values
+              type: object
+        description: Payload for default field values.
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  updated:
+                    description: True if the managed migration job is updated.
+                    type: boolean
+                type: object
+          description: Successful response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation error
+      summary: PATCH /structured-content/content-types/{content_type_id}/managed-migrations/{job_id}
+      tags:
+      - Structured Contents
+  /structured-content/content-types/{content_type_id}/managed-migrations/{job_id}/start:
+    post:
+      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Start managed migration job.
+      operationId: startSCContentTypeManagedMigration
+      parameters:
+      - in: path
+        name: content_type_id
+        required: true
+        schema:
+          description: content type id.
+          type: string
+      - in: path
+        name: job_id
+        required: true
+        schema:
+          description: Unique identifier of the job.
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                job_id: sample_job_id
+                started: true
+              schema:
+                $ref: '#/components/schemas/SCContentTypeManagedMigrationStartResponse'
+          description: Successful response with started=true
+        '400':
+          content:
+            application/json:
+              example:
+                detail: 'No Job found for job_id: {job_id} and instance_id: {instance_id} with status not_started or error'
+              schema:
+                $ref: '#/components/schemas/HTTPException'
+          description: Error response when job found by job_id but job status is invalid (status not in [error or not_started])
+        '404':
+          content:
+            application/json:
+              example:
+                message: 'No Job found for job_id: {job_id} and instance_id: {instance_id}.'
+              schema:
+                $ref: '#/components/schemas/HTTPException'
+          description: Error response when no job found by job_id with status not_started, error
+      summary: POST /structured-content/content-types/{content_type_id}/managed-migrations/{job_id}/start
+      tags:
+      - Structured Contents
+  /structured-content/content-types/{content_type_id}/versions:
+    get:
+      description: '<span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Get content type versions. '
+      operationId: listSCContentTypeVersions
+      parameters:
+      - in: path
+        name: content_type_id
+        required: true
+        schema:
+          description: Unique identifier of the content type
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/BaseContentTypeVersionModel'
+                type: array
+          description: Successful response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation error
+      summary: GET /structured-content/content-types/{content_type_id}/versions
+      tags:
+      - Structured Contents
+    post:
+      description: '<span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Add Content Type Version. '
+      operationId: createSCContentTypeVersion
+      parameters:
+      - in: path
+        name: content_type_id
+        required: true
+        schema:
+          description: Unique identifier of the content type
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SCContentTypeVersionCreateRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCContentTypeCreateResponse'
+          description: Successful response
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCContentTypeCreateResponse'
+          description: Created
+          headers:
+            Location:
+              description: URL to get the created resource
+              schema:
+                type: string
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation error
+      summary: POST /structured-content/content-types/{content_type_id}/versions
+      tags:
+      - Structured Contents
+  /structured-content/content-types/{content_type_id}/versions/{version_id}:
+    get:
+      description: '<span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Get content type version. '
+      operationId: getSCContentTypeVersion
+      parameters:
+      - in: path
+        name: content_type_id
+        required: true
+        schema:
+          description: Unique identifier of the content type
+          type: string
+      - in: path
+        name: version_id
+        required: true
+        schema:
+          description: Unique identifier of the content type version
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCContentTypeVersion'
+          description: Successful response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation error
+      summary: GET /structured-content/content-types/{content_type_id}/versions/{version_id}
+      tags:
+      - Structured Contents
+  /structured-content/contents/{content_id}/migration:
+    post:
+      description: Migrate content to a specific content type version. <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span>
+      operationId: migrateSCContent
+      parameters:
+      - in: path
+        name: content_id
+        required: true
+        schema:
+          description: Unique identifier of the content
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SCContentMigrationCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  content_guid:
+                    description: The identifier of the content
+                    type: string
+                  content_hash:
+                    description: The hashed fingerprint of the content version
+                    type: string
+                  created:
+                    description: Whether the version was created or not
+                    type: boolean
+                  version_guid:
+                    description: The identifier of the content version
+                    type: string
+                type: object
+          description: Successful response
+        '400':
+          $ref: '#/components/responses/ClientError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/ClientError'
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation error
+      summary: POST /structured-content/contents/{content_id}/migration
+      tags:
+      - Structured Contents
+  /structured-content/contents/{content_id}/versions/{version_id}/previews/{preview_id}/acknowledge:
+    post:
+      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Acknowledge content preview. Content preview can be acknowledged only once. So make sure you are acknowledging only the content previews targeted for your integration. Otherwise it will stall acknowledgment from other integrations.
+      operationId: acknowledgeSCContentPreview
+      parameters:
+      - in: path
+        name: content_id
+        required: true
+        schema:
+          description: Unique identifier of the content
+          type: string
+      - in: path
+        name: version_id
+        required: true
+        schema:
+          description: Unique identifier of the content version
+          type: string
+      - in: path
+        name: preview_id
+        required: true
+        schema:
+          description: Unique identifier of the content version preview
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SCContentPreviewAcknowledgeRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation error
+      summary: POST /structured-content/contents/{content_id}/versions/{version_id}/previews/{preview_id}/acknowledge
+      tags:
+      - Structured Contents
+  /structured-content/contents/{content_id}/versions/{version_id}/previews/{preview_id}/complete:
+    post:
+      description: '<span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Complete content preview. '
+      operationId: completeSCContentPreview
+      parameters:
+      - in: path
+        name: content_id
+        required: true
+        schema:
+          description: Unique identifier of the content
+          type: string
+      - in: path
+        name: version_id
+        required: true
+        schema:
+          description: Unique identifier of the content version
+          type: string
+      - in: path
+        name: preview_id
+        required: true
+        schema:
+          description: Unique identifier of the content version preview
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SCContentPreviewCompleteRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation error
+      summary: POST /structured-content/contents/{content_id}/versions/{version_id}/previews/{preview_id}/complete
+      tags:
+      - Structured Contents
+components:
+  schemas:
+    KeyedPreviewCompletedModel:
+      properties:
+        completed:
+          description: URL for completed preview.
+          format: uri
+          maxLength: 65536
+          minLength: 1
+          type: string
+        locale:
+          default: en_US
+          description: "If not specified, the `locale` will be infered from the `Content-Language` header from the `completed` URL.\n In case of multiple locales, only the first one will be considered and it will be converted to snake case.\n For example, if the `Content-Language` header from the `completed` URL returns `en-US, de, bn`, it will be inferred as `en_US`.\n If the `locale` is not specified and there is no `Content-Language` header, this will default to `en_US`."
+          type: string
+        mimeType:
+          default: text/html
+          description: "If not specified, the `mimeType` will be inferred from the `Content-Type` header from the `completed` URL.\n If the `mimeType` is not specified and there is no `Content-Type` header, this will default to `text/html`."
+          type: string
+        name:
+          default: ''
+          description: Human readable preview name to distinguish between generated preview outcomes.
+          type: string
+        orderIndex:
+          default: 0
+          description: Priority of a preview. For multiple previews, this will be used to sort the previews.
+          type: number
+      required:
+      - completed
+      type: object
+    SCContentTypeManagedMigrationValidateRequest:
+      properties:
+        default_values:
+          $ref: '#/components/schemas/LocalizedFieldValues'
+          description: Default values for the migration, if any.
+          type: object
+        source_content_type_version_id:
+          description: The ID of the source content type version to migrate from.
+          type: string
+      required:
+      - source_content_type_version_id
+      type: object
+    SCContentType:
+      allOf:
+      - $ref: '#/components/schemas/BaseContentTypeModel'
+      - properties:
+          latest_version:
+            $ref: '#/components/schemas/SCContentTypeVersion'
+        required:
+        - latest_version
+        type: object
+    SCContentTypeManagedMigrationCreateRequest:
+      properties:
+        created_by:
+          description: Unique identifier of the user who created the job.
+          type: string
+        default_values:
+          $ref: '#/components/schemas/LocalizedFieldValues'
+          description: Default values for the migration job, if any.
+          type: object
+        source_content_type_version_id:
+          description: The ID of the source content type version to migrate from.
+          type: string
+      required:
+      - source_content_type_version_id
+      - created_by
+      type: object
+    ChoiceFieldValueModel:
+      properties:
+        choice_key:
+          description: Choice key of the field value
+          type: string
+        order_index:
+          description: Order index of the field value
+          type: integer
+      required:
+      - choice_key
+      type: object
+    TextFieldValueModel:
+      properties:
+        order_index:
+          description: Order index of the field value
+          type: integer
+        text_value:
+          description: Value of the field value
+          type: string
+      required:
+      - text_value
+      type: object
+    HTTPValidationError:
+      properties:
+        detail:
+          description: Details of the error
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+      type: object
+    SCContentTypeUpdateRequest:
+      properties:
+        details:
+          $ref: '#/components/schemas/CoreContentType'
+        source_metadata:
+          description: Source metadata of the content type
+          type: string
+        updated_by:
+          description: Unique identifier of the user who updated the content type
+          type: string
+      required:
+      - details
+      - updated_by
+      type: object
+    BaseFieldDefinitionType:
+      description: An enumeration.
+      enum:
+      - boolean
+      - json
+      - url
+      - location
+      type: string
+    RichTextFieldDefinition:
+      properties:
+        core:
+          $ref: '#/components/schemas/CoreFieldDef'
+        default_values:
+          description: Default values of the field
+          items:
+            type: string
+          type: array
+        max_visual_text_length:
+          description: Maximum length of the field
+          type: integer
+        min_visual_text_length:
+          description: Minimum length of the field
+          type: integer
+      required:
+      - core
+      - min_visual_text_length
+      type: object
+    ContentFieldValueExpandedModel:
+      properties:
+        content_details:
+          $ref: '#/components/schemas/ContentDetailsModel'
+        content_guid:
+          description: Content GUID of the field value
+          type: string
+        content_url:
+          description: Content URL of the field value
+          type: string
+        embedded:
+          description: Indicates whether the field value is embedded
+          type: boolean
+        order_index:
+          description: Order index of the field value
+          type: integer
+      required:
+      - content_guid
+      - embedded
+      - content_details
+      type: object
+    SCContentTypeVersionCreateRequest:
+      properties:
+        created_by:
+          description: Unique identifier of the user who created the version
+          type: string
+        expected_locales:
+          description: Expected locales of the version
+          items:
+            type: string
+          type: array
+        field_definitions:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/ContentTypeFieldDefinition'
+            - $ref: '#/components/schemas/LibraryAssetFieldDefinition'
+            - $ref: '#/components/schemas/TextFieldDefinition'
+            - $ref: '#/components/schemas/BaseFieldDefinition'
+            - $ref: '#/components/schemas/DatetimeFieldDefinition'
+            - $ref: '#/components/schemas/RichTextFieldDefinition'
+            - $ref: '#/components/schemas/ChoiceFieldDefinition'
+            - $ref: '#/components/schemas/NumberFieldDefinition'
+          type: array
+      required:
+      - field_definitions
+      - created_by
+      type: object
+    LocalizedFieldValues:
+      properties:
+        field_values:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/NumberFieldValueModel'
+            - $ref: '#/components/schemas/BooleanFieldValueModel'
+            - $ref: '#/components/schemas/DatetimeFieldValueModel'
+            - $ref: '#/components/schemas/TextFieldValueModel'
+            - $ref: '#/components/schemas/RichTextFieldValueModel'
+            - $ref: '#/components/schemas/LibraryAssetFieldValueModel'
+            - $ref: '#/components/schemas/ContentFieldValueExpandedModel'
+            - $ref: '#/components/schemas/ContentFieldValueModel'
+            - $ref: '#/components/schemas/URLFieldValueModel'
+            - $ref: '#/components/schemas/JSONFieldValueModel'
+            - $ref: '#/components/schemas/ChoiceFieldValueModel'
+            - $ref: '#/components/schemas/LocationFieldValueModel'
+          type: array
+        locale:
+          type: string
+      required:
+      - locale
+      - field_values
+      type: object
+    SCContentTypeCreateRequest:
+      properties:
+        created_by:
+          description: Unique identifier of the user who is creating the content type
+          type: string
+        details:
+          $ref: '#/components/schemas/CoreContentType'
+        expected_locales:
+          description: Expected locales for the content type
+          items:
+            type: string
+          type: array
+        field_definitions:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/ContentTypeFieldDefinition'
+            - $ref: '#/components/schemas/LibraryAssetFieldDefinition'
+            - $ref: '#/components/schemas/TextFieldDefinition'
+            - $ref: '#/components/schemas/BaseFieldDefinition'
+            - $ref: '#/components/schemas/DatetimeFieldDefinition'
+            - $ref: '#/components/schemas/RichTextFieldDefinition'
+            - $ref: '#/components/schemas/ChoiceFieldDefinition'
+            - $ref: '#/components/schemas/NumberFieldDefinition'
+          type: array
+        source:
+          description: Source for the content type
+          type: string
+        source_id:
+          description: Source ID for the content type
+          type: string
+        source_metadata:
+          description: Source metadata for the content type
+          type: string
+      required:
+      - field_definitions
+      - created_by
+      - details
+      type: object
+    SCContentPreviewCompleteRequest:
+      properties:
+        keyed_previews:
+          additionalProperties:
+            anyOf:
+            - format: uri
+              maxLength: 65536
+              minLength: 1
+              type: string
+            - $ref: '#/components/schemas/KeyedPreviewCompletedModel'
+            - $ref: '#/components/schemas/KeyedPreviewErrorModel'
+          type: object
+      required:
+      - keyed_previews
+      type: object
+    FieldType:
+      description: An enumeration.
+      enum:
+      - boolean
+      - number
+      - text-field
+      - rich-text
+      - datetime
+      - library-asset
+      - content-type
+      - json
+      - url
+      - choice
+      - location
+      type: string
+    NumberFieldValueModel:
+      properties:
+        num_value:
+          description: Value of the field value
+          type: number
+        order_index:
+          description: Order index of the field value
+          type: integer
+      required:
+      - num_value
+      type: object
+    LocationFieldValueModel:
+      properties:
+        latitude:
+          description: Longitude of the field value
+          type: number
+        longitude:
+          description: Longitude of the field value
+          type: number
+        order_index:
+          description: Order index of the field value
+          type: integer
+      required:
+      - longitude
+      - latitude
+      type: object
+    BooleanFieldValueModel:
+      properties:
+        bool_value:
+          description: Value of the field value
+          type: boolean
+        order_index:
+          description: Order index of the field value
+          type: integer
+      required:
+      - bool_value
+      type: object
+    RichTextFieldValueModel:
+      properties:
+        order_index:
+          description: Order index of the field value
+          type: integer
+        rich_text_value:
+          description: Value of the field value
+          type: string
+      required:
+      - rich_text_value
+      type: object
+    SCContentTypeManagedMigrationResponse:
+      properties:
+        content_migration_summary:
+          $ref: '#/components/schemas/ContentMigrationSummary'
+          type: object
+        content_type_id:
+          description: The ID of the content type.
+          type: string
+        created_at:
+          description: Date and time on which the managed migration job was created,  in ISO 8601 UTC format (2020-02-10T10:40:45Z).
+          example: '2019-10-06T13:15:30Z'
+          format: date-time
+          type: string
+        default_values:
+          description: The default values for the content type.
+          type: object
+        id:
+          description: The ID of the managed migration job.
+          type: string
+        instance_id:
+          description: The ID of the instance.
+          type: string
+        source_content_type_version_id:
+          description: The ID of the source content type version.
+          type: string
+        status:
+          description: The status of the managed migration job.
+          enum:
+          - not_started
+          - in_progress
+          - success
+          - error
+          type: string
+        target_content_type_version_id:
+          description: The ID of the target content type version.
+          type: string
+        updated_at:
+          description: Date and time on which the managed migration job was last updated,  in ISO 8601 UTC format (2020-02-10T10:40:45Z).
+          example: '2019-10-06T13:15:30Z'
+          type: string
+      type: object
+    CoreContentType:
+      properties:
+        component:
+          description: Indicates whether the content type is a component
+          type: boolean
+        description:
+          description: Description of the content type
+          type: string
+        disabled:
+          description: Disabled status of the content type
+          type: boolean
+        name:
+          description: Name of the content type
+          type: string
+        thumbnail_guid:
+          description: Thumbnail GUID of the content type
+          type: string
+      required:
+      - name
+      - component
+      type: object
+    ValidationError:
+      properties:
+        loc:
+          description: Locations where the error occurred
+          items:
+            type: string
+          type: array
+        msg:
+          description: Message describing the error
+          type: string
+        type:
+          description: Type of the error
+          title: Error Type
+          type: string
+      required:
+      - loc
+      - msg
+      - type
+      type: object
+    VersionedContentTypeModel:
+      properties:
+        component:
+          description: Indicates whether the content type is a component
+          type: boolean
+        content_type_guid:
+          description: Unique identifier of the content type
+          type: string
+        created_at:
+          description: Date and time on which the content type was created, in ISO 8601 UTC format
+          format: date-time
+          type: string
+        created_by:
+          description: Unique identifier of the user who created the content type
+          type: string
+        description:
+          description: Description of the content type
+          type: string
+        disabled:
+          description: Disabled status of the content type
+          type: boolean
+        links:
+          description: Meta links
+          properties:
+            self:
+              description: URL of the content type
+              example: https://api.cmp.optimizely.com/v3/structured-content/content-types/9fda53cf66a14fd487251480ca695c7b
+              type: string
+            versions:
+              description: URL of the content type versions
+              example: https://api.cmp.optimizely.com/v3/structured-content/content-types/9fda53cf66a14fd487251480ca695c7b/versions
+              type: string
+          type: object
+        name:
+          description: Name of the content type
+          type: string
+        source:
+          description: Source of the content type
+          type: string
+        source_id:
+          description: Source of the content type
+          type: string
+        source_metadata:
+          description: Source metadata of the content type
+          type: string
+        thumbnail_guid:
+          description: Thumbnail GUID of the content type
+          type: string
+        updated_at:
+          description: Date and time on which the content type was last updated, in ISO 8601 UTC format
+          format: date-time
+          type: string
+        updated_by:
+          description: Unique identifier of the user who last updated the content type
+          type: string
+        version:
+          $ref: '#/components/schemas/SCContentTypeVersion'
+      required:
+      - name
+      - component
+      - content_type_guid
+      - created_by
+      - updated_by
+      - created_at
+      - updated_at
+      - links
+      - version
+      type: object
+    SCContentPreviewAcknowledgeRequest:
+      properties:
+        acknowledged_by:
+          description: Unique identifier of the user who acknowledged the preview request
+          type: string
+        content_hash:
+          description: Content hash of the preview request
+          type: string
+      required:
+      - acknowledged_by
+      - content_hash
+      type: object
+    ContentDetailsModel:
+      properties:
+        content_guid:
+          description: Unique identifier of the content
+          type: string
+        content_type:
+          $ref: '#/components/schemas/VersionedContentTypeModel'
+        content_type_guid:
+          description: Unique identifier of the content type
+          type: string
+        content_type_name:
+          description: Name of the content type
+          type: string
+        created_at:
+          description: Date and time on which the content was created, in ISO 8601 UTC format
+          format: date-time
+          type: string
+        created_by:
+          description: Unique identifier of the user who created the content
+          type: string
+        expired:
+          description: Expired status of the content
+          type: boolean
+        expiry_datetime:
+          description: Date and time on which the content will expire, in ISO 8601 UTC format
+          format: date-time
+          type: string
+        latest_fields_version:
+          $ref: '#/components/schemas/ContentFieldsVersionDetails'
+        links:
+          description: Meta links
+          properties:
+            definition:
+              description: URL of the content definition
+              example: https://api.cmp.optimizely.com/v3/structured-content/content-types/5291e00b990a49f1857adc024fd26620/versions/a8b48d529701452aa56a4e752e1b0ffc
+              type: string
+            self:
+              description: URL of the content
+              example: https://api.cmp.optimizely.com/v3/structured-content/contents/a24b834428a043ab8caed1ded4606f7d
+              type: string
+          type: object
+        primary_locale:
+          description: The primary locale of the content
+          example: en_US
+          type: string
+        root_content:
+          description: This is true when the content is not embedded in another content through a content type reference field
+          type: boolean
+        source:
+          description: Source of the content
+          type: string
+        source_id:
+          description: Source ID of the content
+          type: string
+        source_metadata:
+          description: Source metadata of the content
+          type: string
+        template_guid:
+          description: Template GUID of the content
+          type: string
+        title:
+          description: Title of the content
+          type: string
+        updated_at:
+          description: Date and time on which the content was last updated, in ISO 8601 UTC format
+          format: date-time
+          type: string
+        updated_by:
+          description: Unique identifier of the user who last updated the content
+          type: string
+      required:
+      - root_content
+      - title
+      - latest_fields_version
+      - content_guid
+      - created_by
+      - updated_by
+      - created_at
+      - updated_at
+      - content_type_guid
+      - content_type_name
+      - links
+      type: object
+    HTTPException:
+      properties:
+        detail:
+          description: Error message details.
+          type: string
+      type: object
+    CoreFieldDef:
+      properties:
+        editor_metadata:
+          anyOf:
+          - type: object
+          - items: {}
+            type: array
+          description: Editor metadata of the field
+        field_type:
+          $ref: '#/components/schemas/FieldType'
+        help_text:
+          description: Helptext of the field
+          type: string
+        is_list:
+          description: Indicates whether the field is a list
+          type: boolean
+        is_required:
+          description: Required status of the field
+          type: boolean
+        key:
+          description: Key of the field
+          type: string
+        max_list_length:
+          description: Maximum length of the list
+          type: integer
+        min_list_length:
+          description: Minimum length of the list
+          type: integer
+        name:
+          description: Name of the field
+          type: string
+        need_internationalization:
+          description: Indicates whether the field needs internationalization
+          type: boolean
+        order_index:
+          description: Order index of the field
+          type: integer
+        source_id:
+          description: Source ID of the field
+          type: string
+        source_metadata:
+          description: Source metadata of the field
+          type: string
+      required:
+      - key
+      - name
+      - is_list
+      - is_required
+      - need_internationalization
+      type: object
+    ContentFieldsVersionDetails:
+      properties:
+        content_hash:
+          description: Content hash of the version
+          type: string
+        created_at:
+          description: Date and time on which the version was created, in ISO 8601 UTC format
+          format: date-time
+          type: string
+        created_by:
+          description: Unique identifier of the user who created the version
+          type: string
+        fields:
+          additionalProperties:
+            items:
+              $ref: '#/components/schemas/LocalizedFieldValues'
+            type: array
+          description: List of fields
+          type: object
+        source_id:
+          description: Source ID of the version
+          type: string
+        source_metadata:
+          description: Source metadata of the version
+          type: string
+        validation:
+          $ref: '#/components/schemas/ContentFieldsVersionValidation'
+        version_guid:
+          description: Unique identifier of the version
+          type: string
+      required:
+      - fields
+      - created_by
+      - created_at
+      - version_guid
+      - content_hash
+      type: object
+    AllowedContentTypeItem:
+      properties:
+        name:
+          description: Name of the item
+          type: string
+        url:
+          description: URL of the item
+          type: string
+      required:
+      - name
+      - url
+      type: object
+    TextFieldDefinition:
+      properties:
+        core:
+          $ref: '#/components/schemas/CoreFieldDef'
+        default_values:
+          description: Default values of the field
+          items:
+            type: string
+          type: array
+        max_length:
+          description: Maximum length of the field
+          type: integer
+        min_length:
+          description: Minimum length of the field
+          type: integer
+        validation_pattern:
+          description: Validation pattern of the field
+          type: string
+      required:
+      - core
+      - validation_pattern
+      - min_length
+      type: object
+    ChoiceDisplayOption:
+      description: An enumeration.
+      enum:
+      - radio
+      - dropdown
+      - tag
+      - checkbox
+      type: string
+    ContentMigrationSummary:
+      properties:
+        errored:
+          description: The number of content items that failed to migrate.
+          type: integer
+        not_started:
+          description: The number of content items that haven't started migrating.
+          type: integer
+        skipped:
+          description: The number of content items that are skipped due to content type version ID mismatch.
+          type: integer
+        succeeded:
+          description: The number of content items that migrated successfully.
+          type: integer
+        total:
+          description: The total number of content items.
+          type: integer
+      type: object
+    error_reason:
+      description: An enumeration.
+      enum:
+      - REQUIRED_FIELD_ABSENT
+      - LIST_EMPTY
+      - INVALID_STATE
+      - INVALID_SELF_REF
+      - MIN_NOT_MET
+      - MAX_NOT_MET
+      - PATTERN_ERROR
+      title: error_reason
+      type: string
+    LibraryAssetType:
+      description: An enumeration.
+      enum:
+      - article
+      - image
+      - video
+      - raw_file
+      - structured_content
+      type: string
+    LibraryAssetFieldDefinition:
+      properties:
+        allowed_types:
+          items:
+            $ref: '#/components/schemas/LibraryAssetType'
+          type: array
+        core:
+          $ref: '#/components/schemas/CoreFieldDef'
+        default_values:
+          description: Default values for the field
+          items:
+            $ref: '#/components/schemas/LibraryAssetDefaultValue'
+          type: array
+      required:
+      - core
+      - allowed_types
+      type: object
+    SCContentTypeUpdateResponse:
+      properties:
+        updated:
+          description: Updated status of the request
+          type: boolean
+      required:
+      - updated
+      type: object
+    SCContentTypeCreateResponse:
+      properties:
+        content_type_guid:
+          description: Unique identifier of the content type
+          type: string
+        content_type_version_guid:
+          description: Unique identifier of the content type version
+          type: string
+        created:
+          description: Created status of the requested content type
+          type: boolean
+      required:
+      - created
+      type: object
+    SCContentMigrationCreateRequest:
+      properties:
+        created_by:
+          description: Unique identifier of the user who migrated the content
+          type: string
+        fields:
+          additionalProperties:
+            items:
+              $ref: '#/components/schemas/LocalizedFieldValues'
+            type: array
+          description: List of fields
+          type: object
+        new_content_type_version_id:
+          description: Unique identifier of the content type version to migrate the content to
+          type: string
+        source:
+          description: Source of the content
+          title: Source
+          type:
+          - string
+          - 'null'
+        source_id:
+          description: Source id of the content
+          title: Sourceid
+          type:
+          - string
+          - 'null'
+      required:
+      - created_by
+      - content_hash
+      type: object
+    BaseContentTypeVersionModel:
+      properties:
+        created_at:
+          description: Date and time on which the version was created, in ISO 8601 UTC format
+          format: date-time
+          type: string
+        created_by:
+          description: Unique identifier of the user who created the version
+          type: string
+        expected_locales:
+          description: Expected locales of the version
+          items:
+            type: string
+          type: array
+        latest:
+          description: Indicates whether the version is the latest
+          type: boolean
+        links:
+          description: Meta links
+          properties:
+            content_type:
+              description: URL of the content type
+              example: https://api.cmp.optimizely.com/v3/structured-content/content-types/555876bf63e94ea4b3ec4da318736414
+              type: string
+            self:
+              description: URL of the content type version
+              example: https://api.cmp.optimizely.com/v3/structured-content/content-types/555876bf63e94ea4b3ec4da318736414/versions/31a6d15b09c54a04935203eb958ae058
+              type: string
+          type: object
+        version_guid:
+          description: Unique identifier of the version
+          type: string
+      required:
+      - version_guid
+      - created_by
+      - created_at
+      - latest
+      - expected_locales
+      - links
+      type: object
+    ContentTypeListingOption:
+      description: "List Type:\n  * `1` - Component only\n  * `2` - Content only\n  * `3` - Component and Content only\n"
+      enum:
+      - '1'
+      - '2'
+      - '3'
+      type: string
+    LibraryAssetDefaultValue:
+      properties:
+        asset_guid:
+          description: Unique identifier of the asset
+          type: string
+        asset_type:
+          $ref: '#/components/schemas/LibraryAssetType'
+      required:
+      - asset_type
+      - asset_guid
+      type: object
+    ContentTypeFieldDefinition:
+      properties:
+        allow_ref_edit:
+          description: Whether to allow ref editing
+          type: boolean
+        allowed_content_types:
+          description: List of allowed content types
+          items:
+            type: string
+          type: array
+        content_type_links:
+          additionalProperties:
+            $ref: '#/components/schemas/AllowedContentTypeItem'
+          description: Links related to the content type
+          type: object
+        core:
+          $ref: '#/components/schemas/CoreFieldDef'
+        default_value:
+          description: Default value for the field
+          type: string
+        ref_type:
+          $ref: '#/components/schemas/ContentTypeFieldEmbedMixConfig'
+      required:
+      - core
+      - allowed_content_types
+      - ref_type
+      type: object
+    DatetimeFieldValueModel:
+      properties:
+        datetime_value:
+          description: Value of the field value
+          format: date-time
+          type: string
+        order_index:
+          description: Order index of the field value
+          type: integer
+      required:
+      - datetime_value
+      type: object
+    DatetimeFieldDefinition:
+      properties:
+        core:
+          $ref: '#/components/schemas/CoreFieldDef'
+        default_values:
+          description: Default values of the field
+          items:
+            format: date-time
+            type: string
+          type: array
+        max_date:
+          description: Maximum date of the field
+          format: date-time
+          type: string
+        min_date:
+          description: Minimum date of the field
+          format: date-time
+          type: string
+      required:
+      - core
+      - min_date
+      - max_date
+      type: object
+    Error:
+      additionalProperties: true
+      description: Error payload
+      properties:
+        errors:
+          additionalProperties: true
+          description: Additional information
+          properties: {}
+          type: object
+        message:
+          description: Message describing the error
+          example: Not found
+          type: string
+      required:
+      - message
+      type: object
+    SCContentTypeManagedMigrationStartResponse:
+      properties:
+        job_id:
+          description: The unique identifier of job.
+          type: string
+        started:
+          description: True if job started, otherwise false.
+          type: boolean
+      type: object
+    LocationDefaultValue:
+      properties:
+        latitude:
+          description: Latitude of the location
+          type: number
+        longitude:
+          description: Longitude of the location
+          type: number
+      required:
+      - longitude
+      - latitude
+      type: object
+    LibraryAssetFieldValueModel:
+      properties:
+        asset_guid:
+          description: Asset GUID of the field value
+          type: string
+        asset_type:
+          $ref: '#/components/schemas/LibraryAssetType'
+        links:
+          additionalProperties:
+            type: string
+          description: Meta links
+          type: object
+        order_index:
+          description: Order index of the field value
+          type: integer
+      required:
+      - asset_guid
+      - asset_type
+      type: object
+    URLFieldValueModel:
+      properties:
+        order_index:
+          description: Order index of the field value
+          type: integer
+        url:
+          description: URL of the field value
+          format: uri
+          maxLength: 65536
+          minLength: 1
+          type: string
+      required:
+      - url
+      type: object
+    ChoiceFieldDefinition:
+      properties:
+        choices:
+          additionalProperties:
+            type: string
+          description: Choices of the field
+          type: object
+        core:
+          $ref: '#/components/schemas/CoreFieldDef'
+        default_values:
+          description: Default values of the field
+          items:
+            type: string
+          type: array
+        display_option:
+          $ref: '#/components/schemas/ChoiceDisplayOption'
+      required:
+      - core
+      - choices
+      type: object
+    JSONFieldValueModel:
+      properties:
+        json_value:
+          anyOf:
+          - type: object
+          - items: {}
+            type: array
+          description: Value of the field value
+        order_index:
+          description: Order index of the field value
+          type: integer
+      required:
+      - json_value
+      type: object
+    BaseFieldDefinition:
+      properties:
+        base_type:
+          $ref: '#/components/schemas/BaseFieldDefinitionType'
+        core:
+          $ref: '#/components/schemas/CoreFieldDef'
+        default_values:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/LocationDefaultValue'
+            - type: boolean
+            - format: uri
+              maxLength: 65536
+              minLength: 1
+              type: string
+            - type: object
+            - items: {}
+              type: array
+          type: array
+      required:
+      - core
+      - base_type
+      type: object
+    ContentFieldValueModel:
+      properties:
+        content_guid:
+          description: Content GUID of the field value
+          type: string
+        content_url:
+          description: Content URL of the field value
+          type: string
+        embedded:
+          description: Indicates whether the field value is embedded
+          type: boolean
+        order_index:
+          description: Order index of the field value
+          type: integer
+      required:
+      - content_guid
+      - embedded
+      type: object
+    ContentTypeFieldEmbedMixConfig:
+      description: "Ref Type:\n  * `1` Refer only\n  * `2` Refer and create embed\n  * `3` Create only\n"
+      enum:
+      - 1
+      - 2
+      - 3
+      type: integer
+    BaseContentTypeModel:
+      properties:
+        component:
+          description: Status determining whether the content type is a component
+          type: boolean
+        content_type_guid:
+          description: Unique identifier of the content type
+          type: string
+        created_at:
+          description: Date and time on which the content type was created, in ISO 8601 UTC format
+          format: date-time
+          type: string
+        created_by:
+          description: Unique identifier of the user who created the content type
+          type: string
+        description:
+          description: Description of the content type
+          type: string
+        disabled:
+          description: Disabled status of the content type
+          type: boolean
+        links:
+          description: Meta Links
+          properties:
+            self:
+              description: URL of the content type
+              example: https://api.cmp.optimizely.com/v3/structured-content/content-types/9fda53cf66a14fd487251480ca695c7b
+              type: string
+            versions:
+              description: URL of the content type versions
+              example: https://api.cmp.optimizely.com/v3/structured-content/content-types/9fda53cf66a14fd487251480ca695c7b/versions
+              type: string
+          type: object
+        name:
+          description: Name of the content type
+          type: string
+        source:
+          description: Source of the content type
+          type: string
+        source_id:
+          description: Source of the content type
+          type: string
+        source_metadata:
+          description: Source metadata of the content type
+          type: string
+        thumbnail_guid:
+          description: Thumbnail GUID of the content type
+          type: string
+        updated_at:
+          description: Date and time on which the content type was last updated, in ISO 8601 UTC format
+          format: date-time
+          type: string
+        updated_by:
+          description: Unique identifier of the user who last updated the content type
+          type: string
+      required:
+      - name
+      - component
+      - content_type_guid
+      - created_by
+      - updated_by
+      - created_at
+      - updated_at
+      - links
+      type: object
+    SCContentTypeVersion:
+      allOf:
+      - $ref: '#/components/schemas/BaseContentTypeVersionModel'
+      - properties:
+          field_definitions:
+            items:
+              anyOf:
+              - $ref: '#/components/schemas/ContentTypeFieldDefinition'
+              - $ref: '#/components/schemas/LibraryAssetFieldDefinition'
+              - $ref: '#/components/schemas/TextFieldDefinition'
+              - $ref: '#/components/schemas/BaseFieldDefinition'
+              - $ref: '#/components/schemas/DatetimeFieldDefinition'
+              - $ref: '#/components/schemas/RichTextFieldDefinition'
+              - $ref: '#/components/schemas/ChoiceFieldDefinition'
+              - $ref: '#/components/schemas/NumberFieldDefinition'
+            type: array
+        required:
+        - field_definitions
+        type: object
+    ContentFieldsVersionValidation:
+      properties:
+        fields:
+          additionalProperties:
+            additionalProperties:
+              $ref: '#/components/schemas/error_reason'
+            type: object
+          description: Validation for the fields
+          type: object
+      type: object
+    KeyedPreviewErrorModel:
+      properties:
+        error:
+          description: URL for error preview.
+          format: uri
+          maxLength: 65536
+          minLength: 1
+          type: string
+        locale:
+          default: en_US
+          description: "If not specified, the `locale` will be infered from the `Content-Language` header from the `error` URL.\n In case of multiple locales, only the first one will be considered and it will be converted to snake case.\n For example, if the `Content-Language` header from the `completed` URL returns `en-US, de, bn`, it will be inferred as `en_US`.\n If the `locale` is not specified and there is no `Content-Language` header, this will default to `en_US`."
+          type: string
+        mimeType:
+          default: text/html
+          description: "If not specified, the `mimeType` will be inferred from the `Content-Type` header from the `error` URL.\n If the `mimeType` is not specified and there is no `Content-Type` header, this will default to `text/html`."
+          type: string
+        name:
+          default: ''
+          description: Human readable preview name to distinguish between generated preview outcomes.
+          type: string
+        orderIndex:
+          default: 0
+          description: Priority of a preview. For multiple previews, this will be used to sort the previews.
+          type: number
+      required:
+      - error
+      type: object
+    NumberFieldDefinition:
+      properties:
+        core:
+          $ref: '#/components/schemas/CoreFieldDef'
+        default_values:
+          description: Default values of the field
+          items:
+            type: number
+          type: array
+        max_value:
+          description: Maximum value of the field
+          type: number
+        min_value:
+          description: Minimum value of the field
+          type: number
+      required:
+      - core
+      type: object
+  responses:
+    ClientError:
+      content:
+        application/json:
+          example:
+            message: 'Unsupported arguments: a,b,c'
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client error
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
+  securitySchemes:
+    OAuth2:
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/auth
+          scopes:
+            offline_access: Grants the ability to refresh access_token using the refresh token even when user is not present (not logged in).
+            openid: Grants the ability to receive a unique identifier for the user.
+            profile: Grants access to user profile information.
+          tokenUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/token
+        clientCredentials:
+          scopes: {}
+          tokenUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/token
+      type: oauth2
+x-tagGroups:
+- name: API
+  tags:
+  - Uploader
+  - Library
+  - Labels
+  - Brand Compliance
+  - Tasks
+  - Task Step
+  - Campaigns
+  - Publishing
+  - Templates
+  - Users
+  - Work Requests
+  - Structured Contents
+  - Assets
+  - Milestones
+  - Teams
+  - Settings
+  - Workflows
+  - Fields
+  - Events

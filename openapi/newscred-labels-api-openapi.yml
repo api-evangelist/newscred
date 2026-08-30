@@ -1,0 +1,273 @@
+openapi: 3.2.0
+info:
+  title: Newscred Labels API
+  version: V3
+  description: 'Operations tagged Labels across 2 of this provider''s published API definitions: newscred-cmp-open-api-openapi.json, newscred-welcome-open-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- description: v3 version of Optimizely CMP Open API
+  url: https://api.cmp.optimizely.com/v3
+- url: https://api.welcomesoftware.com/v3
+  description: v3 version of _Welcome_ Open API
+tags:
+- name: Labels
+paths:
+  /label-groups:
+    get:
+      description: Get the list of label groups. Label groups are sorted by `name` in ascending order.
+      operationId: listLabelGroups
+      parameters:
+      - description: Source organization type to filter by
+        example: current
+        in: query
+        name: source_org_type
+        schema:
+          enum:
+          - current
+          - related
+          type: string
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/page_size'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties: false
+                properties:
+                  data:
+                    description: List of label groups
+                    items:
+                      $ref: '#/components/schemas/LabelGroup'
+                    type: array
+                  pagination:
+                    allOf:
+                    - $ref: '#/components/schemas/Pagination'
+                    - properties:
+                        next:
+                          example: https://api.cmp.optimizely.com/v3/label-groups?offset=10&page_size=10
+                          type:
+                          - string
+                          - 'null'
+                      type: object
+                required:
+                - data
+                - pagination
+                type: object
+          description: List of fetched label groups
+        '400':
+          $ref: '#/components/responses/ClientError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      summary: GET /label-groups
+      tags:
+      - Labels
+      security:
+      - OAuth2:
+        - openid
+        - profile
+        - offline_access
+    servers:
+    - description: v3 version of Optimizely CMP Open API
+      url: https://api.cmp.optimizely.com/v3
+components:
+  responses:
+    Forbidden:
+      content:
+        application/json:
+          example:
+            message: You do not have the permission to perform this operation
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Permission error
+    ClientError:
+      content:
+        application/json:
+          example:
+            message: 'Unsupported arguments: a,b,c'
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client error
+    Unauthorized:
+      content:
+        application/json:
+          example:
+            message: Unauthorized
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Authorization error
+    Forbidden_2:
+      description: Permission error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: User does not have the permission to perform this operation
+  parameters:
+    page_size:
+      description: Number of results to return per page
+      example: 15
+      in: query
+      name: page_size
+      schema:
+        default: 10
+        maximum: 100
+        minimum: 1
+        type: integer
+    offset:
+      description: Starting index of results (zero indexed)
+      example: 5
+      in: query
+      name: offset
+      schema:
+        default: 0
+        minimum: 0
+        type: integer
+  schemas:
+    LabelGroupValue:
+      additionalProperties: false
+      description: Values of a label group
+      properties:
+        id:
+          description: Unique identifier for the label group value
+          example: 1693bd22eac001bae8f33eab29ee5bc2
+          type: string
+        name:
+          description: Name of the label group value
+          example: Pillar 1
+          type: string
+      required:
+      - id
+      - name
+      type: object
+    Pagination:
+      additionalProperties: false
+      description: Pagination related information
+      properties:
+        next:
+          description: URL to the next page
+          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
+          type:
+          - string
+          - 'null'
+        previous:
+          description: URL to the previous page
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - next
+      - previous
+      type: object
+    Error:
+      additionalProperties: true
+      description: Error payload
+      properties:
+        errors:
+          additionalProperties: true
+          description: Additional information
+          properties: {}
+          type: object
+        message:
+          description: Message describing the error
+          example: Not found
+          type: string
+      required:
+      - message
+      type: object
+    LabelGroup:
+      additionalProperties: false
+      properties:
+        id:
+          description: Unique identifier for the label group
+          example: 693c3b28b10a22800e1936fa53324ac1
+          type: string
+        name:
+          description: Name of the label group
+          example: Content Pillar
+          type: string
+        source_org_type:
+          description: 'Source organization type where the label group is listed.
+
+            `current` means the label group is listed in the organization with which the Open API App is associated.
+
+            `related` means the label group is listed in one of the organizations related to the `current` organization.
+
+            '
+          enum:
+          - current
+          - related
+          type: string
+        values:
+          description: Values of the label group
+          items:
+            $ref: '#/components/schemas/LabelGroupValue'
+          type: array
+      required:
+      - id
+      - name
+      - source_org_type
+      - values
+      type: object
+    Pagination_2:
+      type: object
+      additionalProperties: false
+      description: Pagination related information
+      properties:
+        next:
+          type:
+          - string
+          - 'null'
+          description: URL to the next page
+          example: https://api.welcomesoftware.com/<some-path-to-next-page>?offset=10&page_size=10
+        previous:
+          type:
+          - string
+          - 'null'
+          description: URL to the previous page
+          example: null
+      required:
+      - next
+      - previous
+  securitySchemes:
+    OAuth2:
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/auth
+          scopes:
+            offline_access: Grants the ability to refresh access_token using the refresh token even when user is not present (not logged in).
+            openid: Grants the ability to receive a unique identifier for the user.
+            profile: Grants access to user profile information.
+          tokenUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/token
+        clientCredentials:
+          scopes: {}
+          tokenUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/token
+      type: oauth2
+x-refined-from:
+- newscred-cmp-open-api-openapi.json
+- newscred-welcome-open-api-openapi.yml
+x-tagGroups:
+- name: API
+  tags:
+  - Uploader
+  - Library
+  - Labels
+  - Brand Compliance
+  - Tasks
+  - Task Step
+  - Campaigns
+  - Publishing
+  - Templates
+  - Users
+  - Work Requests
+  - Structured Contents
+  - Assets
+  - Milestones
+  - Teams
+  - Settings
+  - Workflows
+  - Fields
+  - Events

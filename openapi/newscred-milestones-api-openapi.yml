@@ -1,0 +1,462 @@
+openapi: 3.2.0
+info:
+  title: Optimizely CMP Open API Documentation Milestones API
+  version: V3
+servers:
+- description: v3 version of Optimizely CMP Open API
+  url: https://api.cmp.optimizely.com/v3
+security:
+- OAuth2:
+  - openid
+  - profile
+  - offline_access
+tags:
+- name: Milestones
+paths:
+  /milestones:
+    get:
+      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Get a list of milestones.
+      operationId: listMilestones
+      parameters:
+      - example: 63f1c2b675be4132854d2742
+        in: query
+        name: campaign_id
+        schema:
+          description: Filter milestones by campaign association. When a campaign ID is provided, returns only milestones associated with that campaign. When explicitly set to `null`, returns only milestones not associated with any campaign. When omitted, returns all milestones regardless of campaign association.
+          type:
+          - string
+          - 'null'
+      - example: '2023-10-01T00:00:00Z'
+        in: query
+        name: due_date__from
+        schema:
+          description: Filter milestones with due date from this date, in ISO 8601 UTC format
+          format: date-time
+          type: string
+      - example: '2023-10-31T23:59:59Z'
+        in: query
+        name: due_date__to
+        schema:
+          description: Filter milestones with due date up to this date, in ISO 8601 UTC format
+          format: date-time
+          type: string
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/page_size'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties: false
+                properties:
+                  data:
+                    description: List of milestones
+                    items:
+                      $ref: '#/components/schemas/MilestoneResponse'
+                    type: array
+                  pagination:
+                    allOf:
+                    - $ref: '#/components/schemas/Pagination'
+                    - properties:
+                        next:
+                          example: https://api.cmp.optimizely.com/v3/milestones?offset=10&page_size=10
+                          type:
+                          - string
+                          - 'null'
+                      type: object
+                required:
+                - data
+                - pagination
+                type: object
+          description: List of fetched milestones
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      summary: GET /milestones
+      tags:
+      - Milestones
+    post:
+      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Creates a milestone. Defaults to the organization's campaign if campaign_id is omitted. Tasks are validated against the selected campaign and must belong to it.
+      operationId: createMilestone
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MilestoneCreateRequest'
+        description: Payload to create a milestone
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MilestoneResponse'
+          description: Created milestone
+        '400':
+          $ref: '#/components/responses/ClientError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      summary: POST /milestones
+      tags:
+      - Milestones
+  /milestones/{id}:
+    get:
+      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Get a milestone by ID.
+      operationId: getMilestone
+      parameters:
+      - example: 63f1c2b675be4132854d2741
+        in: path
+        name: id
+        required: true
+        schema:
+          description: Unique identifier of the milestone
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MilestoneResponse'
+          description: Details of the milestone
+        '400':
+          $ref: '#/components/responses/ClientError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      summary: GET /milestones/{id}
+      tags:
+      - Milestones
+    patch:
+      description: '<span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Updates a milestone. All fields are optional. Only provided fields will be updated. Note: If tasks array is empty, it will remove all task associations for that milestone.'
+      operationId: updateMilestone
+      parameters:
+      - example: 63f1c2b675be4132854d2741
+        in: path
+        name: id
+        required: true
+        schema:
+          description: Unique identifier of the milestone
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MilestoneUpdateRequest'
+        description: Payload to update a milestone
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MilestoneResponse'
+          description: Updated milestone
+        '400':
+          $ref: '#/components/responses/ClientError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      summary: PATCH /milestones/{id}
+      tags:
+      - Milestones
+components:
+  schemas:
+    MilestoneUpdateRequest:
+      additionalProperties: false
+      properties:
+        campaign_id:
+          description: Id of the campaign to be associated with the milestone
+          example: 63f1c2b675be4132854d2741
+          type: string
+        description:
+          description: Description of the milestone. If provided, this should be between 1 and 250 characters.
+          example: Complete all tasks for the Q1 product launch
+          maxLength: 250
+          minLength: 1
+          type:
+          - string
+          - 'null'
+        due_date:
+          description: Date and time on which the milestone will expire, in ISO 8601 UTC format
+          example: '2023-10-07T13:15:30Z'
+          format: date-time
+          type: string
+        hex_color:
+          description: Hex color code for the milestone label
+          example: '#4ECFD5'
+          type: string
+        tasks:
+          description: List of tasks to be associated with the milestone. This can be an empty array, but in that case it will remove all task associations for that milestone.
+          example:
+          - id: 63f1c2b675be4132854d2741
+          - id: 63f1c2b675be4132854d2742
+          items:
+            properties:
+              id:
+                description: Task ID
+                type: string
+            required:
+            - id
+            type: object
+          type: array
+        title:
+          description: Title of the milestone. This should be between 1 and 80 characters.
+          example: Q1 Product Launch
+          maxLength: 80
+          minLength: 1
+          type: string
+      type: object
+    MilestoneCreateRequest:
+      additionalProperties: false
+      properties:
+        campaign_id:
+          description: Id of the campaign to be associated with the milestone
+          example: 63f1c2b675be4132854d2741
+          type: string
+        description:
+          description: Description of the milestone. If provided, this should be between 1 and 250 characters.
+          example: Complete all tasks for the Q1 product launch
+          maxLength: 250
+          minLength: 1
+          type:
+          - string
+          - 'null'
+        due_date:
+          description: Date and time on which the milestone will expire, in ISO 8601 UTC format
+          example: '2023-10-07T13:15:30Z'
+          format: date-time
+          type: string
+        hex_color:
+          description: Hex color code for the milestone label
+          example: '#4ECFD5'
+          type: string
+        tasks:
+          description: List of tasks to be associated with the milestone
+          example:
+          - id: 63f1c2b675be4132854d2741
+          - id: 63f1c2b675be4132854d2742
+          items:
+            properties:
+              id:
+                description: Task ID
+                type: string
+            required:
+            - id
+            type: object
+          type: array
+        title:
+          description: Title of the milestone. This should be between 1 and 80 characters.
+          example: Q1 Product Launch
+          maxLength: 80
+          minLength: 1
+          type: string
+      required:
+      - title
+      - due_date
+      - hex_color
+      type: object
+    MilestoneResponse:
+      additionalProperties: false
+      properties:
+        campaign:
+          additionalProperties: false
+          description: Campaign associated with the milestone
+          properties:
+            id:
+              description: Unique identifier of the campaign
+              example: 63f1c2b675be4132854d2742
+              type: string
+          required:
+          - id
+          type:
+          - object
+          - 'null'
+        color:
+          description: Color of the milestone label
+          example: '#4ECFD5'
+          type: string
+        description:
+          description: Description of the milestone
+          example: This is a milestone
+          type:
+          - string
+          - 'null'
+        due_date:
+          description: Date and time on which the milestone will expire, in ISO 8601 UTC format
+          example: '2023-10-07T13:15:30Z'
+          format: date-time
+          type: string
+        id:
+          description: Unique identifier of the milestone
+          example: 63f1c2b675be4132854d2741
+          type: string
+        links:
+          additionalProperties: false
+          description: Meta links
+          properties:
+            self:
+              description: URL of the milestone
+              example: https://api.cmp.optimizely.com/v3/milestones/63f1c2b675be4132854d2741
+              type: string
+          required:
+          - self
+          type: object
+        title:
+          description: Title of the milestone
+          example: Sample Milestone
+          type: string
+      required:
+      - id
+      - title
+      - color
+      - description
+      - due_date
+      - campaign
+      - links
+      type: object
+    Pagination:
+      additionalProperties: false
+      description: Pagination related information
+      properties:
+        next:
+          description: URL to the next page
+          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
+          type:
+          - string
+          - 'null'
+        previous:
+          description: URL to the previous page
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - next
+      - previous
+      type: object
+    Error:
+      additionalProperties: true
+      description: Error payload
+      properties:
+        errors:
+          additionalProperties: true
+          description: Additional information
+          properties: {}
+          type: object
+        message:
+          description: Message describing the error
+          example: Not found
+          type: string
+      required:
+      - message
+      type: object
+  responses:
+    Forbidden:
+      content:
+        application/json:
+          example:
+            message: You do not have the permission to perform this operation
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Permission error
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
+    ClientError:
+      content:
+        application/json:
+          example:
+            message: 'Unsupported arguments: a,b,c'
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client error
+    UnprocessableEntity:
+      content:
+        application/json:
+          example:
+            message: Resource cannot be processed
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Unprocessable entity error
+    Unauthorized:
+      content:
+        application/json:
+          example:
+            message: Unauthorized
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Authorization error
+  parameters:
+    page_size:
+      description: Number of results to return per page
+      example: 15
+      in: query
+      name: page_size
+      schema:
+        default: 10
+        maximum: 100
+        minimum: 1
+        type: integer
+    offset:
+      description: Starting index of results (zero indexed)
+      example: 5
+      in: query
+      name: offset
+      schema:
+        default: 0
+        minimum: 0
+        type: integer
+  securitySchemes:
+    OAuth2:
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/auth
+          scopes:
+            offline_access: Grants the ability to refresh access_token using the refresh token even when user is not present (not logged in).
+            openid: Grants the ability to receive a unique identifier for the user.
+            profile: Grants access to user profile information.
+          tokenUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/token
+        clientCredentials:
+          scopes: {}
+          tokenUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/token
+      type: oauth2
+x-tagGroups:
+- name: API
+  tags:
+  - Uploader
+  - Library
+  - Labels
+  - Brand Compliance
+  - Tasks
+  - Task Step
+  - Campaigns
+  - Publishing
+  - Templates
+  - Users
+  - Work Requests
+  - Structured Contents
+  - Assets
+  - Milestones
+  - Teams
+  - Settings
+  - Workflows
+  - Fields
+  - Events
