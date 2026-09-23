@@ -1,0 +1,31 @@
+# Front Door AI Index — newscred — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: newscred
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.optimizely.com
+  final_host: www.optimizely.com
+  ownership: shared
+  owner: optimizely
+  shares_host_with:
+  - episerver
+  - optimizely
+  - zaius
+  inherited_from: null
+  verdict: scored
+  score: null
+  host_score: 6
+  density: null
+  words: 564
+  tiers:
+    agentic: 1
+    core: 5
+    model: 0
+  ambiguous: 3
+  top_terms:
+    AI: 4
+    agent: 3
+    AI agent: 1
+    large language model: 1

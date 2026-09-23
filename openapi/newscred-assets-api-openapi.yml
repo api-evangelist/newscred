@@ -70,14 +70,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Not found error
-    ClientError:
-      content:
-        application/json:
-          example:
-            message: 'Unsupported arguments: a,b,c'
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Client error
     Unauthorized:
       content:
         application/json:
@@ -86,6 +78,14 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Authorization error
+    ClientError:
+      content:
+        application/json:
+          example:
+            message: 'Unsupported arguments: a,b,c'
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client error
   schemas:
     Error:
       additionalProperties: true

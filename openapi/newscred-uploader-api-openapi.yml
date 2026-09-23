@@ -1,19 +1,21 @@
 openapi: 3.2.0
 info:
-  title: Newscred Uploader API
+  title: Optimizely CMP Open API Documentation Uploader API
   version: V3
-  description: 'Operations tagged Uploader across 2 of this provider''s published API definitions: newscred-cmp-open-api-openapi.json, newscred-welcome-open-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - description: v3 version of Optimizely CMP Open API
   url: https://api.cmp.optimizely.com/v3
-- url: https://api.welcomesoftware.com/v3
-  description: v3 version of _Welcome_ Open API
+security:
+- OAuth2:
+  - openid
+  - profile
+  - offline_access
 tags:
 - name: Uploader
 paths:
   /multipart-uploads:
     post:
-      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Create pre-signed URLs for multipart upload of large files
+      description: Experimental Create pre-signed URLs for multipart upload of large files
       operationId: createMultipartUpload
       requestBody:
         content:
@@ -108,17 +110,9 @@ paths:
       summary: POST /v3/multipart-uploads
       tags:
       - Uploader
-      security:
-      - OAuth2:
-        - openid
-        - profile
-        - offline_access
-    servers:
-    - description: v3 version of Optimizely CMP Open API
-      url: https://api.cmp.optimizely.com/v3
   /multipart-uploads/{id}/complete:
     post:
-      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Initiate completion of a multipart upload after all parts have been uploaded
+      description: Experimental Initiate completion of a multipart upload after all parts have been uploaded
       operationId: completeMultipartUpload
       parameters:
       - description: ID of the multipart upload to complete
@@ -164,17 +158,9 @@ paths:
       summary: POST /v3/multipart-uploads/{id}/complete
       tags:
       - Uploader
-      security:
-      - OAuth2:
-        - openid
-        - profile
-        - offline_access
-    servers:
-    - description: v3 version of Optimizely CMP Open API
-      url: https://api.cmp.optimizely.com/v3
   /multipart-uploads/{id}/status:
     get:
-      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Retrieve the current status of a multipart upload
+      description: Experimental Retrieve the current status of a multipart upload
       operationId: getMultipartUploadStatus
       parameters:
       - description: ID of the multipart upload to check status for
@@ -246,14 +232,6 @@ paths:
       summary: GET /v3/multipart-uploads/{id}/status
       tags:
       - Uploader
-      security:
-      - OAuth2:
-        - openid
-        - profile
-        - offline_access
-    servers:
-    - description: v3 version of Optimizely CMP Open API
-      url: https://api.cmp.optimizely.com/v3
   /upload-url:
     get:
       description: Get a presigned URL and related meta fields to upload a file. **The validity time for this URL is 60 minutes**.
@@ -317,16 +295,16 @@ paths:
       summary: GET /upload-url
       tags:
       - Uploader
-      security:
-      - OAuth2:
-        - openid
-        - profile
-        - offline_access
-    servers:
-    - description: v3 version of Optimizely CMP Open API
-      url: https://api.cmp.optimizely.com/v3
 components:
   responses:
+    UnprocessableEntity:
+      content:
+        application/json:
+          example:
+            message: Resource cannot be processed
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Unprocessable entity error
     Forbidden:
       content:
         application/json:
@@ -343,22 +321,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Not found error
-    ClientError:
-      content:
-        application/json:
-          example:
-            message: 'Unsupported arguments: a,b,c'
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Client error
-    UnprocessableEntity:
-      content:
-        application/json:
-          example:
-            message: Resource cannot be processed
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Unprocessable entity error
     Unauthorized:
       content:
         application/json:
@@ -367,14 +329,14 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Authorization error
-    Forbidden_2:
-      description: Permission error
+    ClientError:
       content:
         application/json:
+          example:
+            message: 'Unsupported arguments: a,b,c'
           schema:
             $ref: '#/components/schemas/Error'
-          example:
-            message: User does not have the permission to perform this operation
+      description: Client error
   schemas:
     Error:
       additionalProperties: true
@@ -406,9 +368,6 @@ components:
           scopes: {}
           tokenUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/token
       type: oauth2
-x-refined-from:
-- newscred-cmp-open-api-openapi.json
-- newscred-welcome-open-api-openapi.yml
 x-tagGroups:
 - name: API
   tags:

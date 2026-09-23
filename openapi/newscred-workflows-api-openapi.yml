@@ -15,7 +15,7 @@ tags:
 paths:
   /workflows:
     get:
-      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Get a list of workflows.
+      description: Experimental Get a list of workflows.
       operationId: listWorkflows
       parameters:
       - $ref: '#/components/parameters/offset'
@@ -56,7 +56,7 @@ paths:
       - Workflows
   /workflows/{workflow_id}:
     get:
-      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Get a workflow by ID.
+      description: Experimental Get a workflow by ID.
       operationId: getWorkflow
       parameters:
       - example: 5fe4925ef8a9378056bf4e37
@@ -84,125 +84,32 @@ paths:
       - Workflows
 components:
   schemas:
-    FieldTypeSimpleNumber:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - properties:
-          decimal_places:
-            description: Decimal place of the numerical field
-            example: 2
-            type:
-            - integer
-            - 'null'
-          has_thousand_separator:
-            description: Whether the numerical field has a thousand separator
-            example: true
-            type: boolean
-        required:
-        - has_thousand_separator
-        - decimal_places
-        type: object
-    WorkflowListResponseItem:
+    FieldBaseType:
       additionalProperties: false
       properties:
-        description:
-          description: Description of the workflow
-          example: Nice description
-          type:
-          - string
-          - 'null'
         id:
-          description: Unique identifier of the workflow
-          example: 6e7f910551b00a722e04188
+          description: Identifier of the field
+          example: 64be245ec0d79e79fdf1ad84
           type: string
-        is_flexible:
-          description: Indicates whether the workflow is flexible
-          example: true
-          type: boolean
         name:
-          description: Name of the workflow
-          example: The awesome workflow
+          description: Name of the field
+          example: Dropdown 101
           type: string
+        type:
+          description: Type of the field
+          example: text
+          type: string
+        values:
+          description: List of selected values or from user input
+          items:
+            type: string
+          type: array
       required:
       - id
       - name
-      - description
-      - is_flexible
+      - type
+      - values
       type: object
-    FieldTypeCheckbox:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - properties:
-          choices:
-            description: Choices of the checkbox
-            items:
-              properties:
-                id:
-                  description: Identifier of the choice
-                  example: 6ceee2f4fa3411ecb37802420ac8001b
-                  type: string
-                name:
-                  description: Name of the choice
-                  example: Checkbox 1 Choice 1
-                  type: string
-              required:
-              - id
-              - name
-              - color
-              type: object
-            type: array
-        required:
-        - choices
-        type: object
-    FieldTypeCommon:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - type: object
-    Pagination:
-      additionalProperties: false
-      description: Pagination related information
-      properties:
-        next:
-          description: URL to the next page
-          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
-          type:
-          - string
-          - 'null'
-        previous:
-          description: URL to the previous page
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - next
-      - previous
-      type: object
-    FieldTypeRadio:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - properties:
-          choices:
-            description: Choices of the radio button
-            items:
-              properties:
-                id:
-                  description: Identifier of the choice
-                  example: 6ceee2f4fa3411ecb37802420ac8001b
-                  type: string
-                name:
-                  description: Name of the choice
-                  example: Radio 1 Choice 1
-                  type: string
-              required:
-              - id
-              - name
-              - color
-              type: object
-            type: array
-        required:
-        - choices
-        type: object
     WorkflowResponse:
       additionalProperties: false
       properties:
@@ -360,60 +267,115 @@ components:
       - steps
       - fields
       type: object
-    ObjectFieldCreateResponse:
-      additionalProperties: false
-      discriminator:
-        mapping:
-          checkbox: '#/components/schemas/FieldTypeCheckbox'
-          currency_number: '#/components/schemas/FieldTypeCurrencyNumber'
-          date: '#/components/schemas/FieldTypeCommon'
-          dropdown: '#/components/schemas/FieldTypeDropdown'
-          image: '#/components/schemas/FieldTypeCommon'
-          label: '#/components/schemas/FieldTypeLabel'
-          percentage_number: '#/components/schemas/FieldTypePercentageNumber'
-          radio_button: '#/components/schemas/FieldTypeRadio'
-          rich_text: '#/components/schemas/FieldTypeCommon'
-          simple_number: '#/components/schemas/FieldTypeSimpleNumber'
-          text: '#/components/schemas/FieldTypeCommon'
-          text_area: '#/components/schemas/FieldTypeCommon'
-          video: '#/components/schemas/FieldTypeCommon'
-        propertyName: type
-      oneOf:
-      - $ref: '#/components/schemas/FieldTypeCommon'
-      - $ref: '#/components/schemas/FieldTypeLabel'
-      - $ref: '#/components/schemas/FieldTypeDropdown'
-      - $ref: '#/components/schemas/FieldTypeRadio'
-      - $ref: '#/components/schemas/FieldTypeCheckbox'
-      - $ref: '#/components/schemas/FieldTypeSimpleNumber'
-      - $ref: '#/components/schemas/FieldTypePercentageNumber'
-      - $ref: '#/components/schemas/FieldTypeCurrencyNumber'
-      type: object
-    FieldBaseType:
-      additionalProperties: false
+    FieldTypeSimpleNumber:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - properties:
+          decimal_places:
+            description: Decimal place of the numerical field
+            example: 2
+            type:
+            - integer
+            - 'null'
+          has_thousand_separator:
+            description: Whether the numerical field has a thousand separator
+            example: true
+            type: boolean
+        required:
+        - has_thousand_separator
+        - decimal_places
+        type: object
+    Error:
+      additionalProperties: true
+      description: Error payload
       properties:
-        id:
-          description: Identifier of the field
-          example: 64be245ec0d79e79fdf1ad84
+        errors:
+          additionalProperties: true
+          description: Additional information
+          properties: {}
+          type: object
+        message:
+          description: Message describing the error
+          example: Not found
           type: string
-        name:
-          description: Name of the field
-          example: Dropdown 101
-          type: string
-        type:
-          description: Type of the field
-          example: text
-          type: string
-        values:
-          description: List of selected values or from user input
-          items:
-            type: string
-          type: array
       required:
-      - id
-      - name
-      - type
-      - values
+      - message
       type: object
+    FieldTypeCurrencyNumber:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - properties:
+          currency_code:
+            description: Currency code of the numerical field
+            example: USD
+            type: string
+          decimal_places:
+            description: Decimal place of the numerical field
+            example: 2
+            type:
+            - integer
+            - 'null'
+          has_thousand_separator:
+            description: Whether the numerical field has a thousand separator
+            example: true
+            type: boolean
+        required:
+        - has_thousand_separator
+        - decimal_places
+        - currency_code
+        type: object
+    Pagination:
+      additionalProperties: false
+      description: Pagination related information
+      properties:
+        next:
+          description: URL to the next page
+          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
+          type:
+          - string
+          - 'null'
+        previous:
+          description: URL to the previous page
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - next
+      - previous
+      type: object
+    FieldTypeCommon:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - type: object
+    FieldTypeDropdown:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - properties:
+          choices:
+            description: Choices of the dropdown
+            items:
+              properties:
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Dropdown 1 Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              type: object
+            type: array
+          is_multi_select:
+            description: Select multiple values from the dropdown
+            type: boolean
+        required:
+        - is_multi_select
+        - choices
+        type: object
     FieldTypeLabel:
       allOf:
       - $ref: '#/components/schemas/FieldBaseType'
@@ -443,73 +405,6 @@ components:
         - is_multi_select
         - choices
         type: object
-    FieldTypeDropdown:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - properties:
-          choices:
-            description: Choices of the dropdown
-            items:
-              properties:
-                id:
-                  description: Identifier of the choice
-                  example: 6ceee2f4fa3411ecb37802420ac8001b
-                  type: string
-                name:
-                  description: Name of the choice
-                  example: Dropdown 1 Choice 1
-                  type: string
-              required:
-              - id
-              - name
-              type: object
-            type: array
-          is_multi_select:
-            description: Select multiple values from the dropdown
-            type: boolean
-        required:
-        - is_multi_select
-        - choices
-        type: object
-    FieldTypeCurrencyNumber:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - properties:
-          currency_code:
-            description: Currency code of the numerical field
-            example: USD
-            type: string
-          decimal_places:
-            description: Decimal place of the numerical field
-            example: 2
-            type:
-            - integer
-            - 'null'
-          has_thousand_separator:
-            description: Whether the numerical field has a thousand separator
-            example: true
-            type: boolean
-        required:
-        - has_thousand_separator
-        - decimal_places
-        - currency_code
-        type: object
-    Error:
-      additionalProperties: true
-      description: Error payload
-      properties:
-        errors:
-          additionalProperties: true
-          description: Additional information
-          properties: {}
-          type: object
-        message:
-          description: Message describing the error
-          example: Not found
-          type: string
-      required:
-      - message
-      type: object
     FieldTypePercentageNumber:
       allOf:
       - $ref: '#/components/schemas/FieldBaseType'
@@ -523,6 +418,111 @@ components:
         required:
         - decimal_places
         type: object
+    FieldTypeCheckbox:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - properties:
+          choices:
+            description: Choices of the checkbox
+            items:
+              properties:
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Checkbox 1 Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              - color
+              type: object
+            type: array
+        required:
+        - choices
+        type: object
+    WorkflowListResponseItem:
+      additionalProperties: false
+      properties:
+        description:
+          description: Description of the workflow
+          example: Nice description
+          type:
+          - string
+          - 'null'
+        id:
+          description: Unique identifier of the workflow
+          example: 6e7f910551b00a722e04188
+          type: string
+        is_flexible:
+          description: Indicates whether the workflow is flexible
+          example: true
+          type: boolean
+        name:
+          description: Name of the workflow
+          example: The awesome workflow
+          type: string
+      required:
+      - id
+      - name
+      - description
+      - is_flexible
+      type: object
+    ObjectFieldCreateResponse:
+      additionalProperties: false
+      discriminator:
+        mapping:
+          checkbox: '#/components/schemas/FieldTypeCheckbox'
+          currency_number: '#/components/schemas/FieldTypeCurrencyNumber'
+          date: '#/components/schemas/FieldTypeCommon'
+          dropdown: '#/components/schemas/FieldTypeDropdown'
+          image: '#/components/schemas/FieldTypeCommon'
+          label: '#/components/schemas/FieldTypeLabel'
+          percentage_number: '#/components/schemas/FieldTypePercentageNumber'
+          radio_button: '#/components/schemas/FieldTypeRadio'
+          rich_text: '#/components/schemas/FieldTypeCommon'
+          simple_number: '#/components/schemas/FieldTypeSimpleNumber'
+          text: '#/components/schemas/FieldTypeCommon'
+          text_area: '#/components/schemas/FieldTypeCommon'
+          video: '#/components/schemas/FieldTypeCommon'
+        propertyName: type
+      oneOf:
+      - $ref: '#/components/schemas/FieldTypeCommon'
+      - $ref: '#/components/schemas/FieldTypeLabel'
+      - $ref: '#/components/schemas/FieldTypeDropdown'
+      - $ref: '#/components/schemas/FieldTypeRadio'
+      - $ref: '#/components/schemas/FieldTypeCheckbox'
+      - $ref: '#/components/schemas/FieldTypeSimpleNumber'
+      - $ref: '#/components/schemas/FieldTypePercentageNumber'
+      - $ref: '#/components/schemas/FieldTypeCurrencyNumber'
+      type: object
+    FieldTypeRadio:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - properties:
+          choices:
+            description: Choices of the radio button
+            items:
+              properties:
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Radio 1 Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              - color
+              type: object
+            type: array
+        required:
+        - choices
+        type: object
   responses:
     Forbidden:
       content:
@@ -532,14 +532,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Permission error
-    NotFound:
-      content:
-        application/json:
-          example:
-            message: Resource not found
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Not found error
     Unauthorized:
       content:
         application/json:
@@ -548,6 +540,14 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Authorization error
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
   parameters:
     page_size:
       description: Number of results to return per page

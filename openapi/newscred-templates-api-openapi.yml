@@ -15,7 +15,7 @@ tags:
 paths:
   /templates:
     get:
-      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Get a list of templates.
+      description: Experimental Get a list of templates.
       operationId: listTemplates
       parameters:
       - example: Kangaroo
@@ -61,7 +61,7 @@ paths:
       - Templates
   /templates/{template_id}:
     get:
-      description: '<span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Get a template by ID. '
+      description: Experimental Get a template by ID.
       operationId: getTemplate
       parameters:
       - example: 9119a313057e401189407116fcd3aa24
@@ -208,43 +208,6 @@ paths:
       - Templates
 components:
   schemas:
-    TemplateListResponse:
-      additionalProperties: false
-      properties:
-        data:
-          description: List of templates
-          items:
-            allOf:
-            - $ref: '#/components/schemas/BaseTemplateResponse'
-            - properties:
-                links:
-                  description: Meta links
-                  properties:
-                    self:
-                      description: URL of the template
-                      example: https://api.cmp.optimizely.com/v3/templates/9119a313057e401189407116fcd3aa24
-                      type: string
-                  required:
-                  - self
-                  type: object
-              required:
-              - links
-              type: object
-          type: array
-        pagination:
-          allOf:
-          - $ref: '#/components/schemas/Pagination'
-          - properties:
-              next:
-                example: https://api.cmp.optimizely.com/v3/templates?offset=10&page_size=10
-                type:
-                - string
-                - 'null'
-            type: object
-      required:
-      - data
-      - pagination
-      type: object
     TemplateLogicRuleAction:
       additionalProperties: false
       description: Action to perform for the rule
@@ -277,71 +240,6 @@ components:
       - type
       - values
       type: object
-    TemplateSimpleNumberFormField:
-      allOf:
-      - $ref: '#/components/schemas/BaseTemplateFormField'
-      - properties:
-          logic_rules:
-            $ref: '#/components/schemas/TemplateLogicRule'
-          type_specific_meta:
-            description: Type-specific meta-information
-            properties:
-              decimal_places:
-                description: Decimal places allowed for the field
-                example: 2
-                type:
-                - integer
-                - 'null'
-              has_thousand_separator:
-                description: Whether the field has thousand separators
-                example: true
-                type: boolean
-            required:
-            - decimal_places
-            - has_thousand_separator
-            type: object
-        required:
-        - type_specific_meta
-        - logic_rules
-        type: object
-    Pagination:
-      additionalProperties: false
-      description: Pagination related information
-      properties:
-        next:
-          description: URL to the next page
-          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
-          type:
-          - string
-          - 'null'
-        previous:
-          description: URL to the previous page
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - next
-      - previous
-      type: object
-    TemplateDefaultFormField:
-      allOf:
-      - $ref: '#/components/schemas/BaseTemplateFormField'
-      - properties:
-          logic_rules:
-            $ref: '#/components/schemas/TemplateLogicRule'
-          type_specific_meta:
-            description: Type-specific meta-information
-            enum:
-            - null
-            example: null
-            type:
-            - object
-            - 'null'
-        required:
-        - type_specific_meta
-        - logic_rules
-        type: object
     TemplateResponse:
       allOf:
       - $ref: '#/components/schemas/BaseTemplateResponse'
@@ -389,131 +287,6 @@ components:
         - form_fields
         - links
         type: object
-    TemplateLogicRuleCondition:
-      additionalProperties: false
-      description: Condition of the rule
-      properties:
-        operator:
-          description: Operator of the condition
-          enum:
-          - any_of
-          - equal
-          - not_equal
-          example: any_of
-          type: string
-        values:
-          description: Values of the condition
-          items:
-            example: 4a8b901e9fd911ecbefa0242ac160019
-            type: string
-          type: array
-      required:
-      - operator
-      - values
-      type: object
-    TemplateLogicRule:
-      description: List of logic rules
-      items:
-        properties:
-          action:
-            $ref: '#/components/schemas/TemplateLogicRuleAction'
-          condition:
-            $ref: '#/components/schemas/TemplateLogicRuleCondition'
-        required:
-        - condition
-        - action
-        type: object
-      type: array
-    TemplatePercentageNumberFormField:
-      allOf:
-      - $ref: '#/components/schemas/BaseTemplateFormField'
-      - properties:
-          logic_rules:
-            $ref: '#/components/schemas/TemplateLogicRule'
-          type_specific_meta:
-            description: Type-specific meta-information
-            properties:
-              decimal_places:
-                description: Decimal places allowed for the field
-                example: 2
-                type:
-                - integer
-                - 'null'
-            required:
-            - decimal_places
-            type: object
-        required:
-        - type_specific_meta
-        - logic_rules
-        type: object
-    TemplateCurrencyNumberFormField:
-      allOf:
-      - $ref: '#/components/schemas/BaseTemplateFormField'
-      - properties:
-          logic_rules:
-            $ref: '#/components/schemas/TemplateLogicRule'
-          type_specific_meta:
-            description: Type-specific meta-information
-            properties:
-              currency_code:
-                description: Currency code of the field
-                example: USD
-                type: string
-              decimal_places:
-                description: Decimal places allowed for the field
-                example: 2
-                type:
-                - integer
-                - 'null'
-              has_thousand_separator:
-                description: Whether the field has thousand separators
-                example: true
-                type: boolean
-            required:
-            - decimal_places
-            - currency_code
-            - has_thousand_separator
-            type: object
-        required:
-        - type_specific_meta
-        - logic_rules
-        type: object
-    BaseTemplateResponse:
-      additionalProperties: false
-      properties:
-        applicable_to:
-          description: List of resources the template is applicable to
-          items:
-            enum:
-            - work_request
-            - task_brief
-            - campaign_brief
-            example: work_request
-            type: string
-          type: array
-        description:
-          description: Description of the template
-          example: Sample Desciption
-          type: string
-        id:
-          description: Unique identifier of the template
-          example: 9119a313057e401189407116fcd3aa24
-          type: string
-        is_active:
-          description: Active status of the template
-          example: true
-          type: boolean
-        title:
-          description: Title of the template
-          example: Sample Template Title
-          type: string
-      required:
-      - id
-      - is_active
-      - title
-      - description
-      - applicable_to
-      type: object
     Error:
       additionalProperties: true
       description: Error payload
@@ -529,67 +302,6 @@ components:
           type: string
       required:
       - message
-      type: object
-    TemplateChoiceFormField:
-      allOf:
-      - $ref: '#/components/schemas/BaseTemplateFormField'
-      - properties:
-          logic_rules:
-            $ref: '#/components/schemas/TemplateLogicRule'
-          type_specific_meta:
-            description: Type-specific meta-information
-            properties:
-              choices:
-                description: Choices for the field
-                items:
-                  $ref: '#/components/schemas/ResourceChoiceResponse'
-                type: array
-              is_multi_select:
-                description: Whether multiple selection is allowed
-                example: true
-                type: boolean
-            required:
-            - is_multi_select
-            - choices
-            type: object
-        required:
-        - type_specific_meta
-        - logic_rules
-        type: object
-    TemplateInstructionFormField:
-      allOf:
-      - $ref: '#/components/schemas/BaseTemplateFormField'
-      - properties:
-          logic_rules:
-            $ref: '#/components/schemas/TemplateLogicRule'
-          type_specific_meta:
-            description: Type-specific meta-information
-            properties:
-              description:
-                description: Description of the field
-                example: just a message to inform something
-                type: string
-            required:
-            - description
-            type: object
-        required:
-        - type_specific_meta
-        - logic_rules
-        type: object
-    ResourceChoiceResponse:
-      additionalProperties: false
-      properties:
-        id:
-          description: Unique identifier of the choice
-          example: 9119a313057e401189407116fcd3
-          type: string
-        name:
-          description: Name of the choice
-          example: Some choice
-          type: string
-      required:
-      - id
-      - name
       type: object
     BaseTemplateFormField:
       additionalProperties: false
@@ -655,6 +367,294 @@ components:
       - sort_order
       - type
       type: object
+    Pagination:
+      additionalProperties: false
+      description: Pagination related information
+      properties:
+        next:
+          description: URL to the next page
+          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
+          type:
+          - string
+          - 'null'
+        previous:
+          description: URL to the previous page
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - next
+      - previous
+      type: object
+    TemplateLogicRuleCondition:
+      additionalProperties: false
+      description: Condition of the rule
+      properties:
+        operator:
+          description: Operator of the condition
+          enum:
+          - any_of
+          - equal
+          - not_equal
+          example: any_of
+          type: string
+        values:
+          description: Values of the condition
+          items:
+            example: 4a8b901e9fd911ecbefa0242ac160019
+            type: string
+          type: array
+      required:
+      - operator
+      - values
+      type: object
+    TemplateListResponse:
+      additionalProperties: false
+      properties:
+        data:
+          description: List of templates
+          items:
+            allOf:
+            - $ref: '#/components/schemas/BaseTemplateResponse'
+            - properties:
+                links:
+                  description: Meta links
+                  properties:
+                    self:
+                      description: URL of the template
+                      example: https://api.cmp.optimizely.com/v3/templates/9119a313057e401189407116fcd3aa24
+                      type: string
+                  required:
+                  - self
+                  type: object
+              required:
+              - links
+              type: object
+          type: array
+        pagination:
+          allOf:
+          - $ref: '#/components/schemas/Pagination'
+          - properties:
+              next:
+                example: https://api.cmp.optimizely.com/v3/templates?offset=10&page_size=10
+                type:
+                - string
+                - 'null'
+            type: object
+      required:
+      - data
+      - pagination
+      type: object
+    ResourceChoiceResponse:
+      additionalProperties: false
+      properties:
+        id:
+          description: Unique identifier of the choice
+          example: 9119a313057e401189407116fcd3
+          type: string
+        name:
+          description: Name of the choice
+          example: Some choice
+          type: string
+      required:
+      - id
+      - name
+      type: object
+    TemplateCurrencyNumberFormField:
+      allOf:
+      - $ref: '#/components/schemas/BaseTemplateFormField'
+      - properties:
+          logic_rules:
+            $ref: '#/components/schemas/TemplateLogicRule'
+          type_specific_meta:
+            description: Type-specific meta-information
+            properties:
+              currency_code:
+                description: Currency code of the field
+                example: USD
+                type: string
+              decimal_places:
+                description: Decimal places allowed for the field
+                example: 2
+                type:
+                - integer
+                - 'null'
+              has_thousand_separator:
+                description: Whether the field has thousand separators
+                example: true
+                type: boolean
+            required:
+            - decimal_places
+            - currency_code
+            - has_thousand_separator
+            type: object
+        required:
+        - type_specific_meta
+        - logic_rules
+        type: object
+    TemplateSimpleNumberFormField:
+      allOf:
+      - $ref: '#/components/schemas/BaseTemplateFormField'
+      - properties:
+          logic_rules:
+            $ref: '#/components/schemas/TemplateLogicRule'
+          type_specific_meta:
+            description: Type-specific meta-information
+            properties:
+              decimal_places:
+                description: Decimal places allowed for the field
+                example: 2
+                type:
+                - integer
+                - 'null'
+              has_thousand_separator:
+                description: Whether the field has thousand separators
+                example: true
+                type: boolean
+            required:
+            - decimal_places
+            - has_thousand_separator
+            type: object
+        required:
+        - type_specific_meta
+        - logic_rules
+        type: object
+    TemplateInstructionFormField:
+      allOf:
+      - $ref: '#/components/schemas/BaseTemplateFormField'
+      - properties:
+          logic_rules:
+            $ref: '#/components/schemas/TemplateLogicRule'
+          type_specific_meta:
+            description: Type-specific meta-information
+            properties:
+              description:
+                description: Description of the field
+                example: just a message to inform something
+                type: string
+            required:
+            - description
+            type: object
+        required:
+        - type_specific_meta
+        - logic_rules
+        type: object
+    TemplateDefaultFormField:
+      allOf:
+      - $ref: '#/components/schemas/BaseTemplateFormField'
+      - properties:
+          logic_rules:
+            $ref: '#/components/schemas/TemplateLogicRule'
+          type_specific_meta:
+            description: Type-specific meta-information
+            enum:
+            - null
+            example: null
+            type:
+            - object
+            - 'null'
+        required:
+        - type_specific_meta
+        - logic_rules
+        type: object
+    TemplatePercentageNumberFormField:
+      allOf:
+      - $ref: '#/components/schemas/BaseTemplateFormField'
+      - properties:
+          logic_rules:
+            $ref: '#/components/schemas/TemplateLogicRule'
+          type_specific_meta:
+            description: Type-specific meta-information
+            properties:
+              decimal_places:
+                description: Decimal places allowed for the field
+                example: 2
+                type:
+                - integer
+                - 'null'
+            required:
+            - decimal_places
+            type: object
+        required:
+        - type_specific_meta
+        - logic_rules
+        type: object
+    BaseTemplateResponse:
+      additionalProperties: false
+      properties:
+        applicable_to:
+          description: List of resources the template is applicable to
+          items:
+            enum:
+            - work_request
+            - task_brief
+            - campaign_brief
+            example: work_request
+            type: string
+          type: array
+        description:
+          description: Description of the template
+          example: Sample Desciption
+          type: string
+        id:
+          description: Unique identifier of the template
+          example: 9119a313057e401189407116fcd3aa24
+          type: string
+        is_active:
+          description: Active status of the template
+          example: true
+          type: boolean
+        title:
+          description: Title of the template
+          example: Sample Template Title
+          type: string
+      required:
+      - id
+      - is_active
+      - title
+      - description
+      - applicable_to
+      type: object
+    TemplateLogicRule:
+      description: List of logic rules
+      items:
+        properties:
+          action:
+            $ref: '#/components/schemas/TemplateLogicRuleAction'
+          condition:
+            $ref: '#/components/schemas/TemplateLogicRuleCondition'
+        required:
+        - condition
+        - action
+        type: object
+      type: array
+    TemplateChoiceFormField:
+      allOf:
+      - $ref: '#/components/schemas/BaseTemplateFormField'
+      - properties:
+          logic_rules:
+            $ref: '#/components/schemas/TemplateLogicRule'
+          type_specific_meta:
+            description: Type-specific meta-information
+            properties:
+              choices:
+                description: Choices for the field
+                items:
+                  $ref: '#/components/schemas/ResourceChoiceResponse'
+                type: array
+              is_multi_select:
+                description: Whether multiple selection is allowed
+                example: true
+                type: boolean
+            required:
+            - is_multi_select
+            - choices
+            type: object
+        required:
+        - type_specific_meta
+        - logic_rules
+        type: object
   responses:
     Forbidden:
       content:
@@ -672,14 +672,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Client error
-    NotFound:
-      content:
-        application/json:
-          example:
-            message: Resource not found
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Not found error
     Unauthorized:
       content:
         application/json:
@@ -688,6 +680,14 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Authorization error
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
   parameters:
     page_size:
       description: Number of results to return per page

@@ -15,7 +15,7 @@ tags:
 paths:
   /teams:
     get:
-      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Get a list of teams.
+      description: Experimental Get a list of teams.
       operationId: listTeams
       parameters:
       - $ref: '#/components/parameters/offset'
@@ -56,7 +56,7 @@ paths:
       - Teams
   /teams/{id}:
     get:
-      description: '<span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Get a team. '
+      description: Experimental Get a team.
       operationId: getTeam
       parameters:
       - example: 5d7f910551b00a722e0418830cee6633
@@ -85,60 +85,43 @@ paths:
       tags:
       - Teams
 components:
-  responses:
-    Forbidden:
-      content:
-        application/json:
-          example:
-            message: You do not have the permission to perform this operation
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Permission error
-    NotFound:
-      content:
-        application/json:
-          example:
-            message: Resource not found
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Not found error
-    ClientError:
-      content:
-        application/json:
-          example:
-            message: 'Unsupported arguments: a,b,c'
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Client error
-    Unauthorized:
-      content:
-        application/json:
-          example:
-            message: Unauthorized
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Authorization error
-  parameters:
-    page_size:
-      description: Number of results to return per page
-      example: 15
-      in: query
-      name: page_size
-      schema:
-        default: 10
-        maximum: 100
-        minimum: 1
-        type: integer
-    offset:
-      description: Starting index of results (zero indexed)
-      example: 5
-      in: query
-      name: offset
-      schema:
-        default: 0
-        minimum: 0
-        type: integer
   schemas:
+    Pagination:
+      additionalProperties: false
+      description: Pagination related information
+      properties:
+        next:
+          description: URL to the next page
+          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
+          type:
+          - string
+          - 'null'
+        previous:
+          description: URL to the previous page
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - next
+      - previous
+      type: object
+    Error:
+      additionalProperties: true
+      description: Error payload
+      properties:
+        errors:
+          additionalProperties: true
+          description: Additional information
+          properties: {}
+          type: object
+        message:
+          description: Message describing the error
+          example: Not found
+          type: string
+      required:
+      - message
+      type: object
     TeamWithUsers:
       additionalProperties: false
       properties:
@@ -216,42 +199,59 @@ components:
       - name
       - links
       type: object
-    Pagination:
-      additionalProperties: false
-      description: Pagination related information
-      properties:
-        next:
-          description: URL to the next page
-          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
-          type:
-          - string
-          - 'null'
-        previous:
-          description: URL to the previous page
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - next
-      - previous
-      type: object
-    Error:
-      additionalProperties: true
-      description: Error payload
-      properties:
-        errors:
-          additionalProperties: true
-          description: Additional information
-          properties: {}
-          type: object
-        message:
-          description: Message describing the error
-          example: Not found
-          type: string
-      required:
-      - message
-      type: object
+  responses:
+    Forbidden:
+      content:
+        application/json:
+          example:
+            message: You do not have the permission to perform this operation
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Permission error
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
+    Unauthorized:
+      content:
+        application/json:
+          example:
+            message: Unauthorized
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Authorization error
+    ClientError:
+      content:
+        application/json:
+          example:
+            message: 'Unsupported arguments: a,b,c'
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client error
+  parameters:
+    page_size:
+      description: Number of results to return per page
+      example: 15
+      in: query
+      name: page_size
+      schema:
+        default: 10
+        maximum: 100
+        minimum: 1
+        type: integer
+    offset:
+      description: Starting index of results (zero indexed)
+      example: 5
+      in: query
+      name: offset
+      schema:
+        default: 0
+        minimum: 0
+        type: integer
   securitySchemes:
     OAuth2:
       flows:

@@ -15,7 +15,7 @@ tags:
 paths:
   /brand-compliance/categories:
     get:
-      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Get a list of brand compliance categories.
+      description: Experimental Get a list of brand compliance categories.
       operationId: listBrandComplianceCategories
       parameters:
       - $ref: '#/components/parameters/offset'
@@ -56,7 +56,7 @@ paths:
       - Brand Compliance
   /tasks/{task_id}/assets/{asset_id}/drafts/{draft_id}/brand-compliance:
     get:
-      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Get the brand compliance details of a draft of an asset of a task.
+      description: Experimental Get the brand compliance details of a draft of an asset of a task.
       operationId: getTaskAssetDraftBrandCompliance
       parameters:
       - example: 5f857f30e1c4a2038d6179e9
@@ -103,7 +103,7 @@ paths:
       tags:
       - Brand Compliance
     put:
-      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Update the brand compliance details of a draft of an asset of a task.
+      description: Experimental Update the brand compliance details of a draft of an asset of a task.
       operationId: updateTaskAssetDraftBrandCompliance
       parameters:
       - example: 5f857f30e1c4a2038d6179e9
@@ -157,60 +157,118 @@ paths:
       tags:
       - Brand Compliance
 components:
-  responses:
-    Forbidden:
-      content:
-        application/json:
-          example:
-            message: You do not have the permission to perform this operation
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Permission error
-    NotFound:
-      content:
-        application/json:
-          example:
-            message: Resource not found
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Not found error
-    ClientError:
-      content:
-        application/json:
-          example:
-            message: 'Unsupported arguments: a,b,c'
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Client error
-    Unauthorized:
-      content:
-        application/json:
-          example:
-            message: Unauthorized
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Authorization error
-  parameters:
-    page_size:
-      description: Number of results to return per page
-      example: 15
-      in: query
-      name: page_size
-      schema:
-        default: 10
-        maximum: 100
-        minimum: 1
-        type: integer
-    offset:
-      description: Starting index of results (zero indexed)
-      example: 5
-      in: query
-      name: offset
-      schema:
-        default: 0
-        minimum: 0
-        type: integer
   schemas:
+    Pagination:
+      additionalProperties: false
+      description: Pagination related information
+      properties:
+        next:
+          description: URL to the next page
+          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
+          type:
+          - string
+          - 'null'
+        previous:
+          description: URL to the previous page
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - next
+      - previous
+      type: object
+    TaskAssetDraftBrandComplianceRequest:
+      additionalProperties: false
+      properties:
+        categories:
+          description: List of compliance categories
+          items:
+            additionalProperties: false
+            properties:
+              criteria:
+                description: List of criteria
+                items:
+                  additionalProperties: false
+                  properties:
+                    description:
+                      description: Description of the criterion
+                      example: For all CMYK, RGB and HTML breakdowns, please refer to the full Colour Policy guideline
+                      type:
+                      - string
+                      - 'null'
+                    id:
+                      description: Unique identifier of the criterion
+                      example: 66dd74f41a335b59cd98915c
+                      type: string
+                    selected:
+                      description: Whether the criterion is selected or not
+                      example: true
+                      type:
+                      - boolean
+                      - 'null'
+                  required:
+                  - id
+                  - description
+                  - selected
+                  type: object
+                type: array
+              id:
+                description: Unique identifier of the category
+                example: 66dd74f41a335b59cd98915b
+                type: string
+              notes:
+                description: Notes left by the reviewer for the category
+                example: Look's good
+                type:
+                - string
+                - 'null'
+              status:
+                description: Brand compliance status of the category
+                enum:
+                - compliant
+                - not compliant
+                - not applicable
+                - null
+                example: compliant
+                type:
+                - string
+                - 'null'
+            required:
+            - id
+            - status
+            - notes
+            - criteria
+            type: object
+          type: array
+        status:
+          description: Brand compliance status of the draft
+          enum:
+          - approved
+          - declined
+          - not_reviewed
+          example: approved
+          type: string
+      required:
+      - status
+      - categories
+      type: object
+    Error:
+      additionalProperties: true
+      description: Error payload
+      properties:
+        errors:
+          additionalProperties: true
+          description: Additional information
+          properties: {}
+          type: object
+        message:
+          description: Message describing the error
+          example: Not found
+          type: string
+      required:
+      - message
+      type: object
     TaskAssetDraftBrandComplianceResponse:
       additionalProperties: false
       properties:
@@ -311,101 +369,6 @@ components:
       - reviewed_by
       - categories
       type: object
-    TaskAssetDraftBrandComplianceRequest:
-      additionalProperties: false
-      properties:
-        categories:
-          description: List of compliance categories
-          items:
-            additionalProperties: false
-            properties:
-              criteria:
-                description: List of criteria
-                items:
-                  additionalProperties: false
-                  properties:
-                    description:
-                      description: Description of the criterion
-                      example: For all CMYK, RGB and HTML breakdowns, please refer to the full Colour Policy guideline
-                      type:
-                      - string
-                      - 'null'
-                    id:
-                      description: Unique identifier of the criterion
-                      example: 66dd74f41a335b59cd98915c
-                      type: string
-                    selected:
-                      description: Whether the criterion is selected or not
-                      example: true
-                      type:
-                      - boolean
-                      - 'null'
-                  required:
-                  - id
-                  - description
-                  - selected
-                  type: object
-                type: array
-              id:
-                description: Unique identifier of the category
-                example: 66dd74f41a335b59cd98915b
-                type: string
-              notes:
-                description: Notes left by the reviewer for the category
-                example: Look's good
-                type:
-                - string
-                - 'null'
-              status:
-                description: Brand compliance status of the category
-                enum:
-                - compliant
-                - not compliant
-                - not applicable
-                - null
-                example: compliant
-                type:
-                - string
-                - 'null'
-            required:
-            - id
-            - status
-            - notes
-            - criteria
-            type: object
-          type: array
-        status:
-          description: Brand compliance status of the draft
-          enum:
-          - approved
-          - declined
-          - not_reviewed
-          example: approved
-          type: string
-      required:
-      - status
-      - categories
-      type: object
-    Pagination:
-      additionalProperties: false
-      description: Pagination related information
-      properties:
-        next:
-          description: URL to the next page
-          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
-          type:
-          - string
-          - 'null'
-        previous:
-          description: URL to the previous page
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - next
-      - previous
-      type: object
     BrandComplianceCategoriesResponse:
       additionalProperties: false
       properties:
@@ -440,22 +403,59 @@ components:
       - id
       - criteria
       type: object
-    Error:
-      additionalProperties: true
-      description: Error payload
-      properties:
-        errors:
-          additionalProperties: true
-          description: Additional information
-          properties: {}
-          type: object
-        message:
-          description: Message describing the error
-          example: Not found
-          type: string
-      required:
-      - message
-      type: object
+  responses:
+    Forbidden:
+      content:
+        application/json:
+          example:
+            message: You do not have the permission to perform this operation
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Permission error
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
+    Unauthorized:
+      content:
+        application/json:
+          example:
+            message: Unauthorized
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Authorization error
+    ClientError:
+      content:
+        application/json:
+          example:
+            message: 'Unsupported arguments: a,b,c'
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client error
+  parameters:
+    page_size:
+      description: Number of results to return per page
+      example: 15
+      in: query
+      name: page_size
+      schema:
+        default: 10
+        maximum: 100
+        minimum: 1
+        type: integer
+    offset:
+      description: Starting index of results (zero indexed)
+      example: 5
+      in: query
+      name: offset
+      schema:
+        default: 0
+        minimum: 0
+        type: integer
   securitySchemes:
     OAuth2:
       flows:

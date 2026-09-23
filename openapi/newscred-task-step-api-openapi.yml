@@ -15,7 +15,7 @@ tags:
 paths:
   /tasks/{task_id}/steps/{step_id}:
     patch:
-      description: <span style="background-color:#e95f6a;padding:5px;border-radius:5px">Experimental</span> Update a step in a task
+      description: Experimental Update a step in a task
       operationId: updateTaskStep
       parameters:
       - example: 7d7f910551b00a722e0418830cee6612
@@ -66,15 +66,6 @@ paths:
       - Task Step
 components:
   schemas:
-    TaskStepRequest:
-      additionalProperties: false
-      properties:
-        due_at:
-          description: 'Due date and time of the task step, in ISO 8601 UTC format (2020-02-10T10:40:45Z). Point to note: in the CMP web interface, a popup is shown while updating a step''s due date to inform the user of temporal or sequential constraints based on the due date of other steps. However, this API will update the step''s due date while superceding any validation for the workflow.'
-          example: '2025-10-06T13:00:00Z'
-          format: date-time
-          type: string
-      type: object
     TaskSubStep:
       additionalProperties: false
       properties:
@@ -155,6 +146,15 @@ components:
       - is_external
       - links
       type: object
+    TaskStepRequest:
+      additionalProperties: false
+      properties:
+        due_at:
+          description: 'Due date and time of the task step, in ISO 8601 UTC format (2020-02-10T10:40:45Z). Point to note: in the CMP web interface, a popup is shown while updating a step''s due date to inform the user of temporal or sequential constraints based on the due date of other steps. However, this API will update the step''s due date while superceding any validation for the workflow.'
+          example: '2025-10-06T13:00:00Z'
+          format: date-time
+          type: string
+      type: object
     TaskStep:
       additionalProperties: false
       properties:
@@ -213,6 +213,14 @@ components:
       - message
       type: object
   responses:
+    UnprocessableEntity:
+      content:
+        application/json:
+          example:
+            message: Resource cannot be processed
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Unprocessable entity error
     Forbidden:
       content:
         application/json:
@@ -229,22 +237,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Not found error
-    ClientError:
-      content:
-        application/json:
-          example:
-            message: 'Unsupported arguments: a,b,c'
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Client error
-    UnprocessableEntity:
-      content:
-        application/json:
-          example:
-            message: Resource cannot be processed
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Unprocessable entity error
     Unauthorized:
       content:
         application/json:
@@ -253,6 +245,14 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Authorization error
+    ClientError:
+      content:
+        application/json:
+          example:
+            message: 'Unsupported arguments: a,b,c'
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client error
   securitySchemes:
     OAuth2:
       flows:

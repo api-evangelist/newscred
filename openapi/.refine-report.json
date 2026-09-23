@@ -1,0 +1,58 @@
+{
+  "provider": "newscred",
+  "sources": [
+    "_original/newscred-cmp-open-api-openapi.json"
+  ],
+  "outputs": [
+    "newscred-assets-api-openapi.yml",
+    "newscred-brand-compliance-api-openapi.yml",
+    "newscred-campaigns-api-openapi.yml",
+    "newscred-events-api-openapi.yml",
+    "newscred-fields-api-openapi.yml",
+    "newscred-labels-api-openapi.yml",
+    "newscred-library-api-openapi.yml",
+    "newscred-milestones-api-openapi.yml",
+    "newscred-publishing-api-openapi.yml",
+    "newscred-settings-api-openapi.yml",
+    "newscred-structured-contents-api-openapi.yml",
+    "newscred-task-step-api-openapi.yml",
+    "newscred-tasks-api-openapi.yml",
+    "newscred-teams-api-openapi.yml",
+    "newscred-templates-api-openapi.yml",
+    "newscred-uploader-api-openapi.yml",
+    "newscred-users-api-openapi.yml",
+    "newscred-work-requests-api-openapi.yml",
+    "newscred-workflows-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "1 archived document(s) dropped as subsets of other archived documents",
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "newscred-cmp-open-api-openapi.json: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "_original/newscred-welcome-open-api-openapi.yml: archived document superseded by a larger archived document",
+    "newscred-assets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "newscred-brand-compliance-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "newscred-campaigns-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "newscred-events-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "newscred-fields-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "newscred-labels-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "newscred-library-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "newscred-milestones-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "newscred-publishing-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "newscred-settings-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "newscred-structured-contents-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "newscred-task-step-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "newscred-tasks-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "newscred-teams-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "newscred-templates-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "newscred-uploader-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "newscred-users-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "newscred-work-requests-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "newscred-workflows-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

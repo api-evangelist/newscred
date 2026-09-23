@@ -1,13 +1,15 @@
 openapi: 3.2.0
 info:
-  title: Newscred Labels API
+  title: Optimizely CMP Open API Documentation Labels API
   version: V3
-  description: 'Operations tagged Labels across 2 of this provider''s published API definitions: newscred-cmp-open-api-openapi.json, newscred-welcome-open-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - description: v3 version of Optimizely CMP Open API
   url: https://api.cmp.optimizely.com/v3
-- url: https://api.welcomesoftware.com/v3
-  description: v3 version of _Welcome_ Open API
+security:
+- OAuth2:
+  - openid
+  - profile
+  - offline_access
 tags:
 - name: Labels
 paths:
@@ -63,85 +65,8 @@ paths:
       summary: GET /label-groups
       tags:
       - Labels
-      security:
-      - OAuth2:
-        - openid
-        - profile
-        - offline_access
-    servers:
-    - description: v3 version of Optimizely CMP Open API
-      url: https://api.cmp.optimizely.com/v3
 components:
-  responses:
-    Forbidden:
-      content:
-        application/json:
-          example:
-            message: You do not have the permission to perform this operation
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Permission error
-    ClientError:
-      content:
-        application/json:
-          example:
-            message: 'Unsupported arguments: a,b,c'
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Client error
-    Unauthorized:
-      content:
-        application/json:
-          example:
-            message: Unauthorized
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Authorization error
-    Forbidden_2:
-      description: Permission error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            message: User does not have the permission to perform this operation
-  parameters:
-    page_size:
-      description: Number of results to return per page
-      example: 15
-      in: query
-      name: page_size
-      schema:
-        default: 10
-        maximum: 100
-        minimum: 1
-        type: integer
-    offset:
-      description: Starting index of results (zero indexed)
-      example: 5
-      in: query
-      name: offset
-      schema:
-        default: 0
-        minimum: 0
-        type: integer
   schemas:
-    LabelGroupValue:
-      additionalProperties: false
-      description: Values of a label group
-      properties:
-        id:
-          description: Unique identifier for the label group value
-          example: 1693bd22eac001bae8f33eab29ee5bc2
-          type: string
-        name:
-          description: Name of the label group value
-          example: Pillar 1
-          type: string
-      required:
-      - id
-      - name
-      type: object
     Pagination:
       additionalProperties: false
       description: Pagination related information
@@ -161,6 +86,22 @@ components:
       required:
       - next
       - previous
+      type: object
+    LabelGroupValue:
+      additionalProperties: false
+      description: Values of a label group
+      properties:
+        id:
+          description: Unique identifier for the label group value
+          example: 1693bd22eac001bae8f33eab29ee5bc2
+          type: string
+        name:
+          description: Name of the label group value
+          example: Pillar 1
+          type: string
+      required:
+      - id
+      - name
       type: object
     Error:
       additionalProperties: true
@@ -212,26 +153,51 @@ components:
       - source_org_type
       - values
       type: object
-    Pagination_2:
-      type: object
-      additionalProperties: false
-      description: Pagination related information
-      properties:
-        next:
-          type:
-          - string
-          - 'null'
-          description: URL to the next page
-          example: https://api.welcomesoftware.com/<some-path-to-next-page>?offset=10&page_size=10
-        previous:
-          type:
-          - string
-          - 'null'
-          description: URL to the previous page
-          example: null
-      required:
-      - next
-      - previous
+  responses:
+    Forbidden:
+      content:
+        application/json:
+          example:
+            message: You do not have the permission to perform this operation
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Permission error
+    Unauthorized:
+      content:
+        application/json:
+          example:
+            message: Unauthorized
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Authorization error
+    ClientError:
+      content:
+        application/json:
+          example:
+            message: 'Unsupported arguments: a,b,c'
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client error
+  parameters:
+    page_size:
+      description: Number of results to return per page
+      example: 15
+      in: query
+      name: page_size
+      schema:
+        default: 10
+        maximum: 100
+        minimum: 1
+        type: integer
+    offset:
+      description: Starting index of results (zero indexed)
+      example: 5
+      in: query
+      name: offset
+      schema:
+        default: 0
+        minimum: 0
+        type: integer
   securitySchemes:
     OAuth2:
       flows:
@@ -246,9 +212,6 @@ components:
           scopes: {}
           tokenUrl: https://accounts.cmp.optimizely.com/o/oauth2/v1/token
       type: oauth2
-x-refined-from:
-- newscred-cmp-open-api-openapi.json
-- newscred-welcome-open-api-openapi.yml
 x-tagGroups:
 - name: API
   tags:
