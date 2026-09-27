@@ -2074,35 +2074,38 @@ paths:
       - Tasks
 components:
   schemas:
-    NumberFieldDefinition:
-      properties:
-        core:
-          $ref: '#/components/schemas/CoreFieldDef'
-        default_values:
-          description: Default values of the field
-          items:
-            type: number
-          type: array
-        max_value:
-          description: Maximum value of the field
-          type: number
-        min_value:
-          description: Minimum value of the field
-          type: number
-      required:
-      - core
-      type: object
-    TextFieldValueModel:
-      properties:
-        order_index:
-          description: Order index of the field value
-          type: integer
-        text_value:
-          description: Value of the field value
-          type: string
-      required:
-      - text_value
-      type: object
+    DropdownTypeObjectField:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectField'
+      - $ref: '#/components/schemas/DropdownTypeObjectFieldUpdatePayload'
+    AssetFieldTypeDropdown:
+      allOf:
+      - $ref: '#/components/schemas/BaseAssetField'
+      - properties:
+          choices:
+            description: Choices of the dropdown
+            items:
+              properties:
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Dropdown 1 Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              type: object
+            type: array
+          is_multi_select:
+            description: Allow users to select multiple values from the dropdown
+            type: boolean
+        required:
+        - is_multi_select
+        - choices
+        type: object
     FieldTypeSimpleNumber:
       allOf:
       - $ref: '#/components/schemas/FieldBaseType'
@@ -2121,499 +2124,14 @@ components:
         - has_thousand_separator
         - decimal_places
         type: object
-    TaskPublishingIntentCreateRequest:
-      additionalProperties: false
-      properties:
-        channel_id:
-          description: Unique identifier of the target publishing channel
-          example: 6a2fd16faec3bed9c72f7d4f
-          type: string
-      required:
-      - channel_id
-      type: object
-    TaskFieldUpdateRequest:
-      additionalProperties: false
-      discriminator:
-        mapping:
-          checkbox: '#/components/schemas/MultiChoiceTypeObjectFieldUpdatePayload'
-          currency_number: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
-          date: '#/components/schemas/DateTypeObjectFieldUpdatePayload'
-          dropdown: '#/components/schemas/DropdownTypeObjectFieldUpdatePayload'
-          image: '#/components/schemas/AssetTypeObjectFieldUpdatePayload'
-          label: '#/components/schemas/MultiChoiceTypeObjectFieldUpdatePayload'
-          percentage_number: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
-          radio_button: '#/components/schemas/RadioButtonTypeObjectFieldUpdatePayload'
-          rich_text: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
-          simple_number: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
-          text: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
-          text_area: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
-          video: '#/components/schemas/AssetTypeObjectFieldUpdatePayload'
-        propertyName: type
-      oneOf:
-      - $ref: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
-      - $ref: '#/components/schemas/MultiChoiceTypeObjectFieldUpdatePayload'
-      - $ref: '#/components/schemas/DropdownTypeObjectFieldUpdatePayload'
-      - $ref: '#/components/schemas/RadioButtonTypeObjectFieldUpdatePayload'
-      - $ref: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
-      - $ref: '#/components/schemas/DateTypeObjectFieldUpdatePayload'
-      - $ref: '#/components/schemas/AssetTypeObjectFieldUpdatePayload'
-      type: object
-    Error:
-      additionalProperties: true
-      description: Error payload
-      properties:
-        errors:
-          additionalProperties: true
-          description: Additional information
-          properties: {}
-          type: object
-        message:
-          description: Message describing the error
-          example: Not found
-          type: string
-      required:
-      - message
-      type: object
-    ContentFieldWithEmbeddedPatchValueModel:
-      properties:
-        content_id:
-          type: string
-        patch_details:
-          $ref: '#/components/schemas/RecursivePatchStructuredContentFields'
-      required:
-      - content_id
-      - patch_details
-      type: object
-    FieldType:
-      description: An enumeration.
-      enum:
-      - boolean
-      - number
-      - text-field
-      - rich-text
-      - datetime
-      - library-asset
-      - content-type
-      - json
-      - url
-      - choice
-      - location
-      type: string
-    TaskExternalWorkRequest:
-      additionalProperties: false
-      properties:
-        identifier:
-          description: Identifier of the external work
-          example: MY-PROJ-123
-          maxLength: 50
-          minLength: 1
-          type:
-          - string
-          - 'null'
-        status:
-          description: Status of the external work
-          example: In Progress
-          maxLength: 128
-          minLength: 1
-          type:
-          - string
-          - 'null'
-        title:
-          description: Title of the external work
-          example: A very important ticket
-          maxLength: 128
-          minLength: 1
-          type:
-          - string
-          - 'null'
-        url:
-          description: Link to the external work (must be a valid URL with HTTPS scheme)
-          example: https://example.com/some-project/MY-PROJ-123
-          maxLength: 500
-          type:
-          - string
-          - 'null'
-      type: object
-    AssetFieldTypePercentageNumber:
-      allOf:
-      - $ref: '#/components/schemas/BaseAssetField'
-      - properties:
-          decimal_places:
-            description: Decimal place of the numerical field
-            example: 2
-            type:
-            - integer
-            - 'null'
-        required:
-        - decimal_places
-        type: object
-    DateTypeObjectFieldUpdatePayload:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
-      - properties:
-          values:
-            description: Array of date-time values, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
-            items:
-              description: Date and time, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
-              example: '2020-02-10T10:40:45Z'
-              format: date-time
-              type: string
-            maxItems: 1
-            type: array
-        type: object
-    TaskSubStepCommentResponse:
-      additionalProperties: false
-      properties:
-        attachments:
-          description: List of attachments of the comment
-          example:
-          - id: a113667245d111eb8945000c
-            name: sample.png
-            url: https://files.cmp.optimizely.com/download/96c314a645d111eb8945000c291b51d4?token=
-          items:
-            $ref: '#/components/schemas/AttachmentResponse'
-          type: array
-        created_at:
-          description: Creation date and time of the task substep comment,  in ISO 8601 UTC format (2020-02-10T10:40:45Z)
-          example: '2020-10-06T13:15:30Z'
-          format: date-time
-          type: string
-        id:
-          description: Unique identifier of the substep comment
-          example: 5fe38c39574b52a62a089239
-          type: string
-        is_resolved:
-          description: Determines if the comment is resolved in Optimizely CMP
-          example: false
-          type: boolean
-        links:
-          additionalProperties: false
-          description: Meta links
-          properties:
-            comment_by:
-              description: Creator of the substep comment
-              example: https://api.cmp.optimizely.com/v3/users/5fe38eea574b52a62a08923a
-              type: string
-            self:
-              description: URL of the substep comment
-              example: https://api.cmp.optimizely.com/v3/tasks/5d7f910551b00a722e0418830cee5534/steps/6d7f910551b00a722e0418830cee5564/sub-steps/9c7f910551b00a722e0418830cee2564
-              type: string
-            sub_step:
-              description: URL of the substep
-              example: https://api.cmp.optimizely.com/v3/tasks/5d7f910551b00a722e0418830cee5534/steps/6d7f910551b00a722e0418830cee5564/sub-steps/9c7f910551b00a722e0418830cee2564
-              type: string
-            task:
-              description: URL of the task
-              example: https://api.cmp.optimizely.com/v3/tasks/5d7f910551b00a722e0418830cee5534
-              type: string
-          required:
-          - self
-          - comment_by
-          - task
-          - sub_step
-          type: object
-        modified_at:
-          description: Last modification date and time of the task substep comment,  in ISO 8601 UTC format (2020-02-10T10:40:45Z)
-          example: '2020-10-06T14:15:30Z'
-          format: date-time
-          type: string
-        value:
-          description: Content of the comment
-          example: Well done!
-          type: string
-      required:
-      - id
-      - value
-      - is_resolved
-      - created_at
-      - modified_at
-      - attachments
-      type: object
-    TaskAssetRequest:
-      additionalProperties: false
-      discriminator:
-        mapping:
-          direct_upload: '#/components/schemas/TaskAssetRequestForDirectUpload'
-          fork_from_library: '#/components/schemas/TaskAssetRequestForLibrary'
-        propertyName: type
-      oneOf:
-      - $ref: '#/components/schemas/TaskAssetRequestForDirectUpload'
-      - $ref: '#/components/schemas/TaskAssetRequestForLibrary'
-      type: object
-    Pagination:
-      additionalProperties: false
-      description: Pagination related information
-      properties:
-        next:
-          description: URL to the next page
-          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
-          type:
-          - string
-          - 'null'
-        previous:
-          description: URL to the previous page
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - next
-      - previous
-      type: object
-    RichTextFieldDefinition:
-      properties:
-        core:
-          $ref: '#/components/schemas/CoreFieldDef'
-        default_values:
-          description: Default values of the field
-          items:
-            type: string
-          type: array
-        max_visual_text_length:
-          description: Maximum length of the field
-          type: integer
-        min_visual_text_length:
-          description: Minimum length of the field
-          type: integer
-      required:
-      - core
-      - min_visual_text_length
-      type: object
-    TextFieldDefinition:
-      properties:
-        core:
-          $ref: '#/components/schemas/CoreFieldDef'
-        default_values:
-          description: Default values of the field
-          items:
-            type: string
-          type: array
-        max_length:
-          description: Maximum length of the field
-          type: integer
-        min_length:
-          description: Minimum length of the field
-          type: integer
-        validation_pattern:
-          description: Validation pattern of the field
-          type: string
-      required:
-      - core
-      - validation_pattern
-      - min_length
-      type: object
-    StringTypeObjectField:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectField'
-      - $ref: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
-    BaseObjectFieldUpdatePayload:
-      properties:
-        type:
-          description: Type of the field
-          example: checkbox
-          type: string
-        values:
-          description: Values for the campaign field
-          type: array
-      required:
-      - type
-      - values
-      type: object
-    FieldTypeCommon:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - type: object
-    MultiChoiceTypeObjectFieldUpdatePayload:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
-      - properties:
-          values:
-            description: Array of choice IDs
-            items:
-              example: 9119a313057e401189407116fcd3
-              type: string
-            type: array
-        type: object
-    BaseFieldDefinitionType:
-      description: An enumeration.
-      enum:
-      - boolean
-      - json
-      - url
-      - location
-      type: string
-    RichTextFieldValueModel:
-      properties:
-        order_index:
-          description: Order index of the field value
-          type: integer
-        rich_text_value:
-          description: Value of the field value
-          type: string
-      required:
-      - rich_text_value
-      type: object
-    TaskVideo:
-      additionalProperties: false
-      properties:
-        created_at:
-          description: Date and time when the video was created,  in ISO 8601 UTC format (2020-02-10T10:40:45Z)
-          example: '2019-10-06T13:15:30Z'
-          format: date-time
-          type: string
-        file_size:
-          description: Size of the video in bytes
-          example: 11244
-          type: integer
-        id:
-          description: Unique identifier for the video
-          example: 5d7f910551b00a722e0418830cee6633
-          type: string
-        labels:
-          description: Labels associated with the video
-          items:
-            $ref: '#/components/schemas/ResourceLabelResponse'
-          type: array
-        library_asset_id:
-          description: Unique identifier of the corresponding library asset — the library asset this task asset was forked from, or the one it was released to.
-          example: 6a8b2c3d4e5f6071829a3b4c
-          type:
-          - string
-          - 'null'
-        links:
-          additionalProperties: false
-          description: Meta links
-          properties:
-            drafts:
-              description: URL to POST draft to the video
-              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/assets/5d7f910551b00a722e0418830cee6633/drafts
-              type: string
-            self:
-              description: URL of the video
-              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/videos/5d7f910551b00a722e0418830cee6633
-              type: string
-            task:
-              description: URL of the task that the video is associated with
-              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9
-              type: string
-            web_urls:
-              additionalProperties: false
-              description: Web URLs
-              properties:
-                drafts:
-                  description: Web URL of the drafts of the video
-                  example: https://cmp.optimizely.com/cloud/task/5f857f30e1c4a2038d6179e9/video/5d7f910551b00a722e0418830cee6633
-                  type: string
-                self:
-                  description: Web URL of the video
-                  example: https://cmp.optimizely.com/cloud/taskv3/5f857f30e1c4a2038d6179e9?contentTabGuid=5d7f910551b00a722e0418830cee6633
-                  type: string
-                task:
-                  description: Web URL of the task that the video is associated with
-                  example: https://cmp.optimizely.com/cloud/taskv3/5f857f30e1c4a2038d6179e9
-                  type: string
-              required:
-              - self
-              - task
-              - drafts
-              type: object
-          required:
-          - self
-          - task
-          - drafts
-          - web_urls
-          type: object
-        mime_type:
-          description: MIME type of the video
-          example: video/mp4
-          type: string
-        modified_at:
-          description: Date and time of the most recent modification of the video, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
-          example: '2019-10-07T13:15:30Z'
-          format: date-time
-          type: string
-        title:
-          description: Title of the video
-          example: product.mp4
-          type: string
-        url:
-          description: Download URL of the video
-          example: https://videos.cmp.optimizely.com/03a747babe81ceb55763fa085bqa20dc
-          type: string
-      required:
-      - id
-      - title
-      - mime_type
-      - created_at
-      - modified_at
-      - file_size
-      - url
-      - labels
-      - links
-      type: object
-    ResourceLabelResponse:
-      additionalProperties: false
-      description: Label associated to a fetched resource
-      properties:
-        group:
-          additionalProperties: false
-          description: Label group
-          properties:
-            id:
-              description: Identifier of the label group
-              example: 2467e583a60e23fda2b89db81a453cd2
-              type: string
-            name:
-              description: Name of the label group
-              example: Content Format
-              type: string
-          required:
-          - id
-          - name
-          type: object
-        values:
-          description: List of values of the label
-          items:
-            additionalProperties: false
-            properties:
-              id:
-                description: Identifier of the label value
-                example: 71c378f3fee3d822759d1bdc2aab628c
-                type: string
-              name:
-                description: Name of the label value
-                example: Photos
-                type: string
-            required:
-            - id
-            - name
-            type: object
-          type: array
-      required:
-      - group
-      - values
-      type: object
-    MultiChoiceTypeObjectField:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectField'
-      - $ref: '#/components/schemas/MultiChoiceTypeObjectFieldUpdatePayload'
-    ContentFieldValueModel:
-      properties:
-        content_guid:
-          description: Content GUID of the field value
-          type: string
-        content_url:
-          description: Content URL of the field value
-          type: string
-        embedded:
-          description: Indicates whether the field value is embedded
-          type: boolean
-        order_index:
-          description: Order index of the field value
-          type: integer
-      required:
-      - content_guid
-      - embedded
+    StructuredContentFields:
+      additionalProperties:
+        items:
+          anyOf:
+          - $ref: '#/components/schemas/PatchLocalizedFieldValuesWithEmbeddedContent'
+          - $ref: '#/components/schemas/DeleteLocaleFieldValueModel'
+        type: array
+      description: The fields of structured content
       type: object
     TaskAssetRequestForLibrary:
       additionalProperties: false
@@ -2642,174 +2160,72 @@ components:
       - content_id
       - content_type
       type: object
-    RadioButtonTypeObjectFieldUpdatePayload:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
-      - properties:
-          values:
-            description: Accepts a single choice Id.
-            items:
-              example: 9119a313057e401189407116fcd3
-              type: string
-            maxItems: 1
-            type: array
-        type: object
-    VersionedContentTypeModel:
-      properties:
-        component:
-          description: Indicates whether the content type is a component
-          type: boolean
-        content_type_guid:
-          description: Unique identifier of the content type
-          type: string
-        created_at:
-          description: Date and time on which the content type was created, in ISO 8601 UTC format
-          format: date-time
-          type: string
-        created_by:
-          description: Unique identifier of the user who created the content type
-          type: string
-        description:
-          description: Description of the content type
-          type: string
-        disabled:
-          description: Disabled status of the content type
-          type: boolean
-        links:
-          description: Meta links
-          properties:
-            self:
-              description: URL of the content type
-              example: https://api.cmp.optimizely.com/v3/structured-content/content-types/9fda53cf66a14fd487251480ca695c7b
-              type: string
-            versions:
-              description: URL of the content type versions
-              example: https://api.cmp.optimizely.com/v3/structured-content/content-types/9fda53cf66a14fd487251480ca695c7b/versions
-              type: string
-          type: object
-        name:
-          description: Name of the content type
-          type: string
-        source:
-          description: Source of the content type
-          type: string
-        source_id:
-          description: Source of the content type
-          type: string
-        source_metadata:
-          description: Source metadata of the content type
-          type: string
-        thumbnail_guid:
-          description: Thumbnail GUID of the content type
-          type: string
-        updated_at:
-          description: Date and time on which the content type was last updated, in ISO 8601 UTC format
-          format: date-time
-          type: string
-        updated_by:
-          description: Unique identifier of the user who last updated the content type
-          type: string
-        version:
-          $ref: '#/components/schemas/SCContentTypeVersion'
-      required:
-      - name
-      - component
-      - content_type_guid
-      - created_by
-      - updated_by
-      - created_at
-      - updated_at
-      - links
-      - version
-      type: object
-    ChoiceFieldValueModel:
-      properties:
-        choice_key:
-          description: Choice key of the field value
-          type: string
-        order_index:
-          description: Order index of the field value
-          type: integer
-      required:
-      - choice_key
-      type: object
-    TaskCustomField:
+    TaskAssetRequestForDirectUpload:
       additionalProperties: false
       properties:
-        id:
-          description: Unique identifier for the custom field
-          example: 9nu8ue9wf8u9nusd9q
+        key:
+          description: Unique identifier of the file upload session. This is the `upload_meta_fields.key` field retrieved from the `/v3/upload-url` endpoint.
+          maxLength: 100
           type: string
-        links:
-          additionalProperties: false
-          description: Meta links
-          properties:
-            choices:
-              description: URL of the available custom field choices
-              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/custom-fields/9nu8ue9wf8u9nusd9q/choices
-              type:
-              - string
-              - 'null'
-            self:
-              description: URL of the custom field
-              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/custom-fields/9nu8ue9wf8u9nusd9q
-              type: string
-          required:
-          - self
-          - choices
-          type: object
-        name:
-          description: Name of the custom field
-          example: My Dropdown
+        title:
+          description: Title of the asset
+          example: sample_image.png
+          maxLength: 100
+          minLength: 1
           type: string
         type:
-          description: Type of the custom field
-          enum:
-          - text_field
-          - multi_line_text_field
-          - checkboxes
-          - dropdown
-          - multi_select_dropdown
-          - multiple_choice
-          - date_field
-          - image
-          - video
-          - rich_text_field
-          example: dropdown
+          description: The mechanism for adding the asset to the task
+          example: direct_upload
           type: string
-        values:
-          description: List of values of the custom field
-          items:
-            additionalProperties: false
-            properties:
-              id:
-                description: Identifier of the custom field value
-                example: 1nu8ue9wf8u9nusd9u
-                type:
-                - string
-                - 'null'
-              name:
-                description: Name of the custom field value
-                example: Some text
-                type: string
-            required:
-            - id
-            - name
-            type: object
-          type: array
       required:
-      - id
-      - name
-      - type
-      - values
-      - links
+      - key
+      - title
       type: object
-    FieldTypeRadio:
+    ChoiceFieldDefinition:
+      properties:
+        choices:
+          additionalProperties:
+            type: string
+          description: Choices of the field
+          type: object
+        core:
+          $ref: '#/components/schemas/CoreFieldDef'
+        default_values:
+          description: Default values of the field
+          items:
+            type: string
+          type: array
+        display_option:
+          $ref: '#/components/schemas/ChoiceDisplayOption'
+      required:
+      - core
+      - choices
+      type: object
+    RichTextFieldDefinition:
+      properties:
+        core:
+          $ref: '#/components/schemas/CoreFieldDef'
+        default_values:
+          description: Default values of the field
+          items:
+            type: string
+          type: array
+        max_visual_text_length:
+          description: Maximum length of the field
+          type: integer
+        min_visual_text_length:
+          description: Minimum length of the field
+          type: integer
+      required:
+      - core
+      - min_visual_text_length
+      type: object
+    FieldTypeDropdown:
       allOf:
       - $ref: '#/components/schemas/FieldBaseType'
       - properties:
           choices:
-            description: Choices of the radio button
+            description: Choices of the dropdown
             items:
               properties:
                 id:
@@ -2818,17 +2234,132 @@ components:
                   type: string
                 name:
                   description: Name of the choice
-                  example: Radio 1 Choice 1
+                  example: Dropdown 1 Choice 1
                   type: string
               required:
               - id
               - name
-              - color
               type: object
             type: array
+          is_multi_select:
+            description: Select multiple values from the dropdown
+            type: boolean
         required:
+        - is_multi_select
         - choices
         type: object
+    BaseFieldDefinition:
+      properties:
+        base_type:
+          $ref: '#/components/schemas/BaseFieldDefinitionType'
+        core:
+          $ref: '#/components/schemas/CoreFieldDef'
+        default_values:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/LocationDefaultValue'
+            - type: boolean
+            - format: uri
+              maxLength: 65536
+              minLength: 1
+              type: string
+            - type: object
+            - items: {}
+              type: array
+          type: array
+      required:
+      - core
+      - base_type
+      type: object
+    TaskAssetFieldsUpdateRequest:
+      items:
+        additionalProperties: false
+        discriminator:
+          mapping:
+            checkbox: '#/components/schemas/MultiChoiceTypeObjectField'
+            currency_number: '#/components/schemas/NumberTypeObjectField'
+            date: '#/components/schemas/DateTypeObjectField'
+            dropdown: '#/components/schemas/DropdownTypeObjectField'
+            image: '#/components/schemas/AssetTypeObjectField'
+            label: '#/components/schemas/MultiChoiceTypeObjectField'
+            percentage_number: '#/components/schemas/NumberTypeObjectField'
+            radio_button: '#/components/schemas/RadioButtonTypeObjectField'
+            rich_text: '#/components/schemas/StringTypeObjectField'
+            simple_number: '#/components/schemas/NumberTypeObjectField'
+            text: '#/components/schemas/StringTypeObjectField'
+            text_area: '#/components/schemas/StringTypeObjectField'
+            video: '#/components/schemas/AssetTypeObjectField'
+          propertyName: type
+        oneOf:
+        - $ref: '#/components/schemas/StringTypeObjectField'
+        - $ref: '#/components/schemas/MultiChoiceTypeObjectField'
+        - $ref: '#/components/schemas/DropdownTypeObjectField'
+        - $ref: '#/components/schemas/RadioButtonTypeObjectField'
+        - $ref: '#/components/schemas/NumberTypeObjectField'
+        - $ref: '#/components/schemas/DateTypeObjectField'
+        - $ref: '#/components/schemas/AssetTypeObjectField'
+        type: object
+      type: array
+    TaskCreateRequest:
+      additionalProperties: false
+      properties:
+        campaign_id:
+          description: Id of the campaign to be associated with the task
+          example: 6684f31be89a526d030cfc0f
+          type: string
+        due_at:
+          description: Due date and time of the task, in ISO 8601 UTC format (2020-02-10T10:40:45Z). The `due_at` field is required if `workflow_id` is present and the workflow does not have step duration. If `workflow_id` is present and the workflow has step duration, then either `start_at` or `due_at` is required.
+          example: '2020-10-06T13:15:30Z'
+          format: date-time
+          type: string
+        owner_id:
+          description: Id of the owner of the task
+          example: 665d5717c8ba0201647a0991
+          type: string
+        start_at:
+          description: Start date and time of the task, in ISO 8601 UTC format (2020-02-10T10:40:45Z). If `workflow_id` is present and the workflow has step duration, then either `start_at` or `due_at` is required. If both `start_at` and `due_at` is provided with a `workflow_id` that has step duration, then the `start_at` field will be ignored.
+          example: '2020-10-01T06:00:00Z'
+          format: date-time
+          type: string
+        title:
+          description: Title of the task
+          example: Awesome Task
+          type: string
+        workflow_id:
+          description: Id of the workflow to be used in the task
+          example: 665d56034854d100ad7cb8fb
+          type: string
+      required:
+      - title
+      type: object
+    LocationFieldValueModel:
+      properties:
+        latitude:
+          description: Longitude of the field value
+          type: number
+        longitude:
+          description: Longitude of the field value
+          type: number
+        order_index:
+          description: Order index of the field value
+          type: integer
+      required:
+      - longitude
+      - latitude
+      type: object
+    StructuredContentBody:
+      additionalProperties:
+        items:
+          $ref: '#/components/schemas/LocalizedFieldValuesWithEmbeddedContent'
+        type: array
+      description: The fields of structured content
+      properties:
+        has_embedded:
+          description: Whether the structured content has embedded content reference field values
+          type:
+          - boolean
+          - 'null'
+      type: object
     ObjectFieldCreateRequest:
       additionalProperties: false
       discriminator:
@@ -2856,18 +2387,155 @@ components:
       - $ref: '#/components/schemas/DateTypeObjectField'
       - $ref: '#/components/schemas/AssetTypeObjectField'
       type: object
-    error_reason:
-      description: An enumeration.
+    AssetTypeObjectField:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectField'
+      - $ref: '#/components/schemas/AssetTypeObjectFieldUpdatePayload'
+    TaskStep:
+      additionalProperties: false
+      properties:
+        description:
+          description: Description of the step
+          example: Description of the step
+          type:
+          - string
+          - 'null'
+        due_at:
+          description: Due date and time of the step containing the substep,  in ISO 8601 UTC format (2020-02-10T10:40:45Z)
+          example: '2020-10-06T13:15:30Z'
+          format: date-time
+          type:
+          - string
+          - 'null'
+        id:
+          description: Unique identifier of the step
+          example: 6d7f910551b00a722e0418830cee5564
+          type: string
+        is_completed:
+          description: Determines whether the step is completed in Optimizely CMP
+          example: false
+          type: boolean
+        sub_steps:
+          description: Substeps of the step
+          items:
+            $ref: '#/components/schemas/TaskSubStep'
+          type: array
+        title:
+          description: Title of the step
+          example: Sample step
+          type: string
+      required:
+      - id
+      - title
+      - is_completed
+      - description
+      - due_at
+      - sub_steps
+      type: object
+    BaseObjectField:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
+      - properties:
+          id:
+            description: Unique identifier of the field
+            example: 41aac313bda1e40b6cde7116fc24a
+            type: string
+        required:
+        - id
+        type: object
+    ContentTypeFieldEmbedMixConfig:
+      description: "Ref Type:\n  * `1` Refer only\n  * `2` Refer and create embed\n  * `3` Create only\n"
       enum:
-      - REQUIRED_FIELD_ABSENT
-      - LIST_EMPTY
-      - INVALID_STATE
-      - INVALID_SELF_REF
-      - MIN_NOT_MET
-      - MAX_NOT_MET
-      - PATTERN_ERROR
-      title: error_reason
-      type: string
+      - 1
+      - 2
+      - 3
+      type: integer
+    FieldTypeRadio:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - properties:
+          choices:
+            description: Choices of the radio button
+            items:
+              properties:
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Radio 1 Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              - color
+              type: object
+            type: array
+        required:
+        - choices
+        type: object
+    DropdownTypeObjectFieldUpdatePayload:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
+      - properties:
+          values:
+            description: Array of choice ID. Multiple choice values are not acceptable for `is_multi_select=false`.
+            items:
+              example: 9119a313057e401189407116fcd3
+              type: string
+            type: array
+        type: object
+    NumberTypeObjectFieldUpdatePayload:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
+      - properties:
+          values:
+            description: Accepts a single numeric value
+            items:
+              example: 200
+              type: number
+            maxItems: 1
+            type: array
+        type: object
+    NumberFieldDefinition:
+      properties:
+        core:
+          $ref: '#/components/schemas/CoreFieldDef'
+        default_values:
+          description: Default values of the field
+          items:
+            type: number
+          type: array
+        max_value:
+          description: Maximum value of the field
+          type: number
+        min_value:
+          description: Minimum value of the field
+          type: number
+      required:
+      - core
+      type: object
+    ContentFieldValueWithEmbeddedModel:
+      properties:
+        content_details:
+          $ref: '#/components/schemas/RecursiveStructuredContent'
+          description: The embedded content object
+          title: Contentdetails
+      required:
+      - content_details
+      type: object
+    MultiChoiceTypeObjectFieldUpdatePayload:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
+      - properties:
+          values:
+            description: Array of choice IDs
+            items:
+              example: 9119a313057e401189407116fcd3
+              type: string
+            type: array
+        type: object
     TaskListResponseItem:
       additionalProperties: false
       properties:
@@ -2997,96 +2665,6 @@ components:
       - status
       - links
       type: object
-    TaskSubStepRequest:
-      additionalProperties: false
-      properties:
-        assignee_id:
-          description: ID of the assignee for the substep; cannot be passed together with `is_completed`, `is_in_progress` or `is_skipped`
-          example: 5fdf31d57f0d0e362e2b5908
-          type:
-          - string
-          - 'null'
-        assignee_type:
-          description: Type of the assignee for the substep. If not provided with `assignee_id`, defaults to `user`.
-          enum:
-          - user
-          - team
-          example: user
-          type: string
-        is_completed:
-          description: Whether the substep should be completed; cannot be passed together with `is_in_progress`, `is_skipped` or `assignee_id`
-          enum:
-          - true
-          example: true
-          type: boolean
-        is_in_progress:
-          description: Whether the substep should be progressed; cannot be passed together with `is_completed`, `is_skipped` or `assignee_id`
-          enum:
-          - true
-          example: true
-          type: boolean
-        is_skipped:
-          description: Whether the substep should be skipped; cannot be passed together with `is_in_progress`, `is_completed` or `assignee_id`
-          enum:
-          - true
-          type: boolean
-      type: object
-    LocalizedFieldValuesWithEmbeddedContent:
-      properties:
-        field_values:
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/NumberFieldValueModel'
-            - $ref: '#/components/schemas/BooleanFieldValueModel'
-            - $ref: '#/components/schemas/DatetimeFieldValueModel'
-            - $ref: '#/components/schemas/TextFieldValueModel'
-            - $ref: '#/components/schemas/RichTextFieldValueModel'
-            - $ref: '#/components/schemas/LibraryAssetFieldValueModel'
-            - $ref: '#/components/schemas/ContentFieldValueWithEmbeddedModel'
-            - $ref: '#/components/schemas/ContentFieldValueModel'
-            - $ref: '#/components/schemas/URLFieldValueModel'
-            - $ref: '#/components/schemas/JSONFieldValueModel'
-            - $ref: '#/components/schemas/ChoiceFieldValueModel'
-            - $ref: '#/components/schemas/LocationFieldValueModel'
-          type: array
-        locale:
-          type: string
-      required:
-      - locale
-      - field_values
-      type: object
-    LocationDefaultValue:
-      properties:
-        latitude:
-          description: Latitude of the location
-          type: number
-        longitude:
-          description: Longitude of the location
-          type: number
-      required:
-      - longitude
-      - latitude
-      type: object
-    ChoiceFieldDefinition:
-      properties:
-        choices:
-          additionalProperties:
-            type: string
-          description: Choices of the field
-          type: object
-        core:
-          $ref: '#/components/schemas/CoreFieldDef'
-        default_values:
-          description: Default values of the field
-          items:
-            type: string
-          type: array
-        display_option:
-          $ref: '#/components/schemas/ChoiceDisplayOption'
-      required:
-      - core
-      - choices
-      type: object
     AssetFieldTypeSimpleNumber:
       allOf:
       - $ref: '#/components/schemas/BaseAssetField'
@@ -3105,227 +2683,67 @@ components:
         - has_thousand_separator
         - decimal_places
         type: object
-    LibraryAssetFieldDefinition:
-      properties:
-        allowed_types:
-          items:
-            $ref: '#/components/schemas/LibraryAssetType'
-          type: array
-        core:
-          $ref: '#/components/schemas/CoreFieldDef'
-        default_values:
-          description: Default values for the field
-          items:
-            $ref: '#/components/schemas/LibraryAssetDefaultValue'
-          type: array
-      required:
-      - core
-      - allowed_types
-      type: object
-    AssetFieldTypeCheckbox:
-      allOf:
-      - $ref: '#/components/schemas/BaseAssetField'
-      - properties:
-          choices:
-            description: Choices of the checkbox
-            items:
-              properties:
-                id:
-                  description: Identifier of the choice
-                  example: 6ceee2f4fa3411ecb37802420ac8001b
-                  type: string
-                name:
-                  description: Name of the choice
-                  example: Checkbox 1 Choice 1
-                  type: string
-              required:
-              - id
-              - name
-              type: object
-            type: array
-        required:
-        - choices
-        type: object
-    JSONFieldValueModel:
-      properties:
-        json_value:
-          anyOf:
-          - type: object
-          - items: {}
-            type: array
-          description: Value of the field value
-        order_index:
-          description: Order index of the field value
-          type: integer
-      required:
-      - json_value
-      type: object
-    AssetFieldListResponseItem:
-      discriminator:
-        mapping:
-          checkbox: '#/components/schemas/AssetFieldTypeCheckbox'
-          currency_number: '#/components/schemas/AssetFieldTypeCurrencyNumber'
-          date: '#/components/schemas/AssetFieldTypeCommon'
-          dropdown: '#/components/schemas/AssetFieldTypeDropdown'
-          image: '#/components/schemas/AssetFieldTypeCommon'
-          label: '#/components/schemas/AssetFieldTypeLabel'
-          percentage_number: '#/components/schemas/AssetFieldTypePercentageNumber'
-          radio_button: '#/components/schemas/AssetFieldTypeRadio'
-          rich_text: '#/components/schemas/AssetFieldTypeCommon'
-          simple_number: '#/components/schemas/AssetFieldTypeSimpleNumber'
-          text: '#/components/schemas/AssetFieldTypeCommon'
-          text_area: '#/components/schemas/AssetFieldTypeCommon'
-          video: '#/components/schemas/AssetFieldTypeCommon'
-        propertyName: type
-      oneOf:
-      - $ref: '#/components/schemas/AssetFieldTypeCommon'
-      - $ref: '#/components/schemas/AssetFieldTypeLabel'
-      - $ref: '#/components/schemas/AssetFieldTypeDropdown'
-      - $ref: '#/components/schemas/AssetFieldTypeRadio'
-      - $ref: '#/components/schemas/AssetFieldTypeCheckbox'
-      - $ref: '#/components/schemas/AssetFieldTypeSimpleNumber'
-      - $ref: '#/components/schemas/AssetFieldTypePercentageNumber'
-      - $ref: '#/components/schemas/AssetFieldTypeCurrencyNumber'
-    ContentDetailsModel:
-      properties:
-        content_guid:
-          description: Unique identifier of the content
-          type: string
-        content_type:
-          $ref: '#/components/schemas/VersionedContentTypeModel'
-        content_type_guid:
-          description: Unique identifier of the content type
-          type: string
-        content_type_name:
-          description: Name of the content type
-          type: string
-        created_at:
-          description: Date and time on which the content was created, in ISO 8601 UTC format
-          format: date-time
-          type: string
-        created_by:
-          description: Unique identifier of the user who created the content
-          type: string
-        expired:
-          description: Expired status of the content
-          type: boolean
-        expiry_datetime:
-          description: Date and time on which the content will expire, in ISO 8601 UTC format
-          format: date-time
-          type: string
-        latest_fields_version:
-          $ref: '#/components/schemas/ContentFieldsVersionDetails'
-        links:
-          description: Meta links
-          properties:
-            definition:
-              description: URL of the content definition
-              example: https://api.cmp.optimizely.com/v3/structured-content/content-types/5291e00b990a49f1857adc024fd26620/versions/a8b48d529701452aa56a4e752e1b0ffc
-              type: string
-            self:
-              description: URL of the content
-              example: https://api.cmp.optimizely.com/v3/structured-content/contents/a24b834428a043ab8caed1ded4606f7d
-              type: string
-          type: object
-        primary_locale:
-          description: The primary locale of the content
-          example: en_US
-          type: string
-        root_content:
-          description: This is true when the content is not embedded in another content through a content type reference field
-          type: boolean
-        source:
-          description: Source of the content
-          type: string
-        source_id:
-          description: Source ID of the content
-          type: string
-        source_metadata:
-          description: Source metadata of the content
-          type: string
-        template_guid:
-          description: Template GUID of the content
-          type: string
-        title:
-          description: Title of the content
-          type: string
-        updated_at:
-          description: Date and time on which the content was last updated, in ISO 8601 UTC format
-          format: date-time
-          type: string
-        updated_by:
-          description: Unique identifier of the user who last updated the content
-          type: string
-      required:
-      - root_content
-      - title
-      - latest_fields_version
-      - content_guid
-      - created_by
-      - updated_by
-      - created_at
-      - updated_at
-      - content_type_guid
-      - content_type_name
-      - links
-      type: object
-    TaskStructuredContentUpdateRequest:
+    TaskExternalWorkRequest:
       additionalProperties: false
       properties:
-        expired:
-          description: Expired status of the content
-          title: Expired
-          type: boolean
-        expiry_datetime:
-          description: Date and time on which the content will expire, in ISO 8601 UTC format
-          example: '2019-10-07T13:15:30Z'
-          format: date-time
-          title: Expirydatetime
+        identifier:
+          description: Identifier of the external work
+          example: MY-PROJ-123
+          maxLength: 50
+          minLength: 1
           type:
           - string
           - 'null'
-        fields:
-          $ref: '#/components/schemas/StructuredContentFields'
-          description: The fields of structured content
-          title: fields
-          type: object
-        primary_locale:
-          description: The primary locale of the content
-          example: en_US
-          type: string
-        source:
-          description: Source of the content
-          title: Source
-          type:
-          - string
-          - 'null'
-        source_id:
-          description: Source id of the content
-          title: Sourceid
-          type:
-          - string
-          - 'null'
-        source_metadata:
-          description: Source metadata of the content
-          title: Sourcemetadata
+        status:
+          description: Status of the external work
+          example: In Progress
+          maxLength: 128
+          minLength: 1
           type:
           - string
           - 'null'
         title:
-          description: Title of the structured content
-          example: Some webpage
-          type: string
+          description: Title of the external work
+          example: A very important ticket
+          maxLength: 128
+          minLength: 1
+          type:
+          - string
+          - 'null'
+        url:
+          description: Link to the external work (must be a valid URL with HTTPS scheme)
+          example: https://example.com/some-project/MY-PROJ-123
+          maxLength: 500
+          type:
+          - string
+          - 'null'
       type: object
-    NumberFieldValueModel:
-      properties:
-        num_value:
-          description: Value of the field value
-          type: number
-        order_index:
-          description: Order index of the field value
-          type: integer
-      required:
-      - num_value
+    TaskFieldUpdateRequest:
+      additionalProperties: false
+      discriminator:
+        mapping:
+          checkbox: '#/components/schemas/MultiChoiceTypeObjectFieldUpdatePayload'
+          currency_number: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
+          date: '#/components/schemas/DateTypeObjectFieldUpdatePayload'
+          dropdown: '#/components/schemas/DropdownTypeObjectFieldUpdatePayload'
+          image: '#/components/schemas/AssetTypeObjectFieldUpdatePayload'
+          label: '#/components/schemas/MultiChoiceTypeObjectFieldUpdatePayload'
+          percentage_number: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
+          radio_button: '#/components/schemas/RadioButtonTypeObjectFieldUpdatePayload'
+          rich_text: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
+          simple_number: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
+          text: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
+          text_area: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
+          video: '#/components/schemas/AssetTypeObjectFieldUpdatePayload'
+        propertyName: type
+      oneOf:
+      - $ref: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
+      - $ref: '#/components/schemas/MultiChoiceTypeObjectFieldUpdatePayload'
+      - $ref: '#/components/schemas/DropdownTypeObjectFieldUpdatePayload'
+      - $ref: '#/components/schemas/RadioButtonTypeObjectFieldUpdatePayload'
+      - $ref: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
+      - $ref: '#/components/schemas/DateTypeObjectFieldUpdatePayload'
+      - $ref: '#/components/schemas/AssetTypeObjectFieldUpdatePayload'
       type: object
     TaskAssetCommentResponse:
       additionalProperties: false
@@ -3386,355 +2804,118 @@ components:
       - attachments
       - links
       type: object
-    TaskCustomFieldUpdateRequest:
+    TaskAssetRequest:
       additionalProperties: false
+      discriminator:
+        mapping:
+          direct_upload: '#/components/schemas/TaskAssetRequestForDirectUpload'
+          fork_from_library: '#/components/schemas/TaskAssetRequestForLibrary'
+        propertyName: type
+      oneOf:
+      - $ref: '#/components/schemas/TaskAssetRequestForDirectUpload'
+      - $ref: '#/components/schemas/TaskAssetRequestForLibrary'
+      type: object
+    ChoiceFieldValueModel:
       properties:
-        values:
-          description: 'An array of choice IDs, if the custom field has choices. Otherwise, text values to update the custom field values with. Must contain at least one id/value in the array. For custom fields of type `checkboxes`, you can provide an array of multiple-choice IDs as values.
-
-            Value for the custom field of type `date_field` must follow this format: `YYYY-MM-DD`.
-
-            '
-          items:
-            example: 1nu8ue9wf8u9nusd9u
-            type: string
-          minItems: 1
-          type: array
+        choice_key:
+          description: Choice key of the field value
+          type: string
+        order_index:
+          description: Order index of the field value
+          type: integer
       required:
-      - values
+      - choice_key
       type: object
-    FieldTypeDropdown:
+    StringTypeObjectFieldUpdatePayload:
       allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
+      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
       - properties:
-          choices:
-            description: Choices of the dropdown
+          values:
+            description: Any single string
             items:
-              properties:
-                id:
-                  description: Identifier of the choice
-                  example: 6ceee2f4fa3411ecb37802420ac8001b
-                  type: string
-                name:
-                  description: Name of the choice
-                  example: Dropdown 1 Choice 1
-                  type: string
-              required:
-              - id
-              - name
-              type: object
+              example: This is a test string
+              type: string
             type: array
-          is_multi_select:
-            description: Select multiple values from the dropdown
-            type: boolean
-        required:
-        - is_multi_select
-        - choices
         type: object
-    AttachmentRequest:
+    Pagination:
       additionalProperties: false
+      description: Pagination related information
       properties:
-        key:
-          description: Unique identifier of the file upload session. This is the `upload_meta_fields.key` field retrieved from the `/v3/upload-url` endpoint.
-          example: ce8995aea58b11ea8cd90242ac120005
-          maxLength: 100
-          minLength: 1
-          type: string
-        name:
-          description: Filename of the attachment
-          example: sample_image.png
-          minLength: 1
-          type: string
-      required:
-      - key
-      - name
-      type: object
-    AssetFieldTypeLabel:
-      allOf:
-      - $ref: '#/components/schemas/BaseAssetField'
-      - properties:
-          choices:
-            description: Choices of the label
-            items:
-              properties:
-                id:
-                  description: Identifier of the choice
-                  example: 6ceee2f4fa3411ecb37802420ac8001b
-                  type: string
-                name:
-                  description: Name of the choice
-                  example: Label 1 Choice 1
-                  type: string
-              required:
-              - id
-              - name
-              type: object
-            type: array
-          is_multi_select:
-            description: Select multiple values from the label
-            type: boolean
-        required:
-        - is_multi_select
-        - choices
-        type: object
-    AssetFieldTypeRadio:
-      allOf:
-      - $ref: '#/components/schemas/BaseAssetField'
-      - properties:
-          choices:
-            description: Choices of the radio button
-            items:
-              properties:
-                id:
-                  description: Identifier of the choice
-                  example: 6ceee2f4fa3411ecb37802420ac8001b
-                  type: string
-                name:
-                  description: Name of the choice
-                  example: Radio 1 Choice 1
-                  type: string
-              required:
-              - id
-              - name
-              type: object
-            type: array
-        required:
-        - choices
-        type: object
-    TaskUpdateRequest:
-      additionalProperties: false
-      properties:
-        campaign_id:
-          description: ID of the campaign to be associated with the task
-          example: 6684f31be89a526d030cfc0f
-          type: string
-        due_at:
-          description: Due date and time of the task
-          example: '2025-10-06T13:00:00Z'
-          format: date-time
-          type: string
-        labels:
-          description: Labels to associate
-          items:
-            $ref: '#/components/schemas/ResourceLabelRequest'
-          type: array
-        owner_id:
-          description: ID of the owner for the task
-          example: 6853b3e37ed5e42cff067434
-          type: string
-        start_at:
-          description: Start date of the task
-          example: '2025-10-06T13:00:00Z'
-          format: date-time
-          type: string
-        title:
-          description: Title of the task
-          type: string
-        workflow_id:
-          description: ID of the workflow to be used in the task
-          example: 665d56034854d100ad7cb8fb
-          type: string
-      type: object
-    FieldTypePercentageNumber:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - properties:
-          decimal_places:
-            description: Decimal place of the numerical field
-            example: 2
-            type:
-            - integer
-            - 'null'
-        required:
-        - decimal_places
-        type: object
-    ResourceLabelRequest:
-      additionalProperties: false
-      description: Payload to associate labels to a resource
-      properties:
-        group:
-          description: Label group
-          example: 2467e583a60e23fda2b89db81a453cd2
-          maxLength: 32
-          minLength: 32
-          type: string
-        values:
-          description: List of values of the label
-          items:
-            example: 71c378f3fee3d822759d1bdc2aab628c
-            maxLength: 32
-            minLength: 32
-            type: string
-          type: array
-      required:
-      - group
-      - values
-      type: object
-    FieldTypeCheckbox:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - properties:
-          choices:
-            description: Choices of the checkbox
-            items:
-              properties:
-                id:
-                  description: Identifier of the choice
-                  example: 6ceee2f4fa3411ecb37802420ac8001b
-                  type: string
-                name:
-                  description: Name of the choice
-                  example: Checkbox 1 Choice 1
-                  type: string
-              required:
-              - id
-              - name
-              - color
-              type: object
-            type: array
-        required:
-        - choices
-        type: object
-    AddUrlToTaskRequest:
-      additionalProperties: false
-      properties:
-        title:
-          description: Title of the URL.
-          example: Google
-          type: string
-        url:
-          description: The URL to be added to the task.
-          example: https://www.google.com
-          type: string
-      required:
-      - url
-      type: object
-    AssetFieldTypeDropdown:
-      allOf:
-      - $ref: '#/components/schemas/BaseAssetField'
-      - properties:
-          choices:
-            description: Choices of the dropdown
-            items:
-              properties:
-                id:
-                  description: Identifier of the choice
-                  example: 6ceee2f4fa3411ecb37802420ac8001b
-                  type: string
-                name:
-                  description: Name of the choice
-                  example: Dropdown 1 Choice 1
-                  type: string
-              required:
-              - id
-              - name
-              type: object
-            type: array
-          is_multi_select:
-            description: Allow users to select multiple values from the dropdown
-            type: boolean
-        required:
-        - is_multi_select
-        - choices
-        type: object
-    TaskArticle:
-      additionalProperties: false
-      properties:
-        created_at:
-          description: Date and time on which the article was created, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
-          example: '2019-10-06T13:15:30Z'
-          format: date-time
-          type: string
-        html_body:
-          description: Content of the article
-          example: <p>Article text</p>
-          type: string
-        id:
-          description: Unique identifier of the article
-          example: 5d7f910551b00a722e0418830cee6631
-          type: string
-        labels:
-          description: Labels associated with the article
-          items:
-            $ref: '#/components/schemas/ResourceLabelResponse'
-          type: array
-        library_asset_id:
-          description: Unique identifier of the corresponding library asset — the library asset this task asset was forked from, or the one it was released to.
-          example: 6a8b2c3d4e5f6071829a3b4c
+        next:
+          description: URL to the next page
+          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
           type:
           - string
           - 'null'
+        previous:
+          description: URL to the previous page
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - next
+      - previous
+      type: object
+    LocalizedFieldValuesWithEmbeddedContent:
+      properties:
+        field_values:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/NumberFieldValueModel'
+            - $ref: '#/components/schemas/BooleanFieldValueModel'
+            - $ref: '#/components/schemas/DatetimeFieldValueModel'
+            - $ref: '#/components/schemas/TextFieldValueModel'
+            - $ref: '#/components/schemas/RichTextFieldValueModel'
+            - $ref: '#/components/schemas/LibraryAssetFieldValueModel'
+            - $ref: '#/components/schemas/ContentFieldValueWithEmbeddedModel'
+            - $ref: '#/components/schemas/ContentFieldValueModel'
+            - $ref: '#/components/schemas/URLFieldValueModel'
+            - $ref: '#/components/schemas/JSONFieldValueModel'
+            - $ref: '#/components/schemas/ChoiceFieldValueModel'
+            - $ref: '#/components/schemas/LocationFieldValueModel'
+          type: array
+        locale:
+          type: string
+      required:
+      - locale
+      - field_values
+      type: object
+    LibraryAssetFieldDefinition:
+      properties:
+        allowed_types:
+          items:
+            $ref: '#/components/schemas/LibraryAssetType'
+          type: array
+        core:
+          $ref: '#/components/schemas/CoreFieldDef'
+        default_values:
+          description: Default values for the field
+          items:
+            $ref: '#/components/schemas/LibraryAssetDefaultValue'
+          type: array
+      required:
+      - core
+      - allowed_types
+      type: object
+    LibraryAssetFieldValueModel:
+      properties:
+        asset_guid:
+          description: Asset GUID of the field value
+          type: string
+        asset_type:
+          $ref: '#/components/schemas/LibraryAssetType'
         links:
-          additionalProperties: false
+          additionalProperties:
+            type: string
           description: Meta links
-          properties:
-            drafts:
-              description: URL to POST draft to a task asset – not supported for `article` so the value will be `null`
-              example: null
-              type:
-              - string
-              - 'null'
-            self:
-              description: URL of the article
-              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/articles/5d7f910551b00a722e0418830cee6631
-              type: string
-            task:
-              description: URL of the task that the article is associated with
-              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9
-              type: string
-            web_urls:
-              additionalProperties: false
-              description: Web URLs
-              properties:
-                drafts:
-                  description: Web URL of the drafts of the article – not supported for `article` so the value will be `null`
-                  example: null
-                  type:
-                  - string
-                  - 'null'
-                self:
-                  description: Web URL of the article
-                  example: https://cmp.optimizely.com/cloud/taskv3/5f857f30e1c4a2038d6179e9?contentTabGuid=5d7f910551b00a722e0418830cee6631
-                  type: string
-                task:
-                  description: Web URL of the task that the article is associated with
-                  example: https://cmp.optimizely.com/cloud/taskv3/5f857f30e1c4a2038d6179e9
-                  type: string
-              required:
-              - self
-              - task
-              - drafts
-              type: object
-          required:
-          - self
-          - task
-          - drafts
-          - web_urls
           type: object
-        modified_at:
-          description: Date and time of the most recent modification of the article, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
-          example: '2019-10-07T13:15:30Z'
-          format: date-time
-          type: string
-        title:
-          description: Title of the article
-          example: 3 Ways Influencer Marketing Will Further Mature in 2020
-          type: string
-        url:
-          description: Public URL of the article
-          example: https://cmp.optimizely.com/new-article-published.html
-          type:
-          - string
-          - 'null'
+        order_index:
+          description: Order index of the field value
+          type: integer
       required:
-      - id
-      - title
-      - created_at
-      - modified_at
-      - html_body
-      - url
-      - labels
-      - links
+      - asset_guid
+      - asset_type
       type: object
     LibraryAssetDefaultValue:
       properties:
@@ -3746,6 +2927,22 @@ components:
       required:
       - asset_type
       - asset_guid
+      type: object
+    TaskUrlResponse:
+      additionalProperties: false
+      properties:
+        created_at:
+          description: Timestamp when the URL was added to the task
+          example: '2024-06-01T06:00:00Z'
+          format: date-time
+          type: string
+        id:
+          description: Unique identifier of the URL added to the task
+          example: 692851fbbd8c9217e28f7ad1
+          type: string
+      required:
+      - id
+      - created_at
       type: object
     ObjectFieldCreateResponse:
       additionalProperties: false
@@ -3775,86 +2972,79 @@ components:
       - $ref: '#/components/schemas/FieldTypePercentageNumber'
       - $ref: '#/components/schemas/FieldTypeCurrencyNumber'
       type: object
-    ContentFieldsVersionValidation:
-      properties:
-        fields:
-          additionalProperties:
-            additionalProperties:
-              $ref: '#/components/schemas/error_reason'
-            type: object
-          description: Validation for the fields
-          type: object
-      type: object
-    TaskCommentResponse:
+    ResourceLabelResponse:
       additionalProperties: false
+      description: Label associated to a fetched resource
       properties:
-        attachments:
-          description: List of attachments of the comment
-          example:
-          - id: a113667245d111eb8945000c
-            name: sample.png
-            url: https://files.cmp.optimizely.com/download/96c314a645d111eb8945000c291b51d4?token=
-          items:
-            $ref: '#/components/schemas/AttachmentResponse'
-          type: array
-        comment_by:
-          description: Unique identifier of the user who posted the comment
-          example: 62a8455e29fed3045d9c7a8b
-          type: string
-        created_at:
-          description: Creation date and time of the task comment, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
-          example: '2020-10-06T13:15:30Z'
-          format: date-time
-          type: string
-        id:
-          description: Unique identifier of the task comment
-          example: 5fe38c39574b52a62a089239
-          type: string
-        is_resolved:
-          description: Determines if the comment is resolved in Optimizely CMP
-          example: false
-          type: boolean
-        links:
+        group:
           additionalProperties: false
-          description: Meta links
+          description: Label group
           properties:
-            comment_by:
-              description: URL of the user who posted the comment
-              example: https://api.cmp.optimizely.com/v3/users/62a8455e29fed3045d9c7a8b
+            id:
+              description: Identifier of the label group
+              example: 2467e583a60e23fda2b89db81a453cd2
               type: string
-            task:
-              description: URL of the task
-              example: https://api.cmp.optimizely.com/v3/tasks/5fe38c39574b52a62a089239
+            name:
+              description: Name of the label group
+              example: Content Format
               type: string
           required:
-          - task
-          - comment_by
+          - id
+          - name
           type: object
-        modified_at:
-          description: Last modification date and time of the task comment, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
-          example: '2020-10-06T14:15:30Z'
-          format: date-time
-          type: string
-        parent_comment_id:
-          description: Unique identifier of the parent comment
-          example: 5fe38c39574b52a62a089238
-          type:
-          - string
-          - 'null'
-        value:
-          description: Content of the comment
-          example: Well done!
-          type: string
+        values:
+          description: List of values of the label
+          items:
+            additionalProperties: false
+            properties:
+              id:
+                description: Identifier of the label value
+                example: 71c378f3fee3d822759d1bdc2aab628c
+                type: string
+              name:
+                description: Name of the label value
+                example: Photos
+                type: string
+            required:
+            - id
+            - name
+            type: object
+          type: array
       required:
-      - id
-      - value
-      - is_resolved
-      - parent_comment_id
-      - comment_by
-      - created_at
-      - modified_at
-      - attachments
-      - links
+      - group
+      - values
+      type: object
+    JSONFieldValueModel:
+      properties:
+        json_value:
+          anyOf:
+          - type: object
+          - items: {}
+            type: array
+          description: Value of the field value
+        order_index:
+          description: Order index of the field value
+          type: integer
+      required:
+      - json_value
+      type: object
+    ContentFieldValueModel:
+      properties:
+        content_guid:
+          description: Content GUID of the field value
+          type: string
+        content_url:
+          description: Content URL of the field value
+          type: string
+        embedded:
+          description: Indicates whether the field value is embedded
+          type: boolean
+        order_index:
+          description: Order index of the field value
+          type: integer
+      required:
+      - content_guid
+      - embedded
       type: object
     RecursiveStructuredContent:
       additionalProperties:
@@ -3907,189 +3097,6 @@ components:
       - content_type_guid
       - root_content
       type: object
-    TaskCustomFieldChoiceListResponseItem:
-      additionalProperties: false
-      properties:
-        id:
-          description: Unique identifier of the custom field choice
-          example: j90uv0sd9i0si09sdip
-          type: string
-        name:
-          description: Name of the custom field choice
-          example: Some option
-          type: string
-      required:
-      - id
-      - name
-      type: object
-    CommentCreateRequest:
-      additionalProperties: false
-      properties:
-        attachments:
-          description: List of comment attachments.
-          items:
-            $ref: '#/components/schemas/AttachmentRequest'
-          type: array
-        value:
-          description: Content of the comment. Markdown is supported. To mention a user belonging to the organization, use the `@[name](openapi-user-link)` format.
-          example: Comment mentioning @[Organization User](https://api.cmp.optimizely.com/v3/users/5fe38aeb574b52a62a089238)
-          minLength: 1
-          type: string
-      required:
-      - value
-      type: object
-    BaseAssetField:
-      additionalProperties: false
-      properties:
-        id:
-          description: Identifier of the field
-          example: 64be245ec0d79e79fdf1ad84
-          type: string
-        name:
-          description: Name of the field
-          example: Simple Text
-          type: string
-        type:
-          description: Type of the field
-          example: text
-          type: string
-        values:
-          description: List of selected values or from user input
-          items:
-            type: string
-          type: array
-      required:
-      - id
-      - name
-      - type
-      - values
-      type: object
-    DeleteFieldValueModel:
-      properties:
-        delete:
-          description: Should be true if the field value needs to be deleted
-          type: boolean
-        order_index:
-          description: Order index of the field value
-          type: integer
-      required:
-      - delete
-      type: object
-    DateTypeObjectField:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectField'
-      - $ref: '#/components/schemas/DateTypeObjectFieldUpdatePayload'
-    DatetimeFieldDefinition:
-      properties:
-        core:
-          $ref: '#/components/schemas/CoreFieldDef'
-        default_values:
-          description: Default values of the field
-          items:
-            format: date-time
-            type: string
-          type: array
-        max_date:
-          description: Maximum date of the field
-          format: date-time
-          type: string
-        min_date:
-          description: Minimum date of the field
-          format: date-time
-          type: string
-      required:
-      - core
-      - min_date
-      - max_date
-      type: object
-    FieldBaseType:
-      additionalProperties: false
-      properties:
-        id:
-          description: Identifier of the field
-          example: 64be245ec0d79e79fdf1ad84
-          type: string
-        name:
-          description: Name of the field
-          example: Dropdown 101
-          type: string
-        type:
-          description: Type of the field
-          example: text
-          type: string
-        values:
-          description: List of selected values or from user input
-          items:
-            type: string
-          type: array
-      required:
-      - id
-      - name
-      - type
-      - values
-      type: object
-    TaskAssetFieldsUpdateRequest:
-      items:
-        additionalProperties: false
-        discriminator:
-          mapping:
-            checkbox: '#/components/schemas/MultiChoiceTypeObjectField'
-            currency_number: '#/components/schemas/NumberTypeObjectField'
-            date: '#/components/schemas/DateTypeObjectField'
-            dropdown: '#/components/schemas/DropdownTypeObjectField'
-            image: '#/components/schemas/AssetTypeObjectField'
-            label: '#/components/schemas/MultiChoiceTypeObjectField'
-            percentage_number: '#/components/schemas/NumberTypeObjectField'
-            radio_button: '#/components/schemas/RadioButtonTypeObjectField'
-            rich_text: '#/components/schemas/StringTypeObjectField'
-            simple_number: '#/components/schemas/NumberTypeObjectField'
-            text: '#/components/schemas/StringTypeObjectField'
-            text_area: '#/components/schemas/StringTypeObjectField'
-            video: '#/components/schemas/AssetTypeObjectField'
-          propertyName: type
-        oneOf:
-        - $ref: '#/components/schemas/StringTypeObjectField'
-        - $ref: '#/components/schemas/MultiChoiceTypeObjectField'
-        - $ref: '#/components/schemas/DropdownTypeObjectField'
-        - $ref: '#/components/schemas/RadioButtonTypeObjectField'
-        - $ref: '#/components/schemas/NumberTypeObjectField'
-        - $ref: '#/components/schemas/DateTypeObjectField'
-        - $ref: '#/components/schemas/AssetTypeObjectField'
-        type: object
-      type: array
-    AllowedContentTypeItem:
-      properties:
-        name:
-          description: Name of the item
-          type: string
-        url:
-          description: URL of the item
-          type: string
-      required:
-      - name
-      - url
-      type: object
-    ContentFieldValueExpandedModel:
-      properties:
-        content_details:
-          $ref: '#/components/schemas/ContentDetailsModel'
-        content_guid:
-          description: Content GUID of the field value
-          type: string
-        content_url:
-          description: Content URL of the field value
-          type: string
-        embedded:
-          description: Indicates whether the field value is embedded
-          type: boolean
-        order_index:
-          description: Order index of the field value
-          type: integer
-      required:
-      - content_guid
-      - embedded
-      - content_details
-      type: object
     SCContentTypeVersion:
       allOf:
       - $ref: '#/components/schemas/BaseContentTypeVersionModel'
@@ -4120,127 +3127,427 @@ components:
       required:
       - content_body
       type: object
-    DropdownTypeObjectField:
+    AssetFieldTypeRadio:
       allOf:
-      - $ref: '#/components/schemas/BaseObjectField'
-      - $ref: '#/components/schemas/DropdownTypeObjectFieldUpdatePayload'
-    TaskAssetDraftResponse:
+      - $ref: '#/components/schemas/BaseAssetField'
+      - properties:
+          choices:
+            description: Choices of the radio button
+            items:
+              properties:
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Radio 1 Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              type: object
+            type: array
+        required:
+        - choices
+        type: object
+    TaskImage:
       additionalProperties: false
       properties:
-        asset_id:
-          description: Unique identifier of the asset
-          example: 5d7f910551b00a722e0418830cee6631
-          type: string
-        content:
-          additionalProperties: false
-          description: Content of the draft
-          properties:
-            type:
-              description: Type of the content
-              enum:
-              - url
-              example: url
-              type: string
-            value:
-              description: Content of the draft; download URL for `image`, `raw file`, and `video`
-              example: http://images.cmp.optimizely.com/Zz0xODQ3NDU3Y2Y2YmYzOTlmNjkyOTgyZDY3Y2I3YWM2OA==S
-              type: string
-          required:
-          - type
-          - value
-          type: object
         created_at:
-          description: Date and time on which the draft was created, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
+          description: Date and time on which the image was created, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
           example: '2019-10-06T13:15:30Z'
           format: date-time
           type: string
-        draft_number:
-          description: The serial number of the draft
-          example: 2
+        file_size:
+          description: Size of the image in bytes
+          example: 11244
           type: integer
+        id:
+          description: Unique identifier of the image
+          example: 5d7f910551b00a722e0418830cee6632
+          type: string
+        image_resolution:
+          additionalProperties: false
+          description: Width and height of the image in pixels
+          properties:
+            height:
+              description: Height of the image in pixels
+              example: 800
+              type: integer
+            width:
+              description: Width of the image in pixels
+              example: 700
+              type: integer
+          required:
+          - height
+          - width
+          type: object
+        labels:
+          description: Labels associated with the image
+          items:
+            $ref: '#/components/schemas/ResourceLabelResponse'
+          type: array
+        library_asset_id:
+          description: Unique identifier of the corresponding library asset — the library asset this task asset was forked from, or the one it was released to.
+          example: 6a8b2c3d4e5f6071829a3b4c
+          type:
+          - string
+          - 'null'
         links:
           additionalProperties: false
           description: Meta links
           properties:
-            asset:
-              description: URL of the asset that the draft is associated with
-              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/images/5d7f910551b00a722e0418830cee6631
+            drafts:
+              description: URL to POST draft to the image
+              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/assets/5d7f910551b00a722e0418830cee6632/drafts
+              type: string
+            self:
+              description: URL of the image
+              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/images/5d7f910551b00a722e0418830cee6632
               type: string
             task:
-              description: URL of the task that the asset is associated with
+              description: URL of the task that the image is associated with
               example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9
               type: string
+            web_urls:
+              additionalProperties: false
+              description: Web URLs
+              properties:
+                drafts:
+                  description: Web URL of the drafts of the image
+                  example: https://cmp.optimizely.com/cloud/task/5f857f30e1c4a2038d6179e9/image/5d7f910551b00a722e0418830cee6632
+                  type: string
+                self:
+                  description: Web URL of the image
+                  example: https://cmp.optimizely.com/cloud/taskv3/5f857f30e1c4a2038d6179e9?contentTabGuid=5d7f910551b00a722e0418830cee6632
+                  type: string
+                task:
+                  description: Web URL of the task that the image is associated with
+                  example: https://cmp.optimizely.com/cloud/taskv3/5f857f30e1c4a2038d6179e9
+                  type: string
+              required:
+              - self
+              - task
+              - drafts
+              type: object
           required:
-          - asset
+          - self
           - task
+          - drafts
+          - web_urls
           type: object
         mime_type:
-          description: MIME type of the draft
-          example: image/png
+          description: MIME type of the image
+          example: image/jpeg
+          type: string
+        modified_at:
+          description: Date and time of the most recent modification of the image, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
+          example: '2019-10-07T13:15:30Z'
+          format: date-time
           type: string
         title:
-          description: Title of the draft
-          example: sample_image.png
+          description: Title of the image
+          example: cat.jpeg
           type: string
-        type:
-          description: Type of the draft
-          enum:
-          - image
-          - video
-          - raw_file
-          example: image
+        url:
+          description: Download the URL of the image
+          example: http://images.cmp.optimizely.com/Zz0xODQ3NDU3Y2Y2YmYzOTlmNjkyOTgyZDY3Y2I3YWM2OA==
           type: string
       required:
-      - draft_number
-      - asset_id
+      - id
       - title
-      - type
       - mime_type
       - created_at
-      - content
+      - modified_at
+      - file_size
+      - image_resolution
+      - url
+      - labels
       - links
       type: object
-    FieldTypeCurrencyNumber:
+    TaskSubStepRequest:
+      additionalProperties: false
+      properties:
+        assignee_id:
+          description: ID of the assignee for the substep; cannot be passed together with `is_completed`, `is_in_progress` or `is_skipped`
+          example: 5fdf31d57f0d0e362e2b5908
+          type:
+          - string
+          - 'null'
+        assignee_type:
+          description: Type of the assignee for the substep. If not provided with `assignee_id`, defaults to `user`.
+          enum:
+          - user
+          - team
+          example: user
+          type: string
+        is_completed:
+          description: Whether the substep should be completed; cannot be passed together with `is_in_progress`, `is_skipped` or `assignee_id`
+          enum:
+          - true
+          example: true
+          type: boolean
+        is_in_progress:
+          description: Whether the substep should be progressed; cannot be passed together with `is_completed`, `is_skipped` or `assignee_id`
+          enum:
+          - true
+          example: true
+          type: boolean
+        is_skipped:
+          description: Whether the substep should be skipped; cannot be passed together with `is_in_progress`, `is_completed` or `assignee_id`
+          enum:
+          - true
+          type: boolean
+      type: object
+    BaseFieldDefinitionType:
+      description: An enumeration.
+      enum:
+      - boolean
+      - json
+      - url
+      - location
+      type: string
+    DatetimeFieldDefinition:
+      properties:
+        core:
+          $ref: '#/components/schemas/CoreFieldDef'
+        default_values:
+          description: Default values of the field
+          items:
+            format: date-time
+            type: string
+          type: array
+        max_date:
+          description: Maximum date of the field
+          format: date-time
+          type: string
+        min_date:
+          description: Minimum date of the field
+          format: date-time
+          type: string
+      required:
+      - core
+      - min_date
+      - max_date
+      type: object
+    DateTypeObjectFieldUpdatePayload:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
+      - properties:
+          values:
+            description: Array of date-time values, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
+            items:
+              description: Date and time, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
+              example: '2020-02-10T10:40:45Z'
+              format: date-time
+              type: string
+            maxItems: 1
+            type: array
+        type: object
+    FieldBaseType:
+      additionalProperties: false
+      properties:
+        id:
+          description: Identifier of the field
+          example: 64be245ec0d79e79fdf1ad84
+          type: string
+        name:
+          description: Name of the field
+          example: Dropdown 101
+          type: string
+        type:
+          description: Type of the field
+          example: text
+          type: string
+        values:
+          description: List of selected values or from user input
+          items:
+            type: string
+          type: array
+      required:
+      - id
+      - name
+      - type
+      - values
+      type: object
+    RadioButtonTypeObjectFieldUpdatePayload:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
+      - properties:
+          values:
+            description: Accepts a single choice Id.
+            items:
+              example: 9119a313057e401189407116fcd3
+              type: string
+            maxItems: 1
+            type: array
+        type: object
+    AssetFieldTypeCheckbox:
+      allOf:
+      - $ref: '#/components/schemas/BaseAssetField'
+      - properties:
+          choices:
+            description: Choices of the checkbox
+            items:
+              properties:
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Checkbox 1 Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              type: object
+            type: array
+        required:
+        - choices
+        type: object
+    TextFieldDefinition:
+      properties:
+        core:
+          $ref: '#/components/schemas/CoreFieldDef'
+        default_values:
+          description: Default values of the field
+          items:
+            type: string
+          type: array
+        max_length:
+          description: Maximum length of the field
+          type: integer
+        min_length:
+          description: Minimum length of the field
+          type: integer
+        validation_pattern:
+          description: Validation pattern of the field
+          type: string
+      required:
+      - core
+      - validation_pattern
+      - min_length
+      type: object
+    AttachmentRequest:
+      additionalProperties: false
+      properties:
+        key:
+          description: Unique identifier of the file upload session. This is the `upload_meta_fields.key` field retrieved from the `/v3/upload-url` endpoint.
+          example: ce8995aea58b11ea8cd90242ac120005
+          maxLength: 100
+          minLength: 1
+          type: string
+        name:
+          description: Filename of the attachment
+          example: sample_image.png
+          minLength: 1
+          type: string
+      required:
+      - key
+      - name
+      type: object
+    TaskCustomFieldChoiceListResponseItem:
+      additionalProperties: false
+      properties:
+        id:
+          description: Unique identifier of the custom field choice
+          example: j90uv0sd9i0si09sdip
+          type: string
+        name:
+          description: Name of the custom field choice
+          example: Some option
+          type: string
+      required:
+      - id
+      - name
+      type: object
+    FieldTypeCheckbox:
       allOf:
       - $ref: '#/components/schemas/FieldBaseType'
       - properties:
-          currency_code:
-            description: Currency code of the numerical field
-            example: USD
-            type: string
-          decimal_places:
-            description: Decimal place of the numerical field
-            example: 2
-            type:
-            - integer
-            - 'null'
-          has_thousand_separator:
-            description: Whether the numerical field has a thousand separator
-            example: true
-            type: boolean
+          choices:
+            description: Choices of the checkbox
+            items:
+              properties:
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Checkbox 1 Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              - color
+              type: object
+            type: array
         required:
-        - has_thousand_separator
-        - decimal_places
-        - currency_code
+        - choices
         type: object
-    RecursivePatchStructuredContentFields:
+    DateTypeObjectField:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectField'
+      - $ref: '#/components/schemas/DateTypeObjectFieldUpdatePayload'
+    PatchLocalizedFieldValuesWithEmbeddedContent:
+      properties:
+        field_values:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/NumberFieldValueModel'
+            - $ref: '#/components/schemas/BooleanFieldValueModel'
+            - $ref: '#/components/schemas/DatetimeFieldValueModel'
+            - $ref: '#/components/schemas/TextFieldValueModel'
+            - $ref: '#/components/schemas/RichTextFieldValueModel'
+            - $ref: '#/components/schemas/LibraryAssetFieldValueModel'
+            - $ref: '#/components/schemas/ContentFieldValueWithEmbeddedModel'
+            - $ref: '#/components/schemas/ContentFieldValueModel'
+            - $ref: '#/components/schemas/URLFieldValueModel'
+            - $ref: '#/components/schemas/JSONFieldValueModel'
+            - $ref: '#/components/schemas/ChoiceFieldValueModel'
+            - $ref: '#/components/schemas/LocationFieldValueModel'
+            - $ref: '#/components/schemas/DeleteFieldValueModel'
+            - $ref: '#/components/schemas/ContentFieldWithEmbeddedPatchValueModel'
+          type: array
+        locale:
+          description: The default value should be en_US
+          type: string
+      required:
+      - locale
+      - field_values
+      type: object
+    TaskStructuredContentCreateRequest:
       additionalProperties: false
       properties:
-        content_body:
-          $ref: '#/components/schemas/StructuredContentFields'
-          title: Contentbody
-          type: object
+        content_type_guid:
+          description: Unique identifier of the content type
+          example: 5d7f910551b00a722e0418830cee6633
+          type: string
         expired:
           description: Expired status of the content
           title: Expired
           type: boolean
         expiry_datetime:
           description: Date and time on which the content will expire, in ISO 8601 UTC format
+          example: '2019-10-07T13:15:30Z'
           format: date-time
           title: Expirydatetime
           type:
           - string
           - 'null'
+        fields:
+          $ref: '#/components/schemas/StructuredContentBody'
+          title: fields
+          type:
+          - object
+          - 'null'
+        primary_locale:
+          description: The primary locale of the content
+          example: en_US
+          type: string
         root_content:
           description: This is true when the content is not embedded in another content through a content type reference field
           title: Rootcontent
@@ -4258,155 +3565,195 @@ components:
           - string
           - 'null'
         source_metadata:
+          description: Source metadata of the content
           title: Sourcemetadata
+          type:
+          - string
+          - 'null'
+        template_guid:
+          description: Unique identifier of the template
+          example: 5d7f910551b00a722e0418830cee6633
           type: string
         title:
           description: Title of the structured content
           example: Some webpage
           type: string
+      required:
+      - content_type_guid
       type: object
-    AssetTypeObjectField:
+    AssetTypeObjectFieldUpdatePayload:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
+      - properties:
+          values:
+            description: Payload for fields with attachments
+            items:
+              properties:
+                key:
+                  description: Unique identifier of the file upload session. This is the `upload_meta_fields.key` field retrieved from the `/v3/upload-url` endpoint.
+                  example: ce8995aea58b11ea8cd90242ac120005
+                  type: string
+                title:
+                  description: Title of the image or video
+                  example: Sample.jpeg
+                  minLength: 1
+                  type: string
+              required:
+              - title
+              - key
+            maxItems: 1
+            type: array
+        type: object
+    MultiChoiceTypeObjectField:
       allOf:
       - $ref: '#/components/schemas/BaseObjectField'
-      - $ref: '#/components/schemas/AssetTypeObjectFieldUpdatePayload'
-    TaskStep:
+      - $ref: '#/components/schemas/MultiChoiceTypeObjectFieldUpdatePayload'
+    RadioButtonTypeObjectField:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectField'
+      - $ref: '#/components/schemas/RadioButtonTypeObjectFieldUpdatePayload'
+    AssetFieldTypeCommon:
+      allOf:
+      - $ref: '#/components/schemas/BaseAssetField'
+      - type: object
+    TaskSubStepCommentResponse:
       additionalProperties: false
       properties:
-        description:
-          description: Description of the step
-          example: Description of the step
-          type:
-          - string
-          - 'null'
-        due_at:
-          description: Due date and time of the step containing the substep,  in ISO 8601 UTC format (2020-02-10T10:40:45Z)
+        attachments:
+          description: List of attachments of the comment
+          example:
+          - id: a113667245d111eb8945000c
+            name: sample.png
+            url: https://files.cmp.optimizely.com/download/96c314a645d111eb8945000c291b51d4?token=
+          items:
+            $ref: '#/components/schemas/AttachmentResponse'
+          type: array
+        created_at:
+          description: Creation date and time of the task substep comment,  in ISO 8601 UTC format (2020-02-10T10:40:45Z)
           example: '2020-10-06T13:15:30Z'
           format: date-time
-          type:
-          - string
-          - 'null'
-        id:
-          description: Unique identifier of the step
-          example: 6d7f910551b00a722e0418830cee5564
           type: string
-        is_completed:
-          description: Determines whether the step is completed in Optimizely CMP
+        id:
+          description: Unique identifier of the substep comment
+          example: 5fe38c39574b52a62a089239
+          type: string
+        is_resolved:
+          description: Determines if the comment is resolved in Optimizely CMP
           example: false
           type: boolean
-        sub_steps:
-          description: Substeps of the step
-          items:
-            $ref: '#/components/schemas/TaskSubStep'
-          type: array
-        title:
-          description: Title of the step
-          example: Sample step
-          type: string
-      required:
-      - id
-      - title
-      - is_completed
-      - description
-      - due_at
-      - sub_steps
-      type: object
-    TaskRawFile:
-      additionalProperties: false
-      properties:
-        created_at:
-          description: Date and time on which the raw file was created, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
-          example: '2019-10-06T13:15:30Z'
-          format: date-time
-          type: string
-        file_size:
-          description: Size of the raw file in bytes
-          example: 11244
-          type: integer
-        id:
-          description: Unique identifier of the raw file
-          example: 5d7f910551b00a722e0418830cee6634
-          type: string
-        labels:
-          description: Labels associated to the raw file
-          items:
-            $ref: '#/components/schemas/ResourceLabelResponse'
-          type: array
-        library_asset_id:
-          description: Unique identifier of the corresponding library asset — the library asset this task asset was forked from, or the one it was released to.
-          example: 6a8b2c3d4e5f6071829a3b4c
-          type:
-          - string
-          - 'null'
         links:
           additionalProperties: false
           description: Meta links
           properties:
-            drafts:
-              description: URL to POST draft to the raw file
-              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/assets/5d7f910551b00a722e0418830cee6634/drafts
+            comment_by:
+              description: Creator of the substep comment
+              example: https://api.cmp.optimizely.com/v3/users/5fe38eea574b52a62a08923a
               type: string
             self:
-              description: URL of the raw file
-              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/raw-files/5d7f910551b00a722e0418830cee6634
+              description: URL of the substep comment
+              example: https://api.cmp.optimizely.com/v3/tasks/5d7f910551b00a722e0418830cee5534/steps/6d7f910551b00a722e0418830cee5564/sub-steps/9c7f910551b00a722e0418830cee2564
+              type: string
+            sub_step:
+              description: URL of the substep
+              example: https://api.cmp.optimizely.com/v3/tasks/5d7f910551b00a722e0418830cee5534/steps/6d7f910551b00a722e0418830cee5564/sub-steps/9c7f910551b00a722e0418830cee2564
               type: string
             task:
-              description: URL of the task that the raw file is associated with
-              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9
+              description: URL of the task
+              example: https://api.cmp.optimizely.com/v3/tasks/5d7f910551b00a722e0418830cee5534
               type: string
-            web_urls:
-              additionalProperties: false
-              description: Web URLs
-              properties:
-                drafts:
-                  description: Web URL of the drafts of the raw file
-                  example: https://cmp.optimizely.com/cloud/task/5f857f30e1c4a2038d6179e9/raw_file/5d7f910551b00a722e0418830cee6634
-                  type: string
-                self:
-                  description: Web URL of the raw file
-                  example: https://cmp.optimizely.com/cloud/taskv3/5f857f30e1c4a2038d6179e9?contentTabGuid=5d7f910551b00a722e0418830cee6634
-                  type: string
-                task:
-                  description: Web URL of the task that the raw file is associated with
-                  example: https://cmp.optimizely.com/cloud/taskv3/5f857f30e1c4a2038d6179e9
-                  type: string
-              required:
-              - self
-              - task
-              - drafts
-              type: object
           required:
           - self
+          - comment_by
           - task
-          - drafts
-          - web_urls
+          - sub_step
           type: object
-        mime_type:
-          description: MIME type of the raw file
-          example: application/zip
-          type: string
         modified_at:
-          description: Date and time of the most recent modification of the raw file,  in ISO 8601 UTC format (2020-02-10T10:40:45Z)
-          example: '2019-10-07T13:15:30Z'
+          description: Last modification date and time of the task substep comment,  in ISO 8601 UTC format (2020-02-10T10:40:45Z)
+          example: '2020-10-06T14:15:30Z'
           format: date-time
           type: string
-        title:
-          description: Title of the raw file
-          example: documents.zip
-          type: string
-        url:
-          description: Download the URL of the raw file
-          example: https://files.cmp.optimizely.com/171451644651701b96f1122009f026bc
+        value:
+          description: Content of the comment
+          example: Well done!
           type: string
       required:
       - id
-      - title
-      - mime_type
+      - value
+      - is_resolved
       - created_at
       - modified_at
-      - file_size
+      - attachments
+      type: object
+    DeleteFieldValueModel:
+      properties:
+        delete:
+          description: Should be true if the field value needs to be deleted
+          type: boolean
+        order_index:
+          description: Order index of the field value
+          type: integer
+      required:
+      - delete
+      type: object
+    CommentWithReplyCreateRequest:
+      additionalProperties: false
+      properties:
+        attachments:
+          description: List of comment attachments.
+          items:
+            $ref: '#/components/schemas/AttachmentRequest'
+          type: array
+        parent_comment_id:
+          description: Parent comment id to reply.
+          example: da80cfd7bbf84959a8a981acbad996b3
+          type: string
+        value:
+          description: Content of the comment. Markdown is supported. To mention a user belonging to the organization, use the `@[name](openapi-user-link)` format.
+          example: Comment mentioning @[Organization User](https://api.cmp.optimizely.com/v3/users/5fe38aeb574b52a62a089238)
+          minLength: 1
+          type: string
+      required:
+      - value
+      type: object
+    CommentCreateRequest:
+      additionalProperties: false
+      properties:
+        attachments:
+          description: List of comment attachments.
+          items:
+            $ref: '#/components/schemas/AttachmentRequest'
+          type: array
+        value:
+          description: Content of the comment. Markdown is supported. To mention a user belonging to the organization, use the `@[name](openapi-user-link)` format.
+          example: Comment mentioning @[Organization User](https://api.cmp.optimizely.com/v3/users/5fe38aeb574b52a62a089238)
+          minLength: 1
+          type: string
+      required:
+      - value
+      type: object
+    ContentFieldsVersionValidation:
+      properties:
+        fields:
+          additionalProperties:
+            additionalProperties:
+              $ref: '#/components/schemas/error_reason'
+            type: object
+          description: Validation for the fields
+          type: object
+      type: object
+    URLFieldValueModel:
+      properties:
+        order_index:
+          description: Order index of the field value
+          type: integer
+        url:
+          description: URL of the field value
+          format: uri
+          maxLength: 65536
+          minLength: 1
+          type: string
+      required:
       - url
-      - labels
-      - links
       type: object
     TaskResponse:
       additionalProperties: false
@@ -4570,49 +3917,117 @@ components:
       - steps
       - links
       type: object
-    LibraryAssetType:
+    TaskAssetDraftListResponseItem:
+      additionalProperties: false
+      properties:
+        content:
+          additionalProperties: false
+          description: Content of the draft
+          properties:
+            type:
+              description: Type of the content
+              enum:
+              - url
+              example: url
+              type: string
+            value:
+              description: Content of the draft; download URL for `image`, `raw file`, and `video`
+              example: http://images.cmp.optimizely.com/Zz0xODQ3NDU3Y2Y2YmYzOTlmNjkyOTgyZDY3Y2I3YWM2OA==S
+              type: string
+          required:
+          - type
+          - value
+          type: object
+        created_at:
+          description: Date and time on which the draft was created, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
+          example: '2019-10-06T13:15:30Z'
+          format: date-time
+          type: string
+        draft_number:
+          description: The serial number of the draft
+          example: 2
+          type: integer
+        id:
+          description: Unique identifier of the draft
+          example: 5d7f910551b00a722e0418830cee6631
+          type: string
+        links:
+          additionalProperties: false
+          description: Meta links
+          properties:
+            asset:
+              description: URL of the asset that the draft is associated with
+              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/images/5d7f910551b00a722e0418830cee6631
+              type: string
+            task:
+              description: URL of the task that the asset is associated with
+              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9
+              type: string
+          required:
+          - asset
+          - task
+          type: object
+        mime_type:
+          description: MIME type of the draft
+          example: image/png
+          type: string
+        title:
+          description: Title of the draft
+          example: sample_image.png
+          type: string
+        type:
+          description: Type of the draft
+          enum:
+          - image
+          - video
+          - raw_file
+          example: image
+          type: string
+      required:
+      - id
+      - draft_number
+      - title
+      - type
+      - mime_type
+      - created_at
+      - content
+      - links
+      type: object
+    ContentFieldValueExpandedModel:
+      properties:
+        content_details:
+          $ref: '#/components/schemas/ContentDetailsModel'
+        content_guid:
+          description: Content GUID of the field value
+          type: string
+        content_url:
+          description: Content URL of the field value
+          type: string
+        embedded:
+          description: Indicates whether the field value is embedded
+          type: boolean
+        order_index:
+          description: Order index of the field value
+          type: integer
+      required:
+      - content_guid
+      - embedded
+      - content_details
+      type: object
+    error_reason:
       description: An enumeration.
       enum:
-      - article
-      - image
-      - video
-      - raw_file
-      - structured_content
+      - REQUIRED_FIELD_ABSENT
+      - LIST_EMPTY
+      - INVALID_STATE
+      - INVALID_SELF_REF
+      - MIN_NOT_MET
+      - MAX_NOT_MET
+      - PATTERN_ERROR
+      title: error_reason
       type: string
-    NumberTypeObjectField:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectField'
-      - $ref: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
-    NumberTypeObjectFieldUpdatePayload:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
-      - properties:
-          values:
-            description: Accepts a single numeric value
-            items:
-              example: 200
-              type: number
-            maxItems: 1
-            type: array
-        type: object
-    StructuredContentBody:
-      additionalProperties:
-        items:
-          $ref: '#/components/schemas/LocalizedFieldValuesWithEmbeddedContent'
-        type: array
-      description: The fields of structured content
+    BaseContentTypeVersionModel:
       properties:
-        has_embedded:
-          description: Whether the structured content has embedded content reference field values
-          type:
-          - boolean
-          - 'null'
-      type: object
-    ContentFieldsVersionDetails:
-      properties:
-        content_hash:
-          description: Content hash of the version
-          type: string
         created_at:
           description: Date and time on which the version was created, in ISO 8601 UTC format
           format: date-time
@@ -4620,356 +4035,135 @@ components:
         created_by:
           description: Unique identifier of the user who created the version
           type: string
-        fields:
-          additionalProperties:
-            items:
-              $ref: '#/components/schemas/LocalizedFieldValues'
-            type: array
-          description: List of fields
+        expected_locales:
+          description: Expected locales of the version
+          items:
+            type: string
+          type: array
+        latest:
+          description: Indicates whether the version is the latest
+          type: boolean
+        links:
+          description: Meta links
+          properties:
+            content_type:
+              description: URL of the content type
+              example: https://api.cmp.optimizely.com/v3/structured-content/content-types/555876bf63e94ea4b3ec4da318736414
+              type: string
+            self:
+              description: URL of the content type version
+              example: https://api.cmp.optimizely.com/v3/structured-content/content-types/555876bf63e94ea4b3ec4da318736414/versions/31a6d15b09c54a04935203eb958ae058
+              type: string
           type: object
-        source_id:
-          description: Source ID of the version
-          type: string
-        source_metadata:
-          description: Source metadata of the version
-          type: string
-        validation:
-          $ref: '#/components/schemas/ContentFieldsVersionValidation'
         version_guid:
           description: Unique identifier of the version
           type: string
       required:
-      - fields
+      - version_guid
       - created_by
       - created_at
-      - version_guid
-      - content_hash
+      - latest
+      - expected_locales
+      - links
       type: object
-    FieldTypeLabel:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - properties:
-          choices:
-            description: Choices of the label
-            items:
-              properties:
-                id:
-                  description: Identifier of the choice
-                  example: 6ceee2f4fa3411ecb37802420ac8001b
-                  type: string
-                name:
-                  description: Name of the choice
-                  example: Label 1 Choice 1
-                  type: string
-              required:
-              - id
-              - name
-              - color
-              type: object
-            type: array
-          is_multi_select:
-            description: Select multiple values from the label
-            type: boolean
-        required:
-        - is_multi_select
-        - choices
-        type: object
-    TaskBriefResponse:
+    TaskArticle:
       additionalProperties: false
       properties:
-        fields:
-          description: List of fields of the brief
+        created_at:
+          description: Date and time on which the article was created, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
+          example: '2019-10-06T13:15:30Z'
+          format: date-time
+          type: string
+        html_body:
+          description: Content of the article
+          example: <p>Article text</p>
+          type: string
+        id:
+          description: Unique identifier of the article
+          example: 5d7f910551b00a722e0418830cee6631
+          type: string
+        labels:
+          description: Labels associated with the article
           items:
-            additionalProperties: false
-            properties:
-              name:
-                description: Name of the brief field
-                example: My Dropdown
-                type: string
-              settings_field_id:
-                description: Unique identifier of the settings field. If available, can be used to look up the field details using settings API.
-                example: 67c5684de8b943290648a693
-                type:
-                - string
-                - 'null'
-              value:
-                description: List of values set for the brief field
-                items:
-                  description: Value set in the brief field
-                  example: option 1
-                  type: string
-                type: array
-            required:
-            - id
-            - name
-            - value
-            - is_id_settings_searchable
-            type: object
+            $ref: '#/components/schemas/ResourceLabelResponse'
           type: array
+        library_asset_id:
+          description: Unique identifier of the corresponding library asset — the library asset this task asset was forked from, or the one it was released to.
+          example: 6a8b2c3d4e5f6071829a3b4c
+          type:
+          - string
+          - 'null'
         links:
           additionalProperties: false
           description: Meta links
           properties:
+            drafts:
+              description: URL to POST draft to a task asset – not supported for `article` so the value will be `null`
+              example: null
+              type:
+              - string
+              - 'null'
             self:
-              description: URL of the brief
-              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/brief
+              description: URL of the article
+              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/articles/5d7f910551b00a722e0418830cee6631
               type: string
             task:
-              description: URL of the task
+              description: URL of the task that the article is associated with
               example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9
               type: string
+            web_urls:
+              additionalProperties: false
+              description: Web URLs
+              properties:
+                drafts:
+                  description: Web URL of the drafts of the article – not supported for `article` so the value will be `null`
+                  example: null
+                  type:
+                  - string
+                  - 'null'
+                self:
+                  description: Web URL of the article
+                  example: https://cmp.optimizely.com/cloud/taskv3/5f857f30e1c4a2038d6179e9?contentTabGuid=5d7f910551b00a722e0418830cee6631
+                  type: string
+                task:
+                  description: Web URL of the task that the article is associated with
+                  example: https://cmp.optimizely.com/cloud/taskv3/5f857f30e1c4a2038d6179e9
+                  type: string
+              required:
+              - self
+              - task
+              - drafts
+              type: object
           required:
           - self
           - task
+          - drafts
+          - web_urls
           type: object
-        template:
-          allOf:
-          - $ref: '#/components/schemas/TaskBriefTemplateValue'
-          type:
-          - object
-          - 'null'
-        title:
-          description: Title of the task brief
-          example: Awesome Task Brief
-          type: string
-        type:
-          description: Type of the task brief
-          enum:
-          - template
-          - attachment
-          - text
-          example: template
-          type: string
-      required:
-      - type
-      - title
-      - fields
-      - links
-      type: object
-    FieldListResponseItem:
-      discriminator:
-        mapping:
-          checkbox: '#/components/schemas/FieldTypeCheckbox'
-          currency_number: '#/components/schemas/FieldTypeCurrencyNumber'
-          date: '#/components/schemas/FieldTypeCommon'
-          dropdown: '#/components/schemas/FieldTypeDropdown'
-          image: '#/components/schemas/FieldTypeCommon'
-          label: '#/components/schemas/FieldTypeLabel'
-          percentage_number: '#/components/schemas/FieldTypePercentageNumber'
-          radio_button: '#/components/schemas/FieldTypeRadio'
-          rich_text: '#/components/schemas/FieldTypeCommon'
-          simple_number: '#/components/schemas/FieldTypeSimpleNumber'
-          text: '#/components/schemas/FieldTypeCommon'
-          text_area: '#/components/schemas/FieldTypeCommon'
-          video: '#/components/schemas/FieldTypeCommon'
-        propertyName: type
-      oneOf:
-      - $ref: '#/components/schemas/FieldTypeCommon'
-      - $ref: '#/components/schemas/FieldTypeLabel'
-      - $ref: '#/components/schemas/FieldTypeDropdown'
-      - $ref: '#/components/schemas/FieldTypeRadio'
-      - $ref: '#/components/schemas/FieldTypeCheckbox'
-      - $ref: '#/components/schemas/FieldTypeSimpleNumber'
-      - $ref: '#/components/schemas/FieldTypePercentageNumber'
-      - $ref: '#/components/schemas/FieldTypeCurrencyNumber'
-    AssetFieldTypeCurrencyNumber:
-      allOf:
-      - $ref: '#/components/schemas/BaseAssetField'
-      - properties:
-          currency_code:
-            description: Currency code of the numerical field
-            example: USD
-            type: string
-          decimal_places:
-            description: Decimal place of the numerical field
-            example: 2
-            type:
-            - integer
-            - 'null'
-          has_thousand_separator:
-            description: Whether the numerical field has a thousand separator
-            example: true
-            type: boolean
-        required:
-        - has_thousand_separator
-        - decimal_places
-        - currency_code
-        type: object
-    DropdownTypeObjectFieldUpdatePayload:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
-      - properties:
-          values:
-            description: Array of choice ID. Multiple choice values are not acceptable for `is_multi_select=false`.
-            items:
-              example: 9119a313057e401189407116fcd3
-              type: string
-            type: array
-        type: object
-    TaskPublishingIntentResponse:
-      additionalProperties: false
-      properties:
-        id:
-          description: Unique identifier of the publishing intent
-          example: 6a3a61f8c201c660b84bbfff
-          type: string
-      required:
-      - id
-      type: object
-    AssetContent:
-      additionalProperties: false
-      description: Content of the asset
-      properties:
-        type:
-          description: "Type of the content. \n - article  – `html_body`\n - image, raw_file, video  – `url`\n - structured_content  – `api_url`"
-          enum:
-          - url
-          - api_url
-          - html_body
-          example: url
-          type: string
-        value:
-          description: Content of the asset.  - article – the html body - image, raw_file, video – the download URL - structured_content – api url
-          example: http://images.cmp.optimizely.com/Zz0xODQ3NDU3Y2Y2YmYzOTlmNjkyOTgyZDY3Y2I3YWM2OA==S
-          type: string
-      required:
-      - type
-      - value
-      type: object
-    DatetimeFieldValueModel:
-      properties:
-        datetime_value:
-          description: Value of the field value
+        modified_at:
+          description: Date and time of the most recent modification of the article, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
+          example: '2019-10-07T13:15:30Z'
           format: date-time
           type: string
-        order_index:
-          description: Order index of the field value
-          type: integer
-      required:
-      - datetime_value
-      type: object
-    StructuredContentFields:
-      additionalProperties:
-        items:
-          anyOf:
-          - $ref: '#/components/schemas/PatchLocalizedFieldValuesWithEmbeddedContent'
-          - $ref: '#/components/schemas/DeleteLocaleFieldValueModel'
-        type: array
-      description: The fields of structured content
-      type: object
-    TaskAssetRequestForDirectUpload:
-      additionalProperties: false
-      properties:
-        key:
-          description: Unique identifier of the file upload session. This is the `upload_meta_fields.key` field retrieved from the `/v3/upload-url` endpoint.
-          maxLength: 100
-          type: string
         title:
-          description: Title of the asset
-          example: sample_image.png
-          maxLength: 100
-          minLength: 1
+          description: Title of the article
+          example: 3 Ways Influencer Marketing Will Further Mature in 2020
           type: string
-        type:
-          description: The mechanism for adding the asset to the task
-          example: direct_upload
-          type: string
-      required:
-      - key
-      - title
-      type: object
-    ContentTypeFieldEmbedMixConfig:
-      description: "Ref Type:\n  * `1` Refer only\n  * `2` Refer and create embed\n  * `3` Create only\n"
-      enum:
-      - 1
-      - 2
-      - 3
-      type: integer
-    ContentFieldValueWithEmbeddedModel:
-      properties:
-        content_details:
-          $ref: '#/components/schemas/RecursiveStructuredContent'
-          description: The embedded content object
-          title: Contentdetails
-      required:
-      - content_details
-      type: object
-    TaskBriefTemplateValue:
-      additionalProperties: false
-      description: Template info of the brief if the brief is of template type
-      properties:
-        id:
-          description: Unique identifier of the template
-          example: 9nu8ue9wf8u9nusd9f
-          type: string
-        name:
-          description: Name of the template
-          example: My Template
-          type: string
+        url:
+          description: Public URL of the article
+          example: https://cmp.optimizely.com/new-article-published.html
+          type:
+          - string
+          - 'null'
       required:
       - id
-      - name
-      type: object
-    TaskExternalWorkResponse:
-      additionalProperties: false
-      properties:
-        external_system:
-          description: Name of the external system
-          example: jira
-          type: string
-        identifier:
-          description: Identifier of the external work
-          example: MY-PROJ-123
-          type:
-          - string
-          - 'null'
-        links:
-          additionalProperties: false
-          description: Meta links
-          properties:
-            self:
-              description: URL to get or update the external work information
-              example: https://api.cmp.optimizely.com/v3/tasks/5d7f910551b00a722e0418830cee6631/steps/32982hf94j98cnr48034nv035/sub-steps/9n390809r384nv503459075034nv5/external-work
-              type: string
-          required:
-          - self
-          type: object
-        status:
-          description: Status of the external work
-          example: In Progress
-          type:
-          - string
-          - 'null'
-        title:
-          description: Title of the external work
-          example: A very important ticket
-          type:
-          - string
-          - 'null'
-        url:
-          description: Link to the external work
-          example: https://example.com/some-project/MY-PROJ-123
-          type:
-          - string
-          - 'null'
-      required:
-      - identifier
       - title
-      - status
+      - created_at
+      - modified_at
+      - html_body
       - url
-      - external_system
+      - labels
       - links
-      type: object
-    DeleteLocaleFieldValueModel:
-      properties:
-        delete:
-          description: Should be true if the field value with locale needs to be deleted
-          type: boolean
-        locale:
-          type: string
-      required:
-      - locale
-      - delete
       type: object
     TaskSubStep:
       additionalProperties: false
@@ -5051,295 +4245,31 @@ components:
       - is_external
       - links
       type: object
-    LibraryAssetFieldValueModel:
-      properties:
-        asset_guid:
-          description: Asset GUID of the field value
-          type: string
-        asset_type:
-          $ref: '#/components/schemas/LibraryAssetType'
-        links:
-          additionalProperties:
-            type: string
-          description: Meta links
-          type: object
-        order_index:
-          description: Order index of the field value
-          type: integer
-      required:
-      - asset_guid
-      - asset_type
-      type: object
-    TaskStructuredContentCreateRequest:
-      additionalProperties: false
-      properties:
-        content_type_guid:
-          description: Unique identifier of the content type
-          example: 5d7f910551b00a722e0418830cee6633
-          type: string
-        expired:
-          description: Expired status of the content
-          title: Expired
-          type: boolean
-        expiry_datetime:
-          description: Date and time on which the content will expire, in ISO 8601 UTC format
-          example: '2019-10-07T13:15:30Z'
-          format: date-time
-          title: Expirydatetime
-          type:
-          - string
-          - 'null'
-        fields:
-          $ref: '#/components/schemas/StructuredContentBody'
-          title: fields
-          type:
-          - object
-          - 'null'
-        primary_locale:
-          description: The primary locale of the content
-          example: en_US
-          type: string
-        root_content:
-          description: This is true when the content is not embedded in another content through a content type reference field
-          title: Rootcontent
-          type: boolean
-        source:
-          description: Source of the content
-          title: Source
-          type:
-          - string
-          - 'null'
-        source_id:
-          description: Source id of the content
-          title: Sourceid
-          type:
-          - string
-          - 'null'
-        source_metadata:
-          description: Source metadata of the content
-          title: Sourcemetadata
-          type:
-          - string
-          - 'null'
-        template_guid:
-          description: Unique identifier of the template
-          example: 5d7f910551b00a722e0418830cee6633
-          type: string
-        title:
-          description: Title of the structured content
-          example: Some webpage
-          type: string
-      required:
-      - content_type_guid
-      type: object
-    ContentTypeFieldDefinition:
-      properties:
-        allow_ref_edit:
-          description: Whether to allow ref editing
-          type: boolean
-        allowed_content_types:
-          description: List of allowed content types
-          items:
-            type: string
-          type: array
-        content_type_links:
-          additionalProperties:
-            $ref: '#/components/schemas/AllowedContentTypeItem'
-          description: Links related to the content type
-          type: object
-        core:
-          $ref: '#/components/schemas/CoreFieldDef'
-        default_value:
-          description: Default value for the field
-          type: string
-        ref_type:
-          $ref: '#/components/schemas/ContentTypeFieldEmbedMixConfig'
-      required:
-      - core
-      - allowed_content_types
-      - ref_type
-      type: object
-    BooleanFieldValueModel:
-      properties:
-        bool_value:
-          description: Value of the field value
-          type: boolean
-        order_index:
-          description: Order index of the field value
-          type: integer
-      required:
-      - bool_value
-      type: object
-    ChoiceDisplayOption:
-      description: An enumeration.
-      enum:
-      - radio
-      - dropdown
-      - tag
-      - checkbox
-      type: string
-    BaseFieldDefinition:
-      properties:
-        base_type:
-          $ref: '#/components/schemas/BaseFieldDefinitionType'
-        core:
-          $ref: '#/components/schemas/CoreFieldDef'
-        default_values:
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/LocationDefaultValue'
-            - type: boolean
-            - format: uri
-              maxLength: 65536
-              minLength: 1
-              type: string
-            - type: object
-            - items: {}
-              type: array
-          type: array
-      required:
-      - core
-      - base_type
-      type: object
-    AssetFieldTypeCommon:
-      allOf:
-      - $ref: '#/components/schemas/BaseAssetField'
-      - type: object
-    AttachmentResponse:
+    BaseAssetField:
       additionalProperties: false
       properties:
         id:
-          description: Unique identifier for the attachment
-          example: 5a7f910511b0a72230ce6631
+          description: Identifier of the field
+          example: 64be245ec0d79e79fdf1ad84
           type: string
         name:
-          description: Filename of the attachment
-          example: sample_image.png
+          description: Name of the field
+          example: Simple Text
           type: string
-        url:
-          description: Download URL of the attachment
-          example: https://files.cmp.optimizely.com/download/2115bfe4450c11ebaae8000c291b51d4
+        type:
+          description: Type of the field
+          example: text
           type: string
+        values:
+          description: List of selected values or from user input
+          items:
+            type: string
+          type: array
       required:
       - id
       - name
-      - url
-      type: object
-    BaseObjectField:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
-      - properties:
-          id:
-            description: Unique identifier of the field
-            example: 41aac313bda1e40b6cde7116fc24a
-            type: string
-        required:
-        - id
-        type: object
-    AssetTypeObjectFieldUpdatePayload:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
-      - properties:
-          values:
-            description: Payload for fields with attachments
-            items:
-              properties:
-                key:
-                  description: Unique identifier of the file upload session. This is the `upload_meta_fields.key` field retrieved from the `/v3/upload-url` endpoint.
-                  example: ce8995aea58b11ea8cd90242ac120005
-                  type: string
-                title:
-                  description: Title of the image or video
-                  example: Sample.jpeg
-                  minLength: 1
-                  type: string
-              required:
-              - title
-              - key
-            maxItems: 1
-            type: array
-        type: object
-    CoreFieldDef:
-      properties:
-        editor_metadata:
-          anyOf:
-          - type: object
-          - items: {}
-            type: array
-          description: Editor metadata of the field
-        field_type:
-          $ref: '#/components/schemas/FieldType'
-        help_text:
-          description: Helptext of the field
-          type: string
-        is_list:
-          description: Indicates whether the field is a list
-          type: boolean
-        is_required:
-          description: Required status of the field
-          type: boolean
-        key:
-          description: Key of the field
-          type: string
-        max_list_length:
-          description: Maximum length of the list
-          type: integer
-        min_list_length:
-          description: Minimum length of the list
-          type: integer
-        name:
-          description: Name of the field
-          type: string
-        need_internationalization:
-          description: Indicates whether the field needs internationalization
-          type: boolean
-        order_index:
-          description: Order index of the field
-          type: integer
-        source_id:
-          description: Source ID of the field
-          type: string
-        source_metadata:
-          description: Source metadata of the field
-          type: string
-      required:
-      - key
-      - name
-      - is_list
-      - is_required
-      - need_internationalization
-      type: object
-    TaskCreateRequest:
-      additionalProperties: false
-      properties:
-        campaign_id:
-          description: Id of the campaign to be associated with the task
-          example: 6684f31be89a526d030cfc0f
-          type: string
-        due_at:
-          description: Due date and time of the task, in ISO 8601 UTC format (2020-02-10T10:40:45Z). The `due_at` field is required if `workflow_id` is present and the workflow does not have step duration. If `workflow_id` is present and the workflow has step duration, then either `start_at` or `due_at` is required.
-          example: '2020-10-06T13:15:30Z'
-          format: date-time
-          type: string
-        owner_id:
-          description: Id of the owner of the task
-          example: 665d5717c8ba0201647a0991
-          type: string
-        start_at:
-          description: Start date and time of the task, in ISO 8601 UTC format (2020-02-10T10:40:45Z). If `workflow_id` is present and the workflow has step duration, then either `start_at` or `due_at` is required. If both `start_at` and `due_at` is provided with a `workflow_id` that has step duration, then the `start_at` field will be ignored.
-          example: '2020-10-01T06:00:00Z'
-          format: date-time
-          type: string
-        title:
-          description: Title of the task
-          example: Awesome Task
-          type: string
-        workflow_id:
-          description: Id of the workflow to be used in the task
-          example: 665d56034854d100ad7cb8fb
-          type: string
-      required:
-      - title
+      - type
+      - values
       type: object
     TaskAssetResponse:
       additionalProperties: false
@@ -5441,9 +4371,762 @@ components:
       - labels
       - links
       type: object
-    TaskAssetDraftListResponseItem:
+    TaskVideo:
       additionalProperties: false
       properties:
+        created_at:
+          description: Date and time when the video was created,  in ISO 8601 UTC format (2020-02-10T10:40:45Z)
+          example: '2019-10-06T13:15:30Z'
+          format: date-time
+          type: string
+        file_size:
+          description: Size of the video in bytes
+          example: 11244
+          type: integer
+        id:
+          description: Unique identifier for the video
+          example: 5d7f910551b00a722e0418830cee6633
+          type: string
+        labels:
+          description: Labels associated with the video
+          items:
+            $ref: '#/components/schemas/ResourceLabelResponse'
+          type: array
+        library_asset_id:
+          description: Unique identifier of the corresponding library asset — the library asset this task asset was forked from, or the one it was released to.
+          example: 6a8b2c3d4e5f6071829a3b4c
+          type:
+          - string
+          - 'null'
+        links:
+          additionalProperties: false
+          description: Meta links
+          properties:
+            drafts:
+              description: URL to POST draft to the video
+              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/assets/5d7f910551b00a722e0418830cee6633/drafts
+              type: string
+            self:
+              description: URL of the video
+              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/videos/5d7f910551b00a722e0418830cee6633
+              type: string
+            task:
+              description: URL of the task that the video is associated with
+              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9
+              type: string
+            web_urls:
+              additionalProperties: false
+              description: Web URLs
+              properties:
+                drafts:
+                  description: Web URL of the drafts of the video
+                  example: https://cmp.optimizely.com/cloud/task/5f857f30e1c4a2038d6179e9/video/5d7f910551b00a722e0418830cee6633
+                  type: string
+                self:
+                  description: Web URL of the video
+                  example: https://cmp.optimizely.com/cloud/taskv3/5f857f30e1c4a2038d6179e9?contentTabGuid=5d7f910551b00a722e0418830cee6633
+                  type: string
+                task:
+                  description: Web URL of the task that the video is associated with
+                  example: https://cmp.optimizely.com/cloud/taskv3/5f857f30e1c4a2038d6179e9
+                  type: string
+              required:
+              - self
+              - task
+              - drafts
+              type: object
+          required:
+          - self
+          - task
+          - drafts
+          - web_urls
+          type: object
+        mime_type:
+          description: MIME type of the video
+          example: video/mp4
+          type: string
+        modified_at:
+          description: Date and time of the most recent modification of the video, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
+          example: '2019-10-07T13:15:30Z'
+          format: date-time
+          type: string
+        title:
+          description: Title of the video
+          example: product.mp4
+          type: string
+        url:
+          description: Download URL of the video
+          example: https://videos.cmp.optimizely.com/03a747babe81ceb55763fa085bqa20dc
+          type: string
+      required:
+      - id
+      - title
+      - mime_type
+      - created_at
+      - modified_at
+      - file_size
+      - url
+      - labels
+      - links
+      type: object
+    LibraryAssetType:
+      description: An enumeration.
+      enum:
+      - article
+      - image
+      - video
+      - raw_file
+      - structured_content
+      type: string
+    TaskCustomField:
+      additionalProperties: false
+      properties:
+        id:
+          description: Unique identifier for the custom field
+          example: 9nu8ue9wf8u9nusd9q
+          type: string
+        links:
+          additionalProperties: false
+          description: Meta links
+          properties:
+            choices:
+              description: URL of the available custom field choices
+              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/custom-fields/9nu8ue9wf8u9nusd9q/choices
+              type:
+              - string
+              - 'null'
+            self:
+              description: URL of the custom field
+              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/custom-fields/9nu8ue9wf8u9nusd9q
+              type: string
+          required:
+          - self
+          - choices
+          type: object
+        name:
+          description: Name of the custom field
+          example: My Dropdown
+          type: string
+        type:
+          description: Type of the custom field
+          enum:
+          - text_field
+          - multi_line_text_field
+          - checkboxes
+          - dropdown
+          - multi_select_dropdown
+          - multiple_choice
+          - date_field
+          - image
+          - video
+          - rich_text_field
+          example: dropdown
+          type: string
+        values:
+          description: List of values of the custom field
+          items:
+            additionalProperties: false
+            properties:
+              id:
+                description: Identifier of the custom field value
+                example: 1nu8ue9wf8u9nusd9u
+                type:
+                - string
+                - 'null'
+              name:
+                description: Name of the custom field value
+                example: Some text
+                type: string
+            required:
+            - id
+            - name
+            type: object
+          type: array
+      required:
+      - id
+      - name
+      - type
+      - values
+      - links
+      type: object
+    AssetFieldTypeCurrencyNumber:
+      allOf:
+      - $ref: '#/components/schemas/BaseAssetField'
+      - properties:
+          currency_code:
+            description: Currency code of the numerical field
+            example: USD
+            type: string
+          decimal_places:
+            description: Decimal place of the numerical field
+            example: 2
+            type:
+            - integer
+            - 'null'
+          has_thousand_separator:
+            description: Whether the numerical field has a thousand separator
+            example: true
+            type: boolean
+        required:
+        - has_thousand_separator
+        - decimal_places
+        - currency_code
+        type: object
+    TaskSubStepCommentUpdateRequest:
+      additionalProperties: false
+      properties:
+        value:
+          description: Updated comment value. Markdown is supported. To mention a user belonging to the organization, use `@[name](openapi-user-link)` format.
+          example: Updated comment mentioning @[Organization User](https://api.cmp.optimizely.com/v3/users/5fe38aeb574b52a62a089238)
+          minLength: 1
+          type: string
+      required:
+      - value
+      type: object
+    TaskCommentResponse:
+      additionalProperties: false
+      properties:
+        attachments:
+          description: List of attachments of the comment
+          example:
+          - id: a113667245d111eb8945000c
+            name: sample.png
+            url: https://files.cmp.optimizely.com/download/96c314a645d111eb8945000c291b51d4?token=
+          items:
+            $ref: '#/components/schemas/AttachmentResponse'
+          type: array
+        comment_by:
+          description: Unique identifier of the user who posted the comment
+          example: 62a8455e29fed3045d9c7a8b
+          type: string
+        created_at:
+          description: Creation date and time of the task comment, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
+          example: '2020-10-06T13:15:30Z'
+          format: date-time
+          type: string
+        id:
+          description: Unique identifier of the task comment
+          example: 5fe38c39574b52a62a089239
+          type: string
+        is_resolved:
+          description: Determines if the comment is resolved in Optimizely CMP
+          example: false
+          type: boolean
+        links:
+          additionalProperties: false
+          description: Meta links
+          properties:
+            comment_by:
+              description: URL of the user who posted the comment
+              example: https://api.cmp.optimizely.com/v3/users/62a8455e29fed3045d9c7a8b
+              type: string
+            task:
+              description: URL of the task
+              example: https://api.cmp.optimizely.com/v3/tasks/5fe38c39574b52a62a089239
+              type: string
+          required:
+          - task
+          - comment_by
+          type: object
+        modified_at:
+          description: Last modification date and time of the task comment, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
+          example: '2020-10-06T14:15:30Z'
+          format: date-time
+          type: string
+        parent_comment_id:
+          description: Unique identifier of the parent comment
+          example: 5fe38c39574b52a62a089238
+          type:
+          - string
+          - 'null'
+        value:
+          description: Content of the comment
+          example: Well done!
+          type: string
+      required:
+      - id
+      - value
+      - is_resolved
+      - parent_comment_id
+      - comment_by
+      - created_at
+      - modified_at
+      - attachments
+      - links
+      type: object
+    CoreFieldDef:
+      properties:
+        editor_metadata:
+          anyOf:
+          - type: object
+          - items: {}
+            type: array
+          description: Editor metadata of the field
+        field_type:
+          $ref: '#/components/schemas/FieldType'
+        help_text:
+          description: Helptext of the field
+          type: string
+        is_list:
+          description: Indicates whether the field is a list
+          type: boolean
+        is_required:
+          description: Required status of the field
+          type: boolean
+        key:
+          description: Key of the field
+          type: string
+        max_list_length:
+          description: Maximum length of the list
+          type: integer
+        min_list_length:
+          description: Minimum length of the list
+          type: integer
+        name:
+          description: Name of the field
+          type: string
+        need_internationalization:
+          description: Indicates whether the field needs internationalization
+          type: boolean
+        order_index:
+          description: Order index of the field
+          type: integer
+        source_id:
+          description: Source ID of the field
+          type: string
+        source_metadata:
+          description: Source metadata of the field
+          type: string
+      required:
+      - key
+      - name
+      - is_list
+      - is_required
+      - need_internationalization
+      type: object
+    TaskUpdateRequest:
+      additionalProperties: false
+      properties:
+        campaign_id:
+          description: ID of the campaign to be associated with the task
+          example: 6684f31be89a526d030cfc0f
+          type: string
+        due_at:
+          description: Due date and time of the task
+          example: '2025-10-06T13:00:00Z'
+          format: date-time
+          type: string
+        labels:
+          description: Labels to associate
+          items:
+            $ref: '#/components/schemas/ResourceLabelRequest'
+          type: array
+        owner_id:
+          description: ID of the owner for the task
+          example: 6853b3e37ed5e42cff067434
+          type: string
+        start_at:
+          description: Start date of the task
+          example: '2025-10-06T13:00:00Z'
+          format: date-time
+          type: string
+        title:
+          description: Title of the task
+          type: string
+        workflow_id:
+          description: ID of the workflow to be used in the task
+          example: 665d56034854d100ad7cb8fb
+          type: string
+      type: object
+    TaskBriefResponse:
+      additionalProperties: false
+      properties:
+        fields:
+          description: List of fields of the brief
+          items:
+            additionalProperties: false
+            properties:
+              name:
+                description: Name of the brief field
+                example: My Dropdown
+                type: string
+              settings_field_id:
+                description: Unique identifier of the settings field. If available, can be used to look up the field details using settings API.
+                example: 67c5684de8b943290648a693
+                type:
+                - string
+                - 'null'
+              value:
+                description: List of values set for the brief field
+                items:
+                  description: Value set in the brief field
+                  example: option 1
+                  type: string
+                type: array
+            required:
+            - id
+            - name
+            - value
+            - is_id_settings_searchable
+            type: object
+          type: array
+        links:
+          additionalProperties: false
+          description: Meta links
+          properties:
+            self:
+              description: URL of the brief
+              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/brief
+              type: string
+            task:
+              description: URL of the task
+              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9
+              type: string
+          required:
+          - self
+          - task
+          type: object
+        template:
+          allOf:
+          - $ref: '#/components/schemas/TaskBriefTemplateValue'
+          type:
+          - object
+          - 'null'
+        title:
+          description: Title of the task brief
+          example: Awesome Task Brief
+          type: string
+        type:
+          description: Type of the task brief
+          enum:
+          - template
+          - attachment
+          - text
+          example: template
+          type: string
+      required:
+      - type
+      - title
+      - fields
+      - links
+      type: object
+    ContentTypeFieldDefinition:
+      properties:
+        allow_ref_edit:
+          description: Whether to allow ref editing
+          type: boolean
+        allowed_content_types:
+          description: List of allowed content types
+          items:
+            type: string
+          type: array
+        content_type_links:
+          additionalProperties:
+            $ref: '#/components/schemas/AllowedContentTypeItem'
+          description: Links related to the content type
+          type: object
+        core:
+          $ref: '#/components/schemas/CoreFieldDef'
+        default_value:
+          description: Default value for the field
+          type: string
+        ref_type:
+          $ref: '#/components/schemas/ContentTypeFieldEmbedMixConfig'
+      required:
+      - core
+      - allowed_content_types
+      - ref_type
+      type: object
+    FieldListResponseItem:
+      discriminator:
+        mapping:
+          checkbox: '#/components/schemas/FieldTypeCheckbox'
+          currency_number: '#/components/schemas/FieldTypeCurrencyNumber'
+          date: '#/components/schemas/FieldTypeCommon'
+          dropdown: '#/components/schemas/FieldTypeDropdown'
+          image: '#/components/schemas/FieldTypeCommon'
+          label: '#/components/schemas/FieldTypeLabel'
+          percentage_number: '#/components/schemas/FieldTypePercentageNumber'
+          radio_button: '#/components/schemas/FieldTypeRadio'
+          rich_text: '#/components/schemas/FieldTypeCommon'
+          simple_number: '#/components/schemas/FieldTypeSimpleNumber'
+          text: '#/components/schemas/FieldTypeCommon'
+          text_area: '#/components/schemas/FieldTypeCommon'
+          video: '#/components/schemas/FieldTypeCommon'
+        propertyName: type
+      oneOf:
+      - $ref: '#/components/schemas/FieldTypeCommon'
+      - $ref: '#/components/schemas/FieldTypeLabel'
+      - $ref: '#/components/schemas/FieldTypeDropdown'
+      - $ref: '#/components/schemas/FieldTypeRadio'
+      - $ref: '#/components/schemas/FieldTypeCheckbox'
+      - $ref: '#/components/schemas/FieldTypeSimpleNumber'
+      - $ref: '#/components/schemas/FieldTypePercentageNumber'
+      - $ref: '#/components/schemas/FieldTypeCurrencyNumber'
+    ContentFieldsVersionDetails:
+      properties:
+        content_hash:
+          description: Content hash of the version
+          type: string
+        created_at:
+          description: Date and time on which the version was created, in ISO 8601 UTC format
+          format: date-time
+          type: string
+        created_by:
+          description: Unique identifier of the user who created the version
+          type: string
+        fields:
+          additionalProperties:
+            items:
+              $ref: '#/components/schemas/LocalizedFieldValues'
+            type: array
+          description: List of fields
+          type: object
+        source_id:
+          description: Source ID of the version
+          type: string
+        source_metadata:
+          description: Source metadata of the version
+          type: string
+        validation:
+          $ref: '#/components/schemas/ContentFieldsVersionValidation'
+        version_guid:
+          description: Unique identifier of the version
+          type: string
+      required:
+      - fields
+      - created_by
+      - created_at
+      - version_guid
+      - content_hash
+      type: object
+    FieldTypeCurrencyNumber:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - properties:
+          currency_code:
+            description: Currency code of the numerical field
+            example: USD
+            type: string
+          decimal_places:
+            description: Decimal place of the numerical field
+            example: 2
+            type:
+            - integer
+            - 'null'
+          has_thousand_separator:
+            description: Whether the numerical field has a thousand separator
+            example: true
+            type: boolean
+        required:
+        - has_thousand_separator
+        - decimal_places
+        - currency_code
+        type: object
+    AllowedContentTypeItem:
+      properties:
+        name:
+          description: Name of the item
+          type: string
+        url:
+          description: URL of the item
+          type: string
+      required:
+      - name
+      - url
+      type: object
+    TaskStructuredContentUpdateRequest:
+      additionalProperties: false
+      properties:
+        expired:
+          description: Expired status of the content
+          title: Expired
+          type: boolean
+        expiry_datetime:
+          description: Date and time on which the content will expire, in ISO 8601 UTC format
+          example: '2019-10-07T13:15:30Z'
+          format: date-time
+          title: Expirydatetime
+          type:
+          - string
+          - 'null'
+        fields:
+          $ref: '#/components/schemas/StructuredContentFields'
+          description: The fields of structured content
+          title: fields
+          type: object
+        primary_locale:
+          description: The primary locale of the content
+          example: en_US
+          type: string
+        source:
+          description: Source of the content
+          title: Source
+          type:
+          - string
+          - 'null'
+        source_id:
+          description: Source id of the content
+          title: Sourceid
+          type:
+          - string
+          - 'null'
+        source_metadata:
+          description: Source metadata of the content
+          title: Sourcemetadata
+          type:
+          - string
+          - 'null'
+        title:
+          description: Title of the structured content
+          example: Some webpage
+          type: string
+      type: object
+    BaseObjectFieldUpdatePayload:
+      properties:
+        type:
+          description: Type of the field
+          example: checkbox
+          type: string
+        values:
+          description: Values for the campaign field
+          type: array
+      required:
+      - type
+      - values
+      type: object
+    FieldTypePercentageNumber:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - properties:
+          decimal_places:
+            description: Decimal place of the numerical field
+            example: 2
+            type:
+            - integer
+            - 'null'
+        required:
+        - decimal_places
+        type: object
+    NumberTypeObjectField:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectField'
+      - $ref: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
+    FieldType:
+      description: An enumeration.
+      enum:
+      - boolean
+      - number
+      - text-field
+      - rich-text
+      - datetime
+      - library-asset
+      - content-type
+      - json
+      - url
+      - choice
+      - location
+      type: string
+    VersionedContentTypeModel:
+      properties:
+        component:
+          description: Indicates whether the content type is a component
+          type: boolean
+        content_type_guid:
+          description: Unique identifier of the content type
+          type: string
+        created_at:
+          description: Date and time on which the content type was created, in ISO 8601 UTC format
+          format: date-time
+          type: string
+        created_by:
+          description: Unique identifier of the user who created the content type
+          type: string
+        description:
+          description: Description of the content type
+          type: string
+        disabled:
+          description: Disabled status of the content type
+          type: boolean
+        links:
+          description: Meta links
+          properties:
+            self:
+              description: URL of the content type
+              example: https://api.cmp.optimizely.com/v3/structured-content/content-types/9fda53cf66a14fd487251480ca695c7b
+              type: string
+            versions:
+              description: URL of the content type versions
+              example: https://api.cmp.optimizely.com/v3/structured-content/content-types/9fda53cf66a14fd487251480ca695c7b/versions
+              type: string
+          type: object
+        name:
+          description: Name of the content type
+          type: string
+        source:
+          description: Source of the content type
+          type: string
+        source_id:
+          description: Source of the content type
+          type: string
+        source_metadata:
+          description: Source metadata of the content type
+          type: string
+        thumbnail_guid:
+          description: Thumbnail GUID of the content type
+          type: string
+        updated_at:
+          description: Date and time on which the content type was last updated, in ISO 8601 UTC format
+          format: date-time
+          type: string
+        updated_by:
+          description: Unique identifier of the user who last updated the content type
+          type: string
+        version:
+          $ref: '#/components/schemas/SCContentTypeVersion'
+      required:
+      - name
+      - component
+      - content_type_guid
+      - created_by
+      - updated_by
+      - created_at
+      - updated_at
+      - links
+      - version
+      type: object
+    TaskPublishingIntentCreateRequest:
+      additionalProperties: false
+      properties:
+        channel_id:
+          description: Unique identifier of the target publishing channel
+          example: 6a2fd16faec3bed9c72f7d4f
+          type: string
+      required:
+      - channel_id
+      type: object
+    BooleanFieldValueModel:
+      properties:
+        bool_value:
+          description: Value of the field value
+          type: boolean
+        order_index:
+          description: Order index of the field value
+          type: integer
+      required:
+      - bool_value
+      type: object
+    FieldTypeCommon:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - type: object
+    TaskAssetDraftResponse:
+      additionalProperties: false
+      properties:
+        asset_id:
+          description: Unique identifier of the asset
+          example: 5d7f910551b00a722e0418830cee6631
+          type: string
         content:
           additionalProperties: false
           description: Content of the draft
@@ -5471,10 +5154,6 @@ components:
           description: The serial number of the draft
           example: 2
           type: integer
-        id:
-          description: Unique identifier of the draft
-          example: 5d7f910551b00a722e0418830cee6631
-          type: string
         links:
           additionalProperties: false
           description: Meta links
@@ -5508,14 +5187,564 @@ components:
           example: image
           type: string
       required:
-      - id
       - draft_number
+      - asset_id
       - title
       - type
       - mime_type
       - created_at
       - content
       - links
+      type: object
+    TaskRawFile:
+      additionalProperties: false
+      properties:
+        created_at:
+          description: Date and time on which the raw file was created, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
+          example: '2019-10-06T13:15:30Z'
+          format: date-time
+          type: string
+        file_size:
+          description: Size of the raw file in bytes
+          example: 11244
+          type: integer
+        id:
+          description: Unique identifier of the raw file
+          example: 5d7f910551b00a722e0418830cee6634
+          type: string
+        labels:
+          description: Labels associated to the raw file
+          items:
+            $ref: '#/components/schemas/ResourceLabelResponse'
+          type: array
+        library_asset_id:
+          description: Unique identifier of the corresponding library asset — the library asset this task asset was forked from, or the one it was released to.
+          example: 6a8b2c3d4e5f6071829a3b4c
+          type:
+          - string
+          - 'null'
+        links:
+          additionalProperties: false
+          description: Meta links
+          properties:
+            drafts:
+              description: URL to POST draft to the raw file
+              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/assets/5d7f910551b00a722e0418830cee6634/drafts
+              type: string
+            self:
+              description: URL of the raw file
+              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/raw-files/5d7f910551b00a722e0418830cee6634
+              type: string
+            task:
+              description: URL of the task that the raw file is associated with
+              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9
+              type: string
+            web_urls:
+              additionalProperties: false
+              description: Web URLs
+              properties:
+                drafts:
+                  description: Web URL of the drafts of the raw file
+                  example: https://cmp.optimizely.com/cloud/task/5f857f30e1c4a2038d6179e9/raw_file/5d7f910551b00a722e0418830cee6634
+                  type: string
+                self:
+                  description: Web URL of the raw file
+                  example: https://cmp.optimizely.com/cloud/taskv3/5f857f30e1c4a2038d6179e9?contentTabGuid=5d7f910551b00a722e0418830cee6634
+                  type: string
+                task:
+                  description: Web URL of the task that the raw file is associated with
+                  example: https://cmp.optimizely.com/cloud/taskv3/5f857f30e1c4a2038d6179e9
+                  type: string
+              required:
+              - self
+              - task
+              - drafts
+              type: object
+          required:
+          - self
+          - task
+          - drafts
+          - web_urls
+          type: object
+        mime_type:
+          description: MIME type of the raw file
+          example: application/zip
+          type: string
+        modified_at:
+          description: Date and time of the most recent modification of the raw file,  in ISO 8601 UTC format (2020-02-10T10:40:45Z)
+          example: '2019-10-07T13:15:30Z'
+          format: date-time
+          type: string
+        title:
+          description: Title of the raw file
+          example: documents.zip
+          type: string
+        url:
+          description: Download the URL of the raw file
+          example: https://files.cmp.optimizely.com/171451644651701b96f1122009f026bc
+          type: string
+      required:
+      - id
+      - title
+      - mime_type
+      - created_at
+      - modified_at
+      - file_size
+      - url
+      - labels
+      - links
+      type: object
+    ResourceLabelRequest:
+      additionalProperties: false
+      description: Payload to associate labels to a resource
+      properties:
+        group:
+          description: Label group
+          example: 2467e583a60e23fda2b89db81a453cd2
+          maxLength: 32
+          minLength: 32
+          type: string
+        values:
+          description: List of values of the label
+          items:
+            example: 71c378f3fee3d822759d1bdc2aab628c
+            maxLength: 32
+            minLength: 32
+            type: string
+          type: array
+      required:
+      - group
+      - values
+      type: object
+    Error:
+      additionalProperties: true
+      description: Error payload
+      properties:
+        errors:
+          additionalProperties: true
+          description: Additional information
+          properties: {}
+          type: object
+        message:
+          description: Message describing the error
+          example: Not found
+          type: string
+      required:
+      - message
+      type: object
+    AssetFieldTypeLabel:
+      allOf:
+      - $ref: '#/components/schemas/BaseAssetField'
+      - properties:
+          choices:
+            description: Choices of the label
+            items:
+              properties:
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Label 1 Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              type: object
+            type: array
+          is_multi_select:
+            description: Select multiple values from the label
+            type: boolean
+        required:
+        - is_multi_select
+        - choices
+        type: object
+    TaskExternalWorkResponse:
+      additionalProperties: false
+      properties:
+        external_system:
+          description: Name of the external system
+          example: jira
+          type: string
+        identifier:
+          description: Identifier of the external work
+          example: MY-PROJ-123
+          type:
+          - string
+          - 'null'
+        links:
+          additionalProperties: false
+          description: Meta links
+          properties:
+            self:
+              description: URL to get or update the external work information
+              example: https://api.cmp.optimizely.com/v3/tasks/5d7f910551b00a722e0418830cee6631/steps/32982hf94j98cnr48034nv035/sub-steps/9n390809r384nv503459075034nv5/external-work
+              type: string
+          required:
+          - self
+          type: object
+        status:
+          description: Status of the external work
+          example: In Progress
+          type:
+          - string
+          - 'null'
+        title:
+          description: Title of the external work
+          example: A very important ticket
+          type:
+          - string
+          - 'null'
+        url:
+          description: Link to the external work
+          example: https://example.com/some-project/MY-PROJ-123
+          type:
+          - string
+          - 'null'
+      required:
+      - identifier
+      - title
+      - status
+      - url
+      - external_system
+      - links
+      type: object
+    AssetFieldTypePercentageNumber:
+      allOf:
+      - $ref: '#/components/schemas/BaseAssetField'
+      - properties:
+          decimal_places:
+            description: Decimal place of the numerical field
+            example: 2
+            type:
+            - integer
+            - 'null'
+        required:
+        - decimal_places
+        type: object
+    ContentDetailsModel:
+      properties:
+        content_guid:
+          description: Unique identifier of the content
+          type: string
+        content_type:
+          $ref: '#/components/schemas/VersionedContentTypeModel'
+        content_type_guid:
+          description: Unique identifier of the content type
+          type: string
+        content_type_name:
+          description: Name of the content type
+          type: string
+        created_at:
+          description: Date and time on which the content was created, in ISO 8601 UTC format
+          format: date-time
+          type: string
+        created_by:
+          description: Unique identifier of the user who created the content
+          type: string
+        expired:
+          description: Expired status of the content
+          type: boolean
+        expiry_datetime:
+          description: Date and time on which the content will expire, in ISO 8601 UTC format
+          format: date-time
+          type: string
+        latest_fields_version:
+          $ref: '#/components/schemas/ContentFieldsVersionDetails'
+        links:
+          description: Meta links
+          properties:
+            definition:
+              description: URL of the content definition
+              example: https://api.cmp.optimizely.com/v3/structured-content/content-types/5291e00b990a49f1857adc024fd26620/versions/a8b48d529701452aa56a4e752e1b0ffc
+              type: string
+            self:
+              description: URL of the content
+              example: https://api.cmp.optimizely.com/v3/structured-content/contents/a24b834428a043ab8caed1ded4606f7d
+              type: string
+          type: object
+        primary_locale:
+          description: The primary locale of the content
+          example: en_US
+          type: string
+        root_content:
+          description: This is true when the content is not embedded in another content through a content type reference field
+          type: boolean
+        source:
+          description: Source of the content
+          type: string
+        source_id:
+          description: Source ID of the content
+          type: string
+        source_metadata:
+          description: Source metadata of the content
+          type: string
+        template_guid:
+          description: Template GUID of the content
+          type: string
+        title:
+          description: Title of the content
+          type: string
+        updated_at:
+          description: Date and time on which the content was last updated, in ISO 8601 UTC format
+          format: date-time
+          type: string
+        updated_by:
+          description: Unique identifier of the user who last updated the content
+          type: string
+      required:
+      - root_content
+      - title
+      - latest_fields_version
+      - content_guid
+      - created_by
+      - updated_by
+      - created_at
+      - updated_at
+      - content_type_guid
+      - content_type_name
+      - links
+      type: object
+    DeleteLocaleFieldValueModel:
+      properties:
+        delete:
+          description: Should be true if the field value with locale needs to be deleted
+          type: boolean
+        locale:
+          type: string
+      required:
+      - locale
+      - delete
+      type: object
+    AssetContent:
+      additionalProperties: false
+      description: Content of the asset
+      properties:
+        type:
+          description: "Type of the content. \n - article  – `html_body`\n - image, raw_file, video  – `url`\n - structured_content  – `api_url`"
+          enum:
+          - url
+          - api_url
+          - html_body
+          example: url
+          type: string
+        value:
+          description: Content of the asset.  - article – the html body - image, raw_file, video – the download URL - structured_content – api url
+          example: http://images.cmp.optimizely.com/Zz0xODQ3NDU3Y2Y2YmYzOTlmNjkyOTgyZDY3Y2I3YWM2OA==S
+          type: string
+      required:
+      - type
+      - value
+      type: object
+    NumberFieldValueModel:
+      properties:
+        num_value:
+          description: Value of the field value
+          type: number
+        order_index:
+          description: Order index of the field value
+          type: integer
+      required:
+      - num_value
+      type: object
+    RichTextFieldValueModel:
+      properties:
+        order_index:
+          description: Order index of the field value
+          type: integer
+        rich_text_value:
+          description: Value of the field value
+          type: string
+      required:
+      - rich_text_value
+      type: object
+    ChoiceDisplayOption:
+      description: An enumeration.
+      enum:
+      - radio
+      - dropdown
+      - tag
+      - checkbox
+      type: string
+    AddUrlToTaskRequest:
+      additionalProperties: false
+      properties:
+        title:
+          description: Title of the URL.
+          example: Google
+          type: string
+        url:
+          description: The URL to be added to the task.
+          example: https://www.google.com
+          type: string
+      required:
+      - url
+      type: object
+    TaskPublishingIntentResponse:
+      additionalProperties: false
+      properties:
+        id:
+          description: Unique identifier of the publishing intent
+          example: 6a3a61f8c201c660b84bbfff
+          type: string
+      required:
+      - id
+      type: object
+    AssetFieldListResponseItem:
+      discriminator:
+        mapping:
+          checkbox: '#/components/schemas/AssetFieldTypeCheckbox'
+          currency_number: '#/components/schemas/AssetFieldTypeCurrencyNumber'
+          date: '#/components/schemas/AssetFieldTypeCommon'
+          dropdown: '#/components/schemas/AssetFieldTypeDropdown'
+          image: '#/components/schemas/AssetFieldTypeCommon'
+          label: '#/components/schemas/AssetFieldTypeLabel'
+          percentage_number: '#/components/schemas/AssetFieldTypePercentageNumber'
+          radio_button: '#/components/schemas/AssetFieldTypeRadio'
+          rich_text: '#/components/schemas/AssetFieldTypeCommon'
+          simple_number: '#/components/schemas/AssetFieldTypeSimpleNumber'
+          text: '#/components/schemas/AssetFieldTypeCommon'
+          text_area: '#/components/schemas/AssetFieldTypeCommon'
+          video: '#/components/schemas/AssetFieldTypeCommon'
+        propertyName: type
+      oneOf:
+      - $ref: '#/components/schemas/AssetFieldTypeCommon'
+      - $ref: '#/components/schemas/AssetFieldTypeLabel'
+      - $ref: '#/components/schemas/AssetFieldTypeDropdown'
+      - $ref: '#/components/schemas/AssetFieldTypeRadio'
+      - $ref: '#/components/schemas/AssetFieldTypeCheckbox'
+      - $ref: '#/components/schemas/AssetFieldTypeSimpleNumber'
+      - $ref: '#/components/schemas/AssetFieldTypePercentageNumber'
+      - $ref: '#/components/schemas/AssetFieldTypeCurrencyNumber'
+    AttachmentResponse:
+      additionalProperties: false
+      properties:
+        id:
+          description: Unique identifier for the attachment
+          example: 5a7f910511b0a72230ce6631
+          type: string
+        name:
+          description: Filename of the attachment
+          example: sample_image.png
+          type: string
+        url:
+          description: Download URL of the attachment
+          example: https://files.cmp.optimizely.com/download/2115bfe4450c11ebaae8000c291b51d4
+          type: string
+      required:
+      - id
+      - name
+      - url
+      type: object
+    FieldTypeLabel:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - properties:
+          choices:
+            description: Choices of the label
+            items:
+              properties:
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Label 1 Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              - color
+              type: object
+            type: array
+          is_multi_select:
+            description: Select multiple values from the label
+            type: boolean
+        required:
+        - is_multi_select
+        - choices
+        type: object
+    TaskBriefTemplateValue:
+      additionalProperties: false
+      description: Template info of the brief if the brief is of template type
+      properties:
+        id:
+          description: Unique identifier of the template
+          example: 9nu8ue9wf8u9nusd9f
+          type: string
+        name:
+          description: Name of the template
+          example: My Template
+          type: string
+      required:
+      - id
+      - name
+      type: object
+    RecursivePatchStructuredContentFields:
+      additionalProperties: false
+      properties:
+        content_body:
+          $ref: '#/components/schemas/StructuredContentFields'
+          title: Contentbody
+          type: object
+        expired:
+          description: Expired status of the content
+          title: Expired
+          type: boolean
+        expiry_datetime:
+          description: Date and time on which the content will expire, in ISO 8601 UTC format
+          format: date-time
+          title: Expirydatetime
+          type:
+          - string
+          - 'null'
+        root_content:
+          description: This is true when the content is not embedded in another content through a content type reference field
+          title: Rootcontent
+          type: boolean
+        source:
+          description: Source of the content
+          title: Source
+          type:
+          - string
+          - 'null'
+        source_id:
+          description: Source id of the content
+          title: Sourceid
+          type:
+          - string
+          - 'null'
+        source_metadata:
+          title: Sourcemetadata
+          type: string
+        title:
+          description: Title of the structured content
+          example: Some webpage
+          type: string
+      type: object
+    ContentFieldWithEmbeddedPatchValueModel:
+      properties:
+        content_id:
+          type: string
+        patch_details:
+          $ref: '#/components/schemas/RecursivePatchStructuredContentFields'
+      required:
+      - content_id
+      - patch_details
+      type: object
+    LocationDefaultValue:
+      properties:
+        latitude:
+          description: Latitude of the location
+          type: number
+        longitude:
+          description: Longitude of the location
+          type: number
+      required:
+      - longitude
+      - latitude
       type: object
     LocalizedFieldValues:
       properties:
@@ -5541,304 +5770,51 @@ components:
       - locale
       - field_values
       type: object
-    PatchLocalizedFieldValuesWithEmbeddedContent:
-      properties:
-        field_values:
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/NumberFieldValueModel'
-            - $ref: '#/components/schemas/BooleanFieldValueModel'
-            - $ref: '#/components/schemas/DatetimeFieldValueModel'
-            - $ref: '#/components/schemas/TextFieldValueModel'
-            - $ref: '#/components/schemas/RichTextFieldValueModel'
-            - $ref: '#/components/schemas/LibraryAssetFieldValueModel'
-            - $ref: '#/components/schemas/ContentFieldValueWithEmbeddedModel'
-            - $ref: '#/components/schemas/ContentFieldValueModel'
-            - $ref: '#/components/schemas/URLFieldValueModel'
-            - $ref: '#/components/schemas/JSONFieldValueModel'
-            - $ref: '#/components/schemas/ChoiceFieldValueModel'
-            - $ref: '#/components/schemas/LocationFieldValueModel'
-            - $ref: '#/components/schemas/DeleteFieldValueModel'
-            - $ref: '#/components/schemas/ContentFieldWithEmbeddedPatchValueModel'
-          type: array
-        locale:
-          description: The default value should be en_US
-          type: string
-      required:
-      - locale
-      - field_values
-      type: object
-    URLFieldValueModel:
+    TextFieldValueModel:
       properties:
         order_index:
           description: Order index of the field value
           type: integer
-        url:
-          description: URL of the field value
-          format: uri
-          maxLength: 65536
-          minLength: 1
+        text_value:
+          description: Value of the field value
           type: string
       required:
-      - url
+      - text_value
       type: object
-    RadioButtonTypeObjectField:
+    TaskCustomFieldUpdateRequest:
+      additionalProperties: false
+      properties:
+        values:
+          description: 'An array of choice IDs, if the custom field has choices. Otherwise, text values to update the custom field values with. Must contain at least one id/value in the array. For custom fields of type `checkboxes`, you can provide an array of multiple-choice IDs as values.
+
+            Value for the custom field of type `date_field` must follow this format: `YYYY-MM-DD`.
+
+            '
+          items:
+            example: 1nu8ue9wf8u9nusd9u
+            type: string
+          minItems: 1
+          type: array
+      required:
+      - values
+      type: object
+    DatetimeFieldValueModel:
+      properties:
+        datetime_value:
+          description: Value of the field value
+          format: date-time
+          type: string
+        order_index:
+          description: Order index of the field value
+          type: integer
+      required:
+      - datetime_value
+      type: object
+    StringTypeObjectField:
       allOf:
       - $ref: '#/components/schemas/BaseObjectField'
-      - $ref: '#/components/schemas/RadioButtonTypeObjectFieldUpdatePayload'
-    BaseContentTypeVersionModel:
-      properties:
-        created_at:
-          description: Date and time on which the version was created, in ISO 8601 UTC format
-          format: date-time
-          type: string
-        created_by:
-          description: Unique identifier of the user who created the version
-          type: string
-        expected_locales:
-          description: Expected locales of the version
-          items:
-            type: string
-          type: array
-        latest:
-          description: Indicates whether the version is the latest
-          type: boolean
-        links:
-          description: Meta links
-          properties:
-            content_type:
-              description: URL of the content type
-              example: https://api.cmp.optimizely.com/v3/structured-content/content-types/555876bf63e94ea4b3ec4da318736414
-              type: string
-            self:
-              description: URL of the content type version
-              example: https://api.cmp.optimizely.com/v3/structured-content/content-types/555876bf63e94ea4b3ec4da318736414/versions/31a6d15b09c54a04935203eb958ae058
-              type: string
-          type: object
-        version_guid:
-          description: Unique identifier of the version
-          type: string
-      required:
-      - version_guid
-      - created_by
-      - created_at
-      - latest
-      - expected_locales
-      - links
-      type: object
-    TaskSubStepCommentUpdateRequest:
-      additionalProperties: false
-      properties:
-        value:
-          description: Updated comment value. Markdown is supported. To mention a user belonging to the organization, use `@[name](openapi-user-link)` format.
-          example: Updated comment mentioning @[Organization User](https://api.cmp.optimizely.com/v3/users/5fe38aeb574b52a62a089238)
-          minLength: 1
-          type: string
-      required:
-      - value
-      type: object
-    TaskUrlResponse:
-      additionalProperties: false
-      properties:
-        created_at:
-          description: Timestamp when the URL was added to the task
-          example: '2024-06-01T06:00:00Z'
-          format: date-time
-          type: string
-        id:
-          description: Unique identifier of the URL added to the task
-          example: 692851fbbd8c9217e28f7ad1
-          type: string
-      required:
-      - id
-      - created_at
-      type: object
-    StringTypeObjectFieldUpdatePayload:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
-      - properties:
-          values:
-            description: Any single string
-            items:
-              example: This is a test string
-              type: string
-            type: array
-        type: object
-    TaskImage:
-      additionalProperties: false
-      properties:
-        created_at:
-          description: Date and time on which the image was created, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
-          example: '2019-10-06T13:15:30Z'
-          format: date-time
-          type: string
-        file_size:
-          description: Size of the image in bytes
-          example: 11244
-          type: integer
-        id:
-          description: Unique identifier of the image
-          example: 5d7f910551b00a722e0418830cee6632
-          type: string
-        image_resolution:
-          additionalProperties: false
-          description: Width and height of the image in pixels
-          properties:
-            height:
-              description: Height of the image in pixels
-              example: 800
-              type: integer
-            width:
-              description: Width of the image in pixels
-              example: 700
-              type: integer
-          required:
-          - height
-          - width
-          type: object
-        labels:
-          description: Labels associated with the image
-          items:
-            $ref: '#/components/schemas/ResourceLabelResponse'
-          type: array
-        library_asset_id:
-          description: Unique identifier of the corresponding library asset — the library asset this task asset was forked from, or the one it was released to.
-          example: 6a8b2c3d4e5f6071829a3b4c
-          type:
-          - string
-          - 'null'
-        links:
-          additionalProperties: false
-          description: Meta links
-          properties:
-            drafts:
-              description: URL to POST draft to the image
-              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/assets/5d7f910551b00a722e0418830cee6632/drafts
-              type: string
-            self:
-              description: URL of the image
-              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9/images/5d7f910551b00a722e0418830cee6632
-              type: string
-            task:
-              description: URL of the task that the image is associated with
-              example: https://api.cmp.optimizely.com/v3/tasks/5f857f30e1c4a2038d6179e9
-              type: string
-            web_urls:
-              additionalProperties: false
-              description: Web URLs
-              properties:
-                drafts:
-                  description: Web URL of the drafts of the image
-                  example: https://cmp.optimizely.com/cloud/task/5f857f30e1c4a2038d6179e9/image/5d7f910551b00a722e0418830cee6632
-                  type: string
-                self:
-                  description: Web URL of the image
-                  example: https://cmp.optimizely.com/cloud/taskv3/5f857f30e1c4a2038d6179e9?contentTabGuid=5d7f910551b00a722e0418830cee6632
-                  type: string
-                task:
-                  description: Web URL of the task that the image is associated with
-                  example: https://cmp.optimizely.com/cloud/taskv3/5f857f30e1c4a2038d6179e9
-                  type: string
-              required:
-              - self
-              - task
-              - drafts
-              type: object
-          required:
-          - self
-          - task
-          - drafts
-          - web_urls
-          type: object
-        mime_type:
-          description: MIME type of the image
-          example: image/jpeg
-          type: string
-        modified_at:
-          description: Date and time of the most recent modification of the image, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
-          example: '2019-10-07T13:15:30Z'
-          format: date-time
-          type: string
-        title:
-          description: Title of the image
-          example: cat.jpeg
-          type: string
-        url:
-          description: Download the URL of the image
-          example: http://images.cmp.optimizely.com/Zz0xODQ3NDU3Y2Y2YmYzOTlmNjkyOTgyZDY3Y2I3YWM2OA==
-          type: string
-      required:
-      - id
-      - title
-      - mime_type
-      - created_at
-      - modified_at
-      - file_size
-      - image_resolution
-      - url
-      - labels
-      - links
-      type: object
-    CommentWithReplyCreateRequest:
-      additionalProperties: false
-      properties:
-        attachments:
-          description: List of comment attachments.
-          items:
-            $ref: '#/components/schemas/AttachmentRequest'
-          type: array
-        parent_comment_id:
-          description: Parent comment id to reply.
-          example: da80cfd7bbf84959a8a981acbad996b3
-          type: string
-        value:
-          description: Content of the comment. Markdown is supported. To mention a user belonging to the organization, use the `@[name](openapi-user-link)` format.
-          example: Comment mentioning @[Organization User](https://api.cmp.optimizely.com/v3/users/5fe38aeb574b52a62a089238)
-          minLength: 1
-          type: string
-      required:
-      - value
-      type: object
-    LocationFieldValueModel:
-      properties:
-        latitude:
-          description: Longitude of the field value
-          type: number
-        longitude:
-          description: Longitude of the field value
-          type: number
-        order_index:
-          description: Order index of the field value
-          type: integer
-      required:
-      - longitude
-      - latitude
-      type: object
+      - $ref: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
   responses:
-    ClientError:
-      content:
-        application/json:
-          example:
-            message: 'Unsupported arguments: a,b,c'
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Client error
-    NotFound:
-      content:
-        application/json:
-          example:
-            message: Resource not found
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Not found error
-    Unauthorized:
-      content:
-        application/json:
-          example:
-            message: Unauthorized
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Authorization error
     UnprocessableEntity:
       content:
         application/json:
@@ -5855,6 +5831,30 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Permission error
+    Unauthorized:
+      content:
+        application/json:
+          example:
+            message: Unauthorized
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Authorization error
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
+    ClientError:
+      content:
+        application/json:
+          example:
+            message: 'Unsupported arguments: a,b,c'
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client error
   parameters:
     page_size:
       description: Number of results to return per page

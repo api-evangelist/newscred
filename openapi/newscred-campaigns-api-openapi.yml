@@ -404,32 +404,72 @@ paths:
       - Campaigns
 components:
   schemas:
-    FieldBaseType:
+    DropdownTypeObjectField:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectField'
+      - $ref: '#/components/schemas/DropdownTypeObjectFieldUpdatePayload'
+    Pagination:
       additionalProperties: false
+      description: Pagination related information
       properties:
-        id:
-          description: Identifier of the field
-          example: 64be245ec0d79e79fdf1ad84
-          type: string
-        name:
-          description: Name of the field
-          example: Dropdown 101
-          type: string
-        type:
-          description: Type of the field
-          example: text
-          type: string
-        values:
-          description: List of selected values or from user input
-          items:
-            type: string
-          type: array
+        next:
+          description: URL to the next page
+          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
+          type:
+          - string
+          - 'null'
+        previous:
+          description: URL to the previous page
+          example: null
+          type:
+          - string
+          - 'null'
       required:
-      - id
-      - name
-      - type
-      - values
+      - next
+      - previous
       type: object
+    StringTypeObjectFieldUpdatePayload:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
+      - properties:
+          values:
+            description: Any single string
+            items:
+              example: This is a test string
+              type: string
+            type: array
+        type: object
+    NumberTypeObjectField:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectField'
+      - $ref: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
+    AssetTypeObjectFieldUpdatePayload:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
+      - properties:
+          values:
+            description: Payload for fields with attachments
+            items:
+              properties:
+                key:
+                  description: Unique identifier of the file upload session. This is the `upload_meta_fields.key` field retrieved from the `/v3/upload-url` endpoint.
+                  example: ce8995aea58b11ea8cd90242ac120005
+                  type: string
+                title:
+                  description: Title of the image or video
+                  example: Sample.jpeg
+                  minLength: 1
+                  type: string
+              required:
+              - title
+              - key
+            maxItems: 1
+            type: array
+        type: object
+    MultiChoiceTypeObjectField:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectField'
+      - $ref: '#/components/schemas/MultiChoiceTypeObjectFieldUpdatePayload'
     FieldTypeSimpleNumber:
       allOf:
       - $ref: '#/components/schemas/FieldBaseType'
@@ -448,85 +488,61 @@ components:
         - has_thousand_separator
         - decimal_places
         type: object
-    CampaignBriefResponse:
+    RadioButtonTypeObjectField:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectField'
+      - $ref: '#/components/schemas/RadioButtonTypeObjectFieldUpdatePayload'
+    CampaignUpdateRequest:
       additionalProperties: false
       properties:
-        fields:
-          description: List of fields of the brief
-          items:
-            additionalProperties: false
-            properties:
-              name:
-                description: Name of the brief field
-                example: My Dropdown
-                type: string
-              value:
-                description: List of values set for the brief field
-                items:
-                  description: value set in the brief field
-                  example: option 1
-                  type: string
-                type: array
-            required:
-            - name
-            - value
-            type: object
-          type: array
-        links:
-          additionalProperties: false
-          description: Meta links
-          properties:
-            campaign:
-              description: URL of the campaign
-              example: https://api.cmp.optimizely.com/v3/campaigns/5f857f30e1c4a2038d6179e9
-              type: string
-            self:
-              description: URL of the brief
-              example: https://api.cmp.optimizely.com/v3/campaigns/5f857f30e1c4a2038d6179e9/brief
-              type: string
-          required:
-          - self
-          - campaign
-          type: object
-        template:
-          allOf:
-          - $ref: '#/components/schemas/CampaignBriefTemplateValue'
+        end_date:
+          description: 'End date of the campaign in ISO 8601 format: `YYYY-MM-DD`'
+          example: '2022-09-06'
           type:
-          - object
+          - string
+          - 'null'
+        owner_id:
+          description: Unique identifier of the campaign owner
+          example: 8q7f910551b00a722e0418830cee6612
+          type: string
+        start_date:
+          description: 'Start date of the campaign in ISO 8601 format: `YYYY-MM-DD`'
+          example: '2022-09-06'
+          type:
+          - string
           - 'null'
         title:
-          description: Title of the campaign brief
-          example: Awesome Campaign Brief
+          description: Title of the campaign
+          example: The awesome campaign
           type: string
-        type:
-          description: Type of the campaign brief
-          enum:
-          - template
-          - attachment
-          - text
-          example: template
-          type: string
-      required:
-      - type
-      - title
-      - fields
-      - links
       type: object
-    Error:
-      additionalProperties: true
-      description: Error payload
-      properties:
-        errors:
-          additionalProperties: true
-          description: Additional information
-          properties: {}
-          type: object
-        message:
-          description: Message describing the error
-          example: Not found
-          type: string
-      required:
-      - message
+    ObjectFieldCreateResponse:
+      additionalProperties: false
+      discriminator:
+        mapping:
+          checkbox: '#/components/schemas/FieldTypeCheckbox'
+          currency_number: '#/components/schemas/FieldTypeCurrencyNumber'
+          date: '#/components/schemas/FieldTypeCommon'
+          dropdown: '#/components/schemas/FieldTypeDropdown'
+          image: '#/components/schemas/FieldTypeCommon'
+          label: '#/components/schemas/FieldTypeLabel'
+          percentage_number: '#/components/schemas/FieldTypePercentageNumber'
+          radio_button: '#/components/schemas/FieldTypeRadio'
+          rich_text: '#/components/schemas/FieldTypeCommon'
+          simple_number: '#/components/schemas/FieldTypeSimpleNumber'
+          text: '#/components/schemas/FieldTypeCommon'
+          text_area: '#/components/schemas/FieldTypeCommon'
+          video: '#/components/schemas/FieldTypeCommon'
+        propertyName: type
+      oneOf:
+      - $ref: '#/components/schemas/FieldTypeCommon'
+      - $ref: '#/components/schemas/FieldTypeLabel'
+      - $ref: '#/components/schemas/FieldTypeDropdown'
+      - $ref: '#/components/schemas/FieldTypeRadio'
+      - $ref: '#/components/schemas/FieldTypeCheckbox'
+      - $ref: '#/components/schemas/FieldTypeSimpleNumber'
+      - $ref: '#/components/schemas/FieldTypePercentageNumber'
+      - $ref: '#/components/schemas/FieldTypeCurrencyNumber'
       type: object
     CampaignFieldUpdateResponse:
       additionalProperties: false
@@ -570,80 +586,348 @@ components:
       - values
       - links
       type: object
-    AttachmentResponse:
+    ResourceLabelResponse:
       additionalProperties: false
+      description: Label associated to a fetched resource
       properties:
-        id:
-          description: Unique identifier for the attachment
-          example: 5a7f910511b0a72230ce6631
-          type: string
-        name:
-          description: Filename of the attachment
-          example: sample_image.png
-          type: string
-        url:
-          description: Download URL of the attachment
-          example: https://files.cmp.optimizely.com/download/2115bfe4450c11ebaae8000c291b51d4
-          type: string
+        group:
+          additionalProperties: false
+          description: Label group
+          properties:
+            id:
+              description: Identifier of the label group
+              example: 2467e583a60e23fda2b89db81a453cd2
+              type: string
+            name:
+              description: Name of the label group
+              example: Content Format
+              type: string
+          required:
+          - id
+          - name
+          type: object
+        values:
+          description: List of values of the label
+          items:
+            additionalProperties: false
+            properties:
+              id:
+                description: Identifier of the label value
+                example: 71c378f3fee3d822759d1bdc2aab628c
+                type: string
+              name:
+                description: Name of the label value
+                example: Photos
+                type: string
+            required:
+            - id
+            - name
+            type: object
+          type: array
       required:
-      - id
-      - name
-      - url
+      - group
+      - values
       type: object
-    DropdownTypeObjectField:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectField'
-      - $ref: '#/components/schemas/DropdownTypeObjectFieldUpdatePayload'
-    FieldTypeCurrencyNumber:
+    FieldTypeCommon:
       allOf:
       - $ref: '#/components/schemas/FieldBaseType'
-      - properties:
-          currency_code:
-            description: Currency code of the numerical field
-            example: USD
-            type: string
-          decimal_places:
-            description: Decimal place of the numerical field
-            example: 2
-            type:
-            - integer
-            - 'null'
-          has_thousand_separator:
-            description: Whether the numerical field has a thousand separator
-            example: true
-            type: boolean
-        required:
-        - has_thousand_separator
-        - decimal_places
-        - currency_code
-        type: object
-    BaseObjectField:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
-      - properties:
-          id:
-            description: Unique identifier of the field
-            example: 41aac313bda1e40b6cde7116fc24a
-            type: string
-        required:
-        - id
-        type: object
-    CampaignUpdateRequest:
+      - type: object
+    CampaignFieldUpdateRequest:
+      additionalProperties: false
+      discriminator:
+        mapping:
+          checkbox: '#/components/schemas/MultiChoiceTypeObjectFieldUpdatePayload'
+          currency_number: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
+          date: '#/components/schemas/DateTypeObjectFieldUpdatePayload'
+          dropdown: '#/components/schemas/DropdownTypeObjectFieldUpdatePayload'
+          image: '#/components/schemas/AssetTypeObjectFieldUpdatePayload'
+          label: '#/components/schemas/MultiChoiceTypeObjectFieldUpdatePayload'
+          percentage_number: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
+          radio_button: '#/components/schemas/RadioButtonTypeObjectFieldUpdatePayload'
+          rich_text: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
+          simple_number: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
+          text: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
+          text_area: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
+          video: '#/components/schemas/AssetTypeObjectFieldUpdatePayload'
+        propertyName: type
+      oneOf:
+      - $ref: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
+      - $ref: '#/components/schemas/MultiChoiceTypeObjectFieldUpdatePayload'
+      - $ref: '#/components/schemas/DropdownTypeObjectFieldUpdatePayload'
+      - $ref: '#/components/schemas/RadioButtonTypeObjectFieldUpdatePayload'
+      - $ref: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
+      - $ref: '#/components/schemas/DateTypeObjectFieldUpdatePayload'
+      - $ref: '#/components/schemas/AssetTypeObjectFieldUpdatePayload'
+      type: object
+    CommentCreateRequest:
       additionalProperties: false
       properties:
-        end_date:
-          description: 'End date of the campaign in ISO 8601 format: `YYYY-MM-DD`'
-          example: '2022-09-06'
+        attachments:
+          description: List of comment attachments.
+          items:
+            $ref: '#/components/schemas/AttachmentRequest'
+          type: array
+        value:
+          description: Content of the comment. Markdown is supported. To mention a user belonging to the organization, use the `@[name](openapi-user-link)` format.
+          example: Comment mentioning @[Organization User](https://api.cmp.optimizely.com/v3/users/5fe38aeb574b52a62a089238)
+          minLength: 1
+          type: string
+      required:
+      - value
+      type: object
+    CampaignResponse:
+      additionalProperties: false
+      properties:
+        budget:
+          allOf:
+          - $ref: '#/components/schemas/BudgetResponse'
+          type:
+          - object
+          - 'null'
+        created_at:
+          description: Creation date and time of the campaign,  in ISO 8601 UTC format (`2035-02-10T10:40:45Z`)
+          example: '2035-10-06T13:15:30Z'
+          format: date-time
+          type: string
+        description:
+          description: Description of the campaign
+          example: The awesome campaign's description
           type:
           - string
           - 'null'
-        owner_id:
-          description: Unique identifier of the campaign owner
+        end_date:
+          description: 'End date of the campaign in ISO 8601 format: `YYYY-MM-DD`'
+          example: '2019-10-16'
+          type:
+          - string
+          - 'null'
+        id:
+          description: Unique identifier of the campaign
           example: 8q7f910551b00a722e0418830cee6612
+          type: string
+        is_hidden:
+          description: Whether the campaign is hidden or not
+          example: false
+          type: boolean
+        labels:
+          description: Labels associated to the campaign
+          items:
+            $ref: '#/components/schemas/ResourceLabelResponse'
+          type: array
+        links:
+          additionalProperties: false
+          description: Meta links
+          properties:
+            brief:
+              description: URL of the campaign brief
+              example: https://api.cmp.optimizely.com/v3/campaigns/8q7f910551b00a722e0418830cee6612/brief
+              type:
+              - string
+              - 'null'
+            child_campaigns:
+              description: URLs of the child campaigns
+              items:
+                example: https://api.cmp.optimizely.com/v3/campaigns/6fb21acf987094513ecb4b58
+                type: string
+              type: array
+            owner:
+              description: URL of the campaign owner
+              example: https://api.cmp.optimizely.com/v3/users/6ea1bf781398c3147393arr1
+              type:
+              - string
+              - 'null'
+            parent_campaign:
+              description: URL of the parent campaign
+              example: https://api.cmp.optimizely.com/v3/campaigns/7u7f910551b00a722e0418830cee6643
+              type:
+              - string
+              - 'null'
+            self:
+              description: URL of the campaign
+              example: https://api.cmp.optimizely.com/v3/campaigns/8q7f910551b00a722e0418830cee6612
+              type: string
+          required:
+          - self
+          - brief
+          - owner
+          - parent_campaign
+          - child_campaigns
+          type: object
+        reference_id:
+          description: Reference identifier of the campaign
+          example: CPN-1589
           type: string
         start_date:
           description: 'Start date of the campaign in ISO 8601 format: `YYYY-MM-DD`'
-          example: '2022-09-06'
+          example: '2019-10-06'
+          type:
+          - string
+          - 'null'
+        status:
+          description: Status of the campaign
+          enum:
+          - Not Started
+          - Off Track
+          - On Track
+          - Complete
+          - At Risk
+          example: On Track
+          type: string
+        title:
+          description: Title of the campaign
+          example: The awesome campaign
+          type: string
+      required:
+      - id
+      - title
+      - description
+      - start_date
+      - end_date
+      - created_at
+      - is_hidden
+      - status
+      - reference_id
+      - budget
+      - labels
+      - links
+      type: object
+    Error:
+      additionalProperties: true
+      description: Error payload
+      properties:
+        errors:
+          additionalProperties: true
+          description: Additional information
+          properties: {}
+          type: object
+        message:
+          description: Message describing the error
+          example: Not found
+          type: string
+      required:
+      - message
+      type: object
+    FieldTypeDropdown:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - properties:
+          choices:
+            description: Choices of the dropdown
+            items:
+              properties:
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Dropdown 1 Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              type: object
+            type: array
+          is_multi_select:
+            description: Select multiple values from the dropdown
+            type: boolean
+        required:
+        - is_multi_select
+        - choices
+        type: object
+    BudgetResponse:
+      additionalProperties: false
+      description: Budget of the campaign
+      properties:
+        budgeted_amount:
+          description: Planned amount for the campaign
+          example: '1000.50'
+          type: string
+        currency_code:
+          description: Currency code of the budget
+          example: USD
+          type: string
+      required:
+      - currency_code
+      - budgeted_amount
+      type: object
+    ObjectFieldCreateRequest:
+      additionalProperties: false
+      discriminator:
+        mapping:
+          checkbox: '#/components/schemas/MultiChoiceTypeObjectField'
+          currency_number: '#/components/schemas/NumberTypeObjectField'
+          date: '#/components/schemas/DateTypeObjectField'
+          dropdown: '#/components/schemas/DropdownTypeObjectField'
+          image: '#/components/schemas/AssetTypeObjectField'
+          label: '#/components/schemas/MultiChoiceTypeObjectField'
+          percentage_number: '#/components/schemas/NumberTypeObjectField'
+          radio_button: '#/components/schemas/RadioButtonTypeObjectField'
+          rich_text: '#/components/schemas/StringTypeObjectField'
+          simple_number: '#/components/schemas/NumberTypeObjectField'
+          text: '#/components/schemas/StringTypeObjectField'
+          text_area: '#/components/schemas/StringTypeObjectField'
+          video: '#/components/schemas/AssetTypeObjectField'
+        propertyName: type
+      oneOf:
+      - $ref: '#/components/schemas/StringTypeObjectField'
+      - $ref: '#/components/schemas/MultiChoiceTypeObjectField'
+      - $ref: '#/components/schemas/DropdownTypeObjectField'
+      - $ref: '#/components/schemas/RadioButtonTypeObjectField'
+      - $ref: '#/components/schemas/NumberTypeObjectField'
+      - $ref: '#/components/schemas/DateTypeObjectField'
+      - $ref: '#/components/schemas/AssetTypeObjectField'
+      type: object
+    CampaignListResponseItem:
+      additionalProperties: false
+      properties:
+        description:
+          description: Description of the campaign
+          example: The awesome campaign's description
+          type:
+          - string
+          - 'null'
+        end_date:
+          description: 'End date of the campaign in ISO 8601 format: `YYYY-MM-DD`'
+          example: '2019-10-16'
+          type:
+          - string
+          - 'null'
+        id:
+          description: Unique identifier of the campaign
+          example: 8q7f910551b00a722e0418830cee6612
+          type: string
+        is_hidden:
+          description: Whether the campaign is hidden or not
+          example: false
+          type: boolean
+        links:
+          additionalProperties: false
+          description: Meta links
+          properties:
+            self:
+              description: URL of the campaign
+              example: https://api.cmp.optimizely.com/v3/campaigns/8q7f910551b00a722e0418830cee6612
+              type: string
+          required:
+          - self
+          type: object
+        owner:
+          additionalProperties: false
+          description: Owner information of the campaign
+          properties:
+            id:
+              description: Unique identifier of the owner of the campaign
+              example: 8q7f910551b00a722e0418830cee8211
+              type: string
+          type: object
+        reference_id:
+          description: Reference identifier of the campaign
+          example: CPN-1589
+          type: string
+        start_date:
+          description: 'Start date of the campaign in ISO 8601 format: `YYYY-MM-DD`'
+          example: '2019-10-06'
           type:
           - string
           - 'null'
@@ -651,6 +935,16 @@ components:
           description: Title of the campaign
           example: The awesome campaign
           type: string
+      required:
+      - id
+      - title
+      - description
+      - start_date
+      - end_date
+      - is_hidden
+      - reference_id
+      - owner
+      - links
       type: object
     DateTypeObjectFieldUpdatePayload:
       allOf:
@@ -666,53 +960,131 @@ components:
             maxItems: 1
             type: array
         type: object
-    AssetTypeObjectFieldUpdatePayload:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
-      - properties:
-          values:
-            description: Payload for fields with attachments
-            items:
-              properties:
-                key:
-                  description: Unique identifier of the file upload session. This is the `upload_meta_fields.key` field retrieved from the `/v3/upload-url` endpoint.
-                  example: ce8995aea58b11ea8cd90242ac120005
-                  type: string
-                title:
-                  description: Title of the image or video
-                  example: Sample.jpeg
-                  minLength: 1
-                  type: string
-              required:
-              - title
-              - key
-            maxItems: 1
-            type: array
-        type: object
-    Pagination:
-      additionalProperties: false
-      description: Pagination related information
-      properties:
-        next:
-          description: URL to the next page
-          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
-          type:
-          - string
-          - 'null'
-        previous:
-          description: URL to the previous page
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - next
-      - previous
-      type: object
     AssetTypeObjectField:
       allOf:
       - $ref: '#/components/schemas/BaseObjectField'
       - $ref: '#/components/schemas/AssetTypeObjectFieldUpdatePayload'
+    CampaignFieldTypes:
+      description: Type of the field
+      enum:
+      - checkbox
+      - currency_number
+      - date
+      - dropdown
+      - label
+      - radio_button
+      - text_area
+      - percentage_number
+      - rich_text
+      - simple_number
+      - text
+      - image
+      - video
+      example: image
+      type: string
+    FieldBaseType:
+      additionalProperties: false
+      properties:
+        id:
+          description: Identifier of the field
+          example: 64be245ec0d79e79fdf1ad84
+          type: string
+        name:
+          description: Name of the field
+          example: Dropdown 101
+          type: string
+        type:
+          description: Type of the field
+          example: text
+          type: string
+        values:
+          description: List of selected values or from user input
+          items:
+            type: string
+          type: array
+      required:
+      - id
+      - name
+      - type
+      - values
+      type: object
+    BaseObjectField:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
+      - properties:
+          id:
+            description: Unique identifier of the field
+            example: 41aac313bda1e40b6cde7116fc24a
+            type: string
+        required:
+        - id
+        type: object
+    RadioButtonTypeObjectFieldUpdatePayload:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
+      - properties:
+          values:
+            description: Accepts a single choice Id.
+            items:
+              example: 9119a313057e401189407116fcd3
+              type: string
+            maxItems: 1
+            type: array
+        type: object
+    FieldTypeRadio:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - properties:
+          choices:
+            description: Choices of the radio button
+            items:
+              properties:
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Radio 1 Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              - color
+              type: object
+            type: array
+        required:
+        - choices
+        type: object
+    AttachmentRequest:
+      additionalProperties: false
+      properties:
+        key:
+          description: Unique identifier of the file upload session. This is the `upload_meta_fields.key` field retrieved from the `/v3/upload-url` endpoint.
+          example: ce8995aea58b11ea8cd90242ac120005
+          maxLength: 100
+          minLength: 1
+          type: string
+        name:
+          description: Filename of the attachment
+          example: sample_image.png
+          minLength: 1
+          type: string
+      required:
+      - key
+      - name
+      type: object
+    DropdownTypeObjectFieldUpdatePayload:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
+      - properties:
+          values:
+            description: Array of choice ID. Multiple choice values are not acceptable for `is_multi_select=false`.
+            items:
+              example: 9119a313057e401189407116fcd3
+              type: string
+            type: array
+        type: object
     CampaignCreateRequest:
       additionalProperties: false
       properties:
@@ -836,132 +1208,25 @@ components:
       required:
       - title
       type: object
-    CampaignListResponseItem:
+    AttachmentResponse:
       additionalProperties: false
       properties:
-        description:
-          description: Description of the campaign
-          example: The awesome campaign's description
-          type:
-          - string
-          - 'null'
-        end_date:
-          description: 'End date of the campaign in ISO 8601 format: `YYYY-MM-DD`'
-          example: '2019-10-16'
-          type:
-          - string
-          - 'null'
         id:
-          description: Unique identifier of the campaign
-          example: 8q7f910551b00a722e0418830cee6612
+          description: Unique identifier for the attachment
+          example: 5a7f910511b0a72230ce6631
           type: string
-        is_hidden:
-          description: Whether the campaign is hidden or not
-          example: false
-          type: boolean
-        links:
-          additionalProperties: false
-          description: Meta links
-          properties:
-            self:
-              description: URL of the campaign
-              example: https://api.cmp.optimizely.com/v3/campaigns/8q7f910551b00a722e0418830cee6612
-              type: string
-          required:
-          - self
-          type: object
-        owner:
-          additionalProperties: false
-          description: Owner information of the campaign
-          properties:
-            id:
-              description: Unique identifier of the owner of the campaign
-              example: 8q7f910551b00a722e0418830cee8211
-              type: string
-          type: object
-        reference_id:
-          description: Reference identifier of the campaign
-          example: CPN-1589
+        name:
+          description: Filename of the attachment
+          example: sample_image.png
           type: string
-        start_date:
-          description: 'Start date of the campaign in ISO 8601 format: `YYYY-MM-DD`'
-          example: '2019-10-06'
-          type:
-          - string
-          - 'null'
-        title:
-          description: Title of the campaign
-          example: The awesome campaign
+        url:
+          description: Download URL of the attachment
+          example: https://files.cmp.optimizely.com/download/2115bfe4450c11ebaae8000c291b51d4
           type: string
       required:
       - id
-      - title
-      - description
-      - start_date
-      - end_date
-      - is_hidden
-      - reference_id
-      - owner
-      - links
-      type: object
-    StringTypeObjectField:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectField'
-      - $ref: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
-    CampaignFieldTypes:
-      description: Type of the field
-      enum:
-      - checkbox
-      - currency_number
-      - date
-      - dropdown
-      - label
-      - radio_button
-      - text_area
-      - percentage_number
-      - rich_text
-      - simple_number
-      - text
-      - image
-      - video
-      example: image
-      type: string
-    NumberTypeObjectField:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectField'
-      - $ref: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
-    BaseObjectFieldUpdatePayload:
-      properties:
-        type:
-          description: Type of the field
-          example: checkbox
-          type: string
-        values:
-          description: Values for the campaign field
-          type: array
-      required:
-      - type
-      - values
-      type: object
-    FieldTypeCommon:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - type: object
-    BudgetResponse:
-      additionalProperties: false
-      description: Budget of the campaign
-      properties:
-        budgeted_amount:
-          description: Planned amount for the campaign
-          example: '1000.50'
-          type: string
-        currency_code:
-          description: Currency code of the budget
-          example: USD
-          type: string
-      required:
-      - currency_code
-      - budgeted_amount
+      - name
+      - url
       type: object
     NumberTypeObjectFieldUpdatePayload:
       allOf:
@@ -975,88 +1240,20 @@ components:
             maxItems: 1
             type: array
         type: object
-    CampaignFieldUpdateRequest:
+    CampaignBriefTemplateValue:
       additionalProperties: false
-      discriminator:
-        mapping:
-          checkbox: '#/components/schemas/MultiChoiceTypeObjectFieldUpdatePayload'
-          currency_number: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
-          date: '#/components/schemas/DateTypeObjectFieldUpdatePayload'
-          dropdown: '#/components/schemas/DropdownTypeObjectFieldUpdatePayload'
-          image: '#/components/schemas/AssetTypeObjectFieldUpdatePayload'
-          label: '#/components/schemas/MultiChoiceTypeObjectFieldUpdatePayload'
-          percentage_number: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
-          radio_button: '#/components/schemas/RadioButtonTypeObjectFieldUpdatePayload'
-          rich_text: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
-          simple_number: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
-          text: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
-          text_area: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
-          video: '#/components/schemas/AssetTypeObjectFieldUpdatePayload'
-        propertyName: type
-      oneOf:
-      - $ref: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
-      - $ref: '#/components/schemas/MultiChoiceTypeObjectFieldUpdatePayload'
-      - $ref: '#/components/schemas/DropdownTypeObjectFieldUpdatePayload'
-      - $ref: '#/components/schemas/RadioButtonTypeObjectFieldUpdatePayload'
-      - $ref: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
-      - $ref: '#/components/schemas/DateTypeObjectFieldUpdatePayload'
-      - $ref: '#/components/schemas/AssetTypeObjectFieldUpdatePayload'
-      type: object
-    MultiChoiceTypeObjectFieldUpdatePayload:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
-      - properties:
-          values:
-            description: Array of choice IDs
-            items:
-              example: 9119a313057e401189407116fcd3
-              type: string
-            type: array
-        type: object
-    FieldTypeDropdown:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - properties:
-          choices:
-            description: Choices of the dropdown
-            items:
-              properties:
-                id:
-                  description: Identifier of the choice
-                  example: 6ceee2f4fa3411ecb37802420ac8001b
-                  type: string
-                name:
-                  description: Name of the choice
-                  example: Dropdown 1 Choice 1
-                  type: string
-              required:
-              - id
-              - name
-              type: object
-            type: array
-          is_multi_select:
-            description: Select multiple values from the dropdown
-            type: boolean
-        required:
-        - is_multi_select
-        - choices
-        type: object
-    AttachmentRequest:
-      additionalProperties: false
+      description: Template info of the brief if the brief is of template type
       properties:
-        key:
-          description: Unique identifier of the file upload session. This is the `upload_meta_fields.key` field retrieved from the `/v3/upload-url` endpoint.
-          example: ce8995aea58b11ea8cd90242ac120005
-          maxLength: 100
-          minLength: 1
+        id:
+          description: Unique identifier of the template
+          example: 9nu8ue9wf8u9nusd9f
           type: string
         name:
-          description: Filename of the attachment
-          example: sample_image.png
-          minLength: 1
+          description: Name of the template
+          example: My Template
           type: string
       required:
-      - key
+      - id
       - name
       type: object
     FieldTypeLabel:
@@ -1088,52 +1285,17 @@ components:
         - is_multi_select
         - choices
         type: object
-    ResourceLabelResponse:
-      additionalProperties: false
-      description: Label associated to a fetched resource
-      properties:
-        group:
-          additionalProperties: false
-          description: Label group
-          properties:
-            id:
-              description: Identifier of the label group
-              example: 2467e583a60e23fda2b89db81a453cd2
-              type: string
-            name:
-              description: Name of the label group
-              example: Content Format
-              type: string
-          required:
-          - id
-          - name
-          type: object
-        values:
-          description: List of values of the label
-          items:
-            additionalProperties: false
-            properties:
-              id:
-                description: Identifier of the label value
-                example: 71c378f3fee3d822759d1bdc2aab628c
-                type: string
-              name:
-                description: Name of the label value
-                example: Photos
-                type: string
-            required:
-            - id
-            - name
-            type: object
-          type: array
-      required:
-      - group
-      - values
-      type: object
-    MultiChoiceTypeObjectField:
+    MultiChoiceTypeObjectFieldUpdatePayload:
       allOf:
-      - $ref: '#/components/schemas/BaseObjectField'
-      - $ref: '#/components/schemas/MultiChoiceTypeObjectFieldUpdatePayload'
+      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
+      - properties:
+          values:
+            description: Array of choice IDs
+            items:
+              example: 9119a313057e401189407116fcd3
+              type: string
+            type: array
+        type: object
     FieldListResponseItem:
       discriminator:
         mapping:
@@ -1160,178 +1322,6 @@ components:
       - $ref: '#/components/schemas/FieldTypeSimpleNumber'
       - $ref: '#/components/schemas/FieldTypePercentageNumber'
       - $ref: '#/components/schemas/FieldTypeCurrencyNumber'
-    DropdownTypeObjectFieldUpdatePayload:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
-      - properties:
-          values:
-            description: Array of choice ID. Multiple choice values are not acceptable for `is_multi_select=false`.
-            items:
-              example: 9119a313057e401189407116fcd3
-              type: string
-            type: array
-        type: object
-    RadioButtonTypeObjectField:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectField'
-      - $ref: '#/components/schemas/RadioButtonTypeObjectFieldUpdatePayload'
-    FieldTypePercentageNumber:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - properties:
-          decimal_places:
-            description: Decimal place of the numerical field
-            example: 2
-            type:
-            - integer
-            - 'null'
-        required:
-        - decimal_places
-        type: object
-    RadioButtonTypeObjectFieldUpdatePayload:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
-      - properties:
-          values:
-            description: Accepts a single choice Id.
-            items:
-              example: 9119a313057e401189407116fcd3
-              type: string
-            maxItems: 1
-            type: array
-        type: object
-    FieldTypeCheckbox:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - properties:
-          choices:
-            description: Choices of the checkbox
-            items:
-              properties:
-                id:
-                  description: Identifier of the choice
-                  example: 6ceee2f4fa3411ecb37802420ac8001b
-                  type: string
-                name:
-                  description: Name of the choice
-                  example: Checkbox 1 Choice 1
-                  type: string
-              required:
-              - id
-              - name
-              - color
-              type: object
-            type: array
-        required:
-        - choices
-        type: object
-    StringTypeObjectFieldUpdatePayload:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
-      - properties:
-          values:
-            description: Any single string
-            items:
-              example: This is a test string
-              type: string
-            type: array
-        type: object
-    ObjectFieldCreateRequest:
-      additionalProperties: false
-      discriminator:
-        mapping:
-          checkbox: '#/components/schemas/MultiChoiceTypeObjectField'
-          currency_number: '#/components/schemas/NumberTypeObjectField'
-          date: '#/components/schemas/DateTypeObjectField'
-          dropdown: '#/components/schemas/DropdownTypeObjectField'
-          image: '#/components/schemas/AssetTypeObjectField'
-          label: '#/components/schemas/MultiChoiceTypeObjectField'
-          percentage_number: '#/components/schemas/NumberTypeObjectField'
-          radio_button: '#/components/schemas/RadioButtonTypeObjectField'
-          rich_text: '#/components/schemas/StringTypeObjectField'
-          simple_number: '#/components/schemas/NumberTypeObjectField'
-          text: '#/components/schemas/StringTypeObjectField'
-          text_area: '#/components/schemas/StringTypeObjectField'
-          video: '#/components/schemas/AssetTypeObjectField'
-        propertyName: type
-      oneOf:
-      - $ref: '#/components/schemas/StringTypeObjectField'
-      - $ref: '#/components/schemas/MultiChoiceTypeObjectField'
-      - $ref: '#/components/schemas/DropdownTypeObjectField'
-      - $ref: '#/components/schemas/RadioButtonTypeObjectField'
-      - $ref: '#/components/schemas/NumberTypeObjectField'
-      - $ref: '#/components/schemas/DateTypeObjectField'
-      - $ref: '#/components/schemas/AssetTypeObjectField'
-      type: object
-    ObjectFieldCreateResponse:
-      additionalProperties: false
-      discriminator:
-        mapping:
-          checkbox: '#/components/schemas/FieldTypeCheckbox'
-          currency_number: '#/components/schemas/FieldTypeCurrencyNumber'
-          date: '#/components/schemas/FieldTypeCommon'
-          dropdown: '#/components/schemas/FieldTypeDropdown'
-          image: '#/components/schemas/FieldTypeCommon'
-          label: '#/components/schemas/FieldTypeLabel'
-          percentage_number: '#/components/schemas/FieldTypePercentageNumber'
-          radio_button: '#/components/schemas/FieldTypeRadio'
-          rich_text: '#/components/schemas/FieldTypeCommon'
-          simple_number: '#/components/schemas/FieldTypeSimpleNumber'
-          text: '#/components/schemas/FieldTypeCommon'
-          text_area: '#/components/schemas/FieldTypeCommon'
-          video: '#/components/schemas/FieldTypeCommon'
-        propertyName: type
-      oneOf:
-      - $ref: '#/components/schemas/FieldTypeCommon'
-      - $ref: '#/components/schemas/FieldTypeLabel'
-      - $ref: '#/components/schemas/FieldTypeDropdown'
-      - $ref: '#/components/schemas/FieldTypeRadio'
-      - $ref: '#/components/schemas/FieldTypeCheckbox'
-      - $ref: '#/components/schemas/FieldTypeSimpleNumber'
-      - $ref: '#/components/schemas/FieldTypePercentageNumber'
-      - $ref: '#/components/schemas/FieldTypeCurrencyNumber'
-      type: object
-    FieldTypeRadio:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - properties:
-          choices:
-            description: Choices of the radio button
-            items:
-              properties:
-                id:
-                  description: Identifier of the choice
-                  example: 6ceee2f4fa3411ecb37802420ac8001b
-                  type: string
-                name:
-                  description: Name of the choice
-                  example: Radio 1 Choice 1
-                  type: string
-              required:
-              - id
-              - name
-              - color
-              type: object
-            type: array
-        required:
-        - choices
-        type: object
-    CampaignBriefTemplateValue:
-      additionalProperties: false
-      description: Template info of the brief if the brief is of template type
-      properties:
-        id:
-          description: Unique identifier of the template
-          example: 9nu8ue9wf8u9nusd9f
-          type: string
-        name:
-          description: Name of the template
-          example: My Template
-          type: string
-      required:
-      - id
-      - name
-      type: object
     CampaignCommentResponse:
       additionalProperties: false
       properties:
@@ -1403,167 +1393,153 @@ components:
       - attachments
       - links
       type: object
-    CommentCreateRequest:
-      additionalProperties: false
-      properties:
-        attachments:
-          description: List of comment attachments.
-          items:
-            $ref: '#/components/schemas/AttachmentRequest'
-          type: array
-        value:
-          description: Content of the comment. Markdown is supported. To mention a user belonging to the organization, use the `@[name](openapi-user-link)` format.
-          example: Comment mentioning @[Organization User](https://api.cmp.optimizely.com/v3/users/5fe38aeb574b52a62a089238)
-          minLength: 1
-          type: string
-      required:
-      - value
-      type: object
-    DateTypeObjectField:
+    FieldTypeCurrencyNumber:
       allOf:
-      - $ref: '#/components/schemas/BaseObjectField'
-      - $ref: '#/components/schemas/DateTypeObjectFieldUpdatePayload'
-    CampaignResponse:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - properties:
+          currency_code:
+            description: Currency code of the numerical field
+            example: USD
+            type: string
+          decimal_places:
+            description: Decimal place of the numerical field
+            example: 2
+            type:
+            - integer
+            - 'null'
+          has_thousand_separator:
+            description: Whether the numerical field has a thousand separator
+            example: true
+            type: boolean
+        required:
+        - has_thousand_separator
+        - decimal_places
+        - currency_code
+        type: object
+    FieldTypeCheckbox:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - properties:
+          choices:
+            description: Choices of the checkbox
+            items:
+              properties:
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Checkbox 1 Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              - color
+              type: object
+            type: array
+        required:
+        - choices
+        type: object
+    CampaignBriefResponse:
       additionalProperties: false
       properties:
-        budget:
-          allOf:
-          - $ref: '#/components/schemas/BudgetResponse'
-          type:
-          - object
-          - 'null'
-        created_at:
-          description: Creation date and time of the campaign,  in ISO 8601 UTC format (`2035-02-10T10:40:45Z`)
-          example: '2035-10-06T13:15:30Z'
-          format: date-time
-          type: string
-        description:
-          description: Description of the campaign
-          example: The awesome campaign's description
-          type:
-          - string
-          - 'null'
-        end_date:
-          description: 'End date of the campaign in ISO 8601 format: `YYYY-MM-DD`'
-          example: '2019-10-16'
-          type:
-          - string
-          - 'null'
-        id:
-          description: Unique identifier of the campaign
-          example: 8q7f910551b00a722e0418830cee6612
-          type: string
-        is_hidden:
-          description: Whether the campaign is hidden or not
-          example: false
-          type: boolean
-        labels:
-          description: Labels associated to the campaign
+        fields:
+          description: List of fields of the brief
           items:
-            $ref: '#/components/schemas/ResourceLabelResponse'
+            additionalProperties: false
+            properties:
+              name:
+                description: Name of the brief field
+                example: My Dropdown
+                type: string
+              value:
+                description: List of values set for the brief field
+                items:
+                  description: value set in the brief field
+                  example: option 1
+                  type: string
+                type: array
+            required:
+            - name
+            - value
+            type: object
           type: array
         links:
           additionalProperties: false
           description: Meta links
           properties:
-            brief:
-              description: URL of the campaign brief
-              example: https://api.cmp.optimizely.com/v3/campaigns/8q7f910551b00a722e0418830cee6612/brief
-              type:
-              - string
-              - 'null'
-            child_campaigns:
-              description: URLs of the child campaigns
-              items:
-                example: https://api.cmp.optimizely.com/v3/campaigns/6fb21acf987094513ecb4b58
-                type: string
-              type: array
-            owner:
-              description: URL of the campaign owner
-              example: https://api.cmp.optimizely.com/v3/users/6ea1bf781398c3147393arr1
-              type:
-              - string
-              - 'null'
-            parent_campaign:
-              description: URL of the parent campaign
-              example: https://api.cmp.optimizely.com/v3/campaigns/7u7f910551b00a722e0418830cee6643
-              type:
-              - string
-              - 'null'
-            self:
+            campaign:
               description: URL of the campaign
-              example: https://api.cmp.optimizely.com/v3/campaigns/8q7f910551b00a722e0418830cee6612
+              example: https://api.cmp.optimizely.com/v3/campaigns/5f857f30e1c4a2038d6179e9
+              type: string
+            self:
+              description: URL of the brief
+              example: https://api.cmp.optimizely.com/v3/campaigns/5f857f30e1c4a2038d6179e9/brief
               type: string
           required:
           - self
-          - brief
-          - owner
-          - parent_campaign
-          - child_campaigns
+          - campaign
           type: object
-        reference_id:
-          description: Reference identifier of the campaign
-          example: CPN-1589
-          type: string
-        start_date:
-          description: 'Start date of the campaign in ISO 8601 format: `YYYY-MM-DD`'
-          example: '2019-10-06'
+        template:
+          allOf:
+          - $ref: '#/components/schemas/CampaignBriefTemplateValue'
           type:
-          - string
+          - object
           - 'null'
-        status:
-          description: Status of the campaign
-          enum:
-          - Not Started
-          - Off Track
-          - On Track
-          - Complete
-          - At Risk
-          example: On Track
-          type: string
         title:
-          description: Title of the campaign
-          example: The awesome campaign
+          description: Title of the campaign brief
+          example: Awesome Campaign Brief
+          type: string
+        type:
+          description: Type of the campaign brief
+          enum:
+          - template
+          - attachment
+          - text
+          example: template
           type: string
       required:
-      - id
+      - type
       - title
-      - description
-      - start_date
-      - end_date
-      - created_at
-      - is_hidden
-      - status
-      - reference_id
-      - budget
-      - labels
+      - fields
       - links
       type: object
+    DateTypeObjectField:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectField'
+      - $ref: '#/components/schemas/DateTypeObjectFieldUpdatePayload'
+    StringTypeObjectField:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectField'
+      - $ref: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
+    BaseObjectFieldUpdatePayload:
+      properties:
+        type:
+          description: Type of the field
+          example: checkbox
+          type: string
+        values:
+          description: Values for the campaign field
+          type: array
+      required:
+      - type
+      - values
+      type: object
+    FieldTypePercentageNumber:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - properties:
+          decimal_places:
+            description: Decimal place of the numerical field
+            example: 2
+            type:
+            - integer
+            - 'null'
+        required:
+        - decimal_places
+        type: object
   responses:
-    Forbidden:
-      content:
-        application/json:
-          example:
-            message: You do not have the permission to perform this operation
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Permission error
-    ClientError:
-      content:
-        application/json:
-          example:
-            message: 'Unsupported arguments: a,b,c'
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Client error
-    Unauthorized:
-      content:
-        application/json:
-          example:
-            message: Unauthorized
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Authorization error
     UnprocessableEntity:
       content:
         application/json:
@@ -1572,6 +1548,14 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Unprocessable entity error
+    Forbidden:
+      content:
+        application/json:
+          example:
+            message: You do not have the permission to perform this operation
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Permission error
     NotFound:
       content:
         application/json:
@@ -1580,7 +1564,32 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Not found error
+    Unauthorized:
+      content:
+        application/json:
+          example:
+            message: Unauthorized
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Authorization error
+    ClientError:
+      content:
+        application/json:
+          example:
+            message: 'Unsupported arguments: a,b,c'
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client error
   parameters:
+    offset:
+      description: Starting index of results (zero indexed)
+      example: 5
+      in: query
+      name: offset
+      schema:
+        default: 0
+        minimum: 0
+        type: integer
     page_size:
       description: Number of results to return per page
       example: 15
@@ -1590,15 +1599,6 @@ components:
         default: 10
         maximum: 100
         minimum: 1
-        type: integer
-    offset:
-      description: Starting index of results (zero indexed)
-      example: 5
-      in: query
-      name: offset
-      schema:
-        default: 0
-        minimum: 0
         type: integer
   securitySchemes:
     OAuth2:

@@ -296,47 +296,6 @@ paths:
       tags:
       - Uploader
 components:
-  responses:
-    UnprocessableEntity:
-      content:
-        application/json:
-          example:
-            message: Resource cannot be processed
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Unprocessable entity error
-    Forbidden:
-      content:
-        application/json:
-          example:
-            message: You do not have the permission to perform this operation
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Permission error
-    NotFound:
-      content:
-        application/json:
-          example:
-            message: Resource not found
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Not found error
-    Unauthorized:
-      content:
-        application/json:
-          example:
-            message: Unauthorized
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Authorization error
-    ClientError:
-      content:
-        application/json:
-          example:
-            message: 'Unsupported arguments: a,b,c'
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Client error
   schemas:
     Error:
       additionalProperties: true
@@ -354,6 +313,47 @@ components:
       required:
       - message
       type: object
+  responses:
+    UnprocessableEntity:
+      content:
+        application/json:
+          example:
+            message: Resource cannot be processed
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Unprocessable entity error
+    Forbidden:
+      content:
+        application/json:
+          example:
+            message: You do not have the permission to perform this operation
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Permission error
+    Unauthorized:
+      content:
+        application/json:
+          example:
+            message: Unauthorized
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Authorization error
+    ClientError:
+      content:
+        application/json:
+          example:
+            message: 'Unsupported arguments: a,b,c'
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client error
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
   securitySchemes:
     OAuth2:
       flows:

@@ -178,81 +178,6 @@ components:
       - next
       - previous
       type: object
-    TaskAssetDraftBrandComplianceRequest:
-      additionalProperties: false
-      properties:
-        categories:
-          description: List of compliance categories
-          items:
-            additionalProperties: false
-            properties:
-              criteria:
-                description: List of criteria
-                items:
-                  additionalProperties: false
-                  properties:
-                    description:
-                      description: Description of the criterion
-                      example: For all CMYK, RGB and HTML breakdowns, please refer to the full Colour Policy guideline
-                      type:
-                      - string
-                      - 'null'
-                    id:
-                      description: Unique identifier of the criterion
-                      example: 66dd74f41a335b59cd98915c
-                      type: string
-                    selected:
-                      description: Whether the criterion is selected or not
-                      example: true
-                      type:
-                      - boolean
-                      - 'null'
-                  required:
-                  - id
-                  - description
-                  - selected
-                  type: object
-                type: array
-              id:
-                description: Unique identifier of the category
-                example: 66dd74f41a335b59cd98915b
-                type: string
-              notes:
-                description: Notes left by the reviewer for the category
-                example: Look's good
-                type:
-                - string
-                - 'null'
-              status:
-                description: Brand compliance status of the category
-                enum:
-                - compliant
-                - not compliant
-                - not applicable
-                - null
-                example: compliant
-                type:
-                - string
-                - 'null'
-            required:
-            - id
-            - status
-            - notes
-            - criteria
-            type: object
-          type: array
-        status:
-          description: Brand compliance status of the draft
-          enum:
-          - approved
-          - declined
-          - not_reviewed
-          example: approved
-          type: string
-      required:
-      - status
-      - categories
-      type: object
     Error:
       additionalProperties: true
       description: Error payload
@@ -369,6 +294,81 @@ components:
       - reviewed_by
       - categories
       type: object
+    TaskAssetDraftBrandComplianceRequest:
+      additionalProperties: false
+      properties:
+        categories:
+          description: List of compliance categories
+          items:
+            additionalProperties: false
+            properties:
+              criteria:
+                description: List of criteria
+                items:
+                  additionalProperties: false
+                  properties:
+                    description:
+                      description: Description of the criterion
+                      example: For all CMYK, RGB and HTML breakdowns, please refer to the full Colour Policy guideline
+                      type:
+                      - string
+                      - 'null'
+                    id:
+                      description: Unique identifier of the criterion
+                      example: 66dd74f41a335b59cd98915c
+                      type: string
+                    selected:
+                      description: Whether the criterion is selected or not
+                      example: true
+                      type:
+                      - boolean
+                      - 'null'
+                  required:
+                  - id
+                  - description
+                  - selected
+                  type: object
+                type: array
+              id:
+                description: Unique identifier of the category
+                example: 66dd74f41a335b59cd98915b
+                type: string
+              notes:
+                description: Notes left by the reviewer for the category
+                example: Look's good
+                type:
+                - string
+                - 'null'
+              status:
+                description: Brand compliance status of the category
+                enum:
+                - compliant
+                - not compliant
+                - not applicable
+                - null
+                example: compliant
+                type:
+                - string
+                - 'null'
+            required:
+            - id
+            - status
+            - notes
+            - criteria
+            type: object
+          type: array
+        status:
+          description: Brand compliance status of the draft
+          enum:
+          - approved
+          - declined
+          - not_reviewed
+          example: approved
+          type: string
+      required:
+      - status
+      - categories
+      type: object
     BrandComplianceCategoriesResponse:
       additionalProperties: false
       properties:
@@ -403,6 +403,26 @@ components:
       - id
       - criteria
       type: object
+  parameters:
+    offset:
+      description: Starting index of results (zero indexed)
+      example: 5
+      in: query
+      name: offset
+      schema:
+        default: 0
+        minimum: 0
+        type: integer
+    page_size:
+      description: Number of results to return per page
+      example: 15
+      in: query
+      name: page_size
+      schema:
+        default: 10
+        maximum: 100
+        minimum: 1
+        type: integer
   responses:
     Forbidden:
       content:
@@ -412,14 +432,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Permission error
-    NotFound:
-      content:
-        application/json:
-          example:
-            message: Resource not found
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Not found error
     Unauthorized:
       content:
         application/json:
@@ -436,26 +448,14 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Client error
-  parameters:
-    page_size:
-      description: Number of results to return per page
-      example: 15
-      in: query
-      name: page_size
-      schema:
-        default: 10
-        maximum: 100
-        minimum: 1
-        type: integer
-    offset:
-      description: Starting index of results (zero indexed)
-      example: 5
-      in: query
-      name: offset
-      schema:
-        default: 0
-        minimum: 0
-        type: integer
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
   securitySchemes:
     OAuth2:
       flows:

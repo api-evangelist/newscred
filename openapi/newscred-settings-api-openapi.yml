@@ -130,114 +130,35 @@ paths:
       - Settings
 components:
   schemas:
-    SettingsChangeset:
+    MultipleOptionCustomField:
       additionalProperties: false
       properties:
-        create:
-          $ref: '#/components/schemas/SettingsChangesetBase'
-          description: Created settings
-          type: object
-        update:
-          $ref: '#/components/schemas/SettingsChangesetBase'
-          description: Updated settings
-          type: object
-      required:
-      - create
-      - update
-      type: object
-    LogicRule:
-      additionalProperties: false
-      properties:
-        action:
-          $ref: '#/components/schemas/LogicRuleAction'
-          description: Template logic rule action
-          type: object
-        condition:
-          $ref: '#/components/schemas/LogicRuleCondition'
-          description: Logic rule action associated condition
-          type: object
-      required:
-      - action
-      - condition
-      type: object
-    Section:
-      additionalProperties: false
-      properties:
-        id:
-          description: Id of the template section
-          example: 9ec506f480dbc2d5f6919168ae448c41
-          type: string
+        choices:
+          description: Custom field choices
+          example:
+          - choice1
+          - choice2
+          items:
+            example: choice1
+            type: string
+          type: array
         label:
-          description: Name of the template section
-          example: Test section
+          description: Name of the custom field
+          example: A custom field with choice
           type: string
       required:
       - label
-      - id
+      - choices
       type: object
-    Error:
-      additionalProperties: true
-      description: Error payload
+    Settings:
+      additionalProperties: false
       properties:
-        errors:
-          additionalProperties: true
-          description: Additional information
-          properties: {}
+        resources:
+          $ref: '#/components/schemas/SettingsResources'
+          description: Fetched settings
           type: object
-        message:
-          description: Message describing the error
-          example: Not found
-          type: string
       required:
-      - message
-      type: object
-    WorkflowLabel:
-      additionalProperties: false
-      properties:
-        default_value:
-          description: List of label names
-          example:
-          - label1
-          - label2
-          items:
-            example: label1
-            type: string
-          type: array
-        is_required:
-          description: Indicates whether a label is required
-          example: true
-          type: boolean
-        is_required_at_task_creation:
-          description: Indicates whether a label is required at task creation
-          example: false
-          type: boolean
-        label_type:
-          description: Name of the Label Group
-          example: Content Pillar
-          type: string
-      required:
-      - default_value
-      - is_required
-      - label_type
-      - is_required_at_task_creation
-      type: object
-    SettingsLabelGroupLabel:
-      additionalProperties: false
-      properties:
-        color:
-          default: null
-          description: Color of the label
-          example: '#4ECFD5'
-          type:
-          - string
-          - 'null'
-        name:
-          description: Name of the label
-          example: Pillar1
-          type: string
-      required:
-      - name
-      - color
+      - resources
       type: object
     SettingsWebhook:
       additionalProperties: false
@@ -274,134 +195,58 @@ components:
       - secret
       - event_names
       type: object
-    SettingsApp:
+    LabelOnlyCustomField:
       additionalProperties: false
       properties:
-        authorization_callback_urls:
-          description: List of the authorization callback URLs
-          example:
-          - https://example1.com
-          - https://example2.com
-          items:
-            example: https://example1.com
-            type: string
-          type: array
-        description:
-          description: Description of the app
-          example: Sample description
-          type: string
-        env:
-          description: Environment of the app
-          example: production
-          type: string
-        expose_email:
-          description: Indicates whether an email should be exposed in an API response
-          example: true
-          type: boolean
-        homepage_url:
-          description: Home page URL for app
-          example: https://example1.com
-          type: string
-        name:
-          description: Name of the app
-          example: App 1
+        label:
+          description: Name of the custom field
+          example: A Custom Field
           type: string
       required:
-      - name
-      - description
-      - homepage_url
-      - authorization_callback_urls
-      - expose_email
-      - env
+      - label
       type: object
-    SettingsChangesetBase:
+    LogicRuleAction:
       additionalProperties: false
+      description: Template logic rule action
       properties:
-        apps:
-          description: List of the app names
-          example:
-          - A App
-          items:
-            example: A App
-            type: string
-          type: array
-        custom_fields:
-          description: List of the custom field names
-          example:
-          - A Custom Field
-          items:
-            example: A Custom Field
-            type: string
-          type: array
-        labels:
-          description: List of the label names
-          example:
-          - A LabelGroup
-          items:
-            example: A LabelGroup
-            type: string
-          type: array
-        routing_rules:
-          description: List of the routing rule names
-          example:
-          - A routing Rule
-          items:
-            example: A routing Rule
-            type: string
-          type: array
-        templates:
-          description: List of the template names
-          example:
-          - A Template
-          items:
-            example: A Template
-            type: string
-          type: array
-        webhooks:
-          description: List of the webhook names
-          example:
-          - A Webhook
-          items:
-            example: A Webhook
-            type: string
-          type: array
-        workflows:
-          description: List of the workflow names
-          example:
-          - A WorkFlow
-          items:
-            example: A WorkFlow
-            type: string
-          type: array
-      required:
-      - labels
-      - custom_fields
-      - workflows
-      - webhooks
-      - apps
-      - templates
-      - routing_rules
-      type: object
-    SettingsLabelGroup:
-      additionalProperties: false
-      properties:
-        has_single_value:
-          description: Single or multiple value support indicator for the label group
-          example: true
-          type: boolean
-        label_type:
-          description: Name of the label group
-          example: Content Pillar
+        target_field:
+          $ref: '#/components/schemas/LogicRuleTargetField'
+          type: object
+        type:
+          description: Type of logic rule action
+          example: jump_to
           type: string
-        labels:
-          description: List of labels of the label group
+        values:
+          description: Values to consider on logic rule action
+          example: []
           items:
-            $ref: '#/components/schemas/SettingsLabelGroupLabel'
+            example: a choice
+            type: string
           type: array
       required:
-      - has_single_value
-      - label_type
-      - labels
+      - target_field
+      - type
+      - values
+      type: object
+    LogicRuleCondition:
+      additionalProperties: false
+      description: Logic rule action associated condition
+      properties:
+        operator:
+          description: The operator for logic rule action
+          example: equal
+          type: string
+        values:
+          description: List of labels or custom field choices
+          example:
+          - choice1
+          items:
+            example: choice1
+            type: string
+          type: array
+      required:
+      - operator
+      - values
       type: object
     SettingsTemplate:
       additionalProperties: false
@@ -467,358 +312,45 @@ components:
       - description
       - id
       type: object
-    MultipleOptionCustomField:
+    SettingsApp:
       additionalProperties: false
       properties:
-        choices:
-          description: Custom field choices
+        authorization_callback_urls:
+          description: List of the authorization callback URLs
           example:
-          - choice1
-          - choice2
+          - https://example1.com
+          - https://example2.com
           items:
-            example: choice1
+            example: https://example1.com
             type: string
-          type: array
-        label:
-          description: Name of the custom field
-          example: A custom field with choice
-          type: string
-      required:
-      - label
-      - choices
-      type: object
-    LogicRuleCondition:
-      additionalProperties: false
-      description: Logic rule action associated condition
-      properties:
-        operator:
-          description: The operator for logic rule action
-          example: equal
-          type: string
-        values:
-          description: List of labels or custom field choices
-          example:
-          - choice1
-          items:
-            example: choice1
-            type: string
-          type: array
-      required:
-      - operator
-      - values
-      type: object
-    SettingsCustomField:
-      additionalProperties: false
-      description: Settings for custom fields
-      properties:
-        checkbox:
-          description: List of checkbox custom fields
-          items:
-            $ref: '#/components/schemas/MultipleOptionCustomField'
-          type: array
-        currency:
-          description: List of currency custom fields
-          items:
-            $ref: '#/components/schemas/CurrencyCustomField'
-          type: array
-        date:
-          description: List of date custom fields
-          items:
-            $ref: '#/components/schemas/LabelOnlyCustomField'
-          type: array
-        dropdown:
-          description: List of dropdown custom fields
-          items:
-            $ref: '#/components/schemas/MultipleOptionCustomField'
-          type: array
-        image:
-          description: List of image custom fields
-          items:
-            $ref: '#/components/schemas/LabelOnlyCustomField'
-          type: array
-        multi_select_dropdown:
-          description: List of multi-select dropdown custom fields
-          items:
-            $ref: '#/components/schemas/MultipleOptionCustomField'
-          type: array
-        multichoice:
-          description: List of multichoice custom fields
-          items:
-            $ref: '#/components/schemas/MultipleOptionCustomField'
-          type: array
-        number:
-          description: List of number custom fields
-          items:
-            $ref: '#/components/schemas/NumberCustomField'
-          type: array
-        percentage:
-          description: List of percentage custom fields
-          items:
-            $ref: '#/components/schemas/PercentageCustomField'
-          type: array
-        richtext:
-          description: List of rich text custom fields
-          items:
-            $ref: '#/components/schemas/LabelOnlyCustomField'
-          type: array
-        string:
-          description: List of string custom fields
-          items:
-            $ref: '#/components/schemas/LabelOnlyCustomField'
-          type: array
-        textarea:
-          description: List of textarea custom fields
-          items:
-            $ref: '#/components/schemas/LabelOnlyCustomField'
-          type: array
-        video:
-          description: List of video custom fields
-          items:
-            $ref: '#/components/schemas/LabelOnlyCustomField'
-          type: array
-      required:
-      - currency
-      - number
-      - percentage
-      - checkbox
-      - dropdown
-      - multichoice
-      - multi_select_dropdown
-      - date
-      - image
-      - richtext
-      - string
-      - textarea
-      - video
-      type: object
-    SettingsResources:
-      additionalProperties: false
-      properties:
-        apps:
-          description: Settings apps
-          items:
-            $ref: '#/components/schemas/SettingsApp'
-          type: array
-        custom_fields:
-          $ref: '#/components/schemas/SettingsCustomField'
-          type: object
-        labels:
-          description: Settings labels
-          items:
-            $ref: '#/components/schemas/SettingsLabelGroup'
-          type: array
-        routing_rules:
-          description: Settings routing rules
-          items:
-            $ref: '#/components/schemas/SettingsRoutingRule'
-          type: array
-        templates:
-          description: Settings templates
-          items:
-            $ref: '#/components/schemas/SettingsTemplate'
-          type: array
-        webhooks:
-          description: Settings webhooks
-          items:
-            $ref: '#/components/schemas/SettingsWebhook'
-          type: array
-        workflows:
-          description: Settings workflows
-          items:
-            $ref: '#/components/schemas/SettingsWorkflow'
-          type: array
-      required:
-      - labels
-      - custom_fields
-      - workflows
-      - templates
-      - apps
-      - webhooks
-      - routing_rules
-      type: object
-    SettingsWorkflow:
-      additionalProperties: false
-      properties:
-        blacklisted_channels:
-          description: List of the disallowed channels
-          items:
-            $ref: '#/components/schemas/WorkflowChannel'
-          type: array
-        custom_fields:
-          description: List of the associated custom field
-          items:
-            $ref: '#/components/schemas/WorkflowCustomfield'
-          type: array
-        default_channels:
-          description: List of the associated channels
-          items:
-            $ref: '#/components/schemas/WorkflowChannel'
           type: array
         description:
-          default: null
-          description: Description of the workflow
+          description: Description of the app
           example: Sample description
-          type:
-          - string
-          - 'null'
-        is_flexible_workflow:
-          description: Indicates whether the workflow is flexible
-          example: false
+          type: string
+        env:
+          description: Environment of the app
+          example: production
+          type: string
+        expose_email:
+          description: Indicates whether an email should be exposed in an API response
+          example: true
           type: boolean
-        is_not_pushed_to_library_by_default:
-          description: Indicates whether the contents of the task created from this workflow are not pushed to the library by default
-          example: false
-          type: boolean
-        is_released_as_asset:
-          description: Indicates whether the contents of the task created from this workflow are released as an asset
-          example: false
-          type: boolean
-        labels:
-          description: List of the associated labels
-          items:
-            $ref: '#/components/schemas/WorkflowLabel'
-          type: array
+        homepage_url:
+          description: Home page URL for app
+          example: https://example1.com
+          type: string
         name:
-          description: Name of the workflow
-          example: A Workflow
+          description: Name of the app
+          example: App 1
           type: string
-        steps:
-          description: List of the workflow steps
-          items:
-            $ref: '#/components/schemas/WorkflowStep'
-          type: array
       required:
-      - is_flexible_workflow
-      - is_not_pushed_to_library_by_default
-      - is_released_as_asset
       - name
-      - labels
-      - custom_fields
-      - default_channels
-      - blacklisted_channels
-      - steps
       - description
-      type: object
-    LabelOnlyCustomField:
-      additionalProperties: false
-      properties:
-        label:
-          description: Name of the custom field
-          example: A Custom Field
-          type: string
-      required:
-      - label
-      type: object
-    CurrencyCustomField:
-      additionalProperties: false
-      properties:
-        currency_code:
-          default: USD
-          description: Curency code of custom field
-          example: USD
-          type: string
-        decimal_places:
-          default: null
-          description: Value of decimal places
-          example: 1
-          type:
-          - integer
-          - 'null'
-        has_thousand_separator:
-          default: false
-          description: Indicator of thousand separator
-          example: false
-          type: boolean
-        label:
-          description: Name of the custom field
-          example: A Currency Custom Field
-          type: string
-      required:
-      - label
-      - decimal_places
-      - currency_code
-      - has_thousand_separator
-      type: object
-    WorkflowCustomfield:
-      additionalProperties: false
-      properties:
-        default_value:
-          default: []
-          description: List of the custom field choices
-          example:
-          - choice1
-          - choice2
-          items:
-            example: choice1
-            type: string
-          type: array
-        field:
-          description: Name of the custom field
-          example: exampleCustomField
-          type: string
-        is_required:
-          description: Indicates whether a custom field is required
-          example: false
-          type: boolean
-        type:
-          description: Type of custom field
-          example: equal
-          type: string
-      required:
-      - is_required
-      - field
-      - default_value
-      - type
-      type: object
-    PercentageCustomField:
-      additionalProperties: false
-      properties:
-        decimal_places:
-          default: null
-          description: Value of decimal places
-          example: 1
-          type:
-          - integer
-          - 'null'
-        label:
-          description: Name of the custom field
-          example: A Percentage Custom Field
-          type: string
-      required:
-      - label
-      - decimal_places
-      type: object
-    WorkflowStep:
-      additionalProperties: false
-      properties:
-        description:
-          default: null
-          description: Description of the workflow step
-          example: This is a dummy example
-          type:
-          - string
-          - 'null'
-        duration:
-          default: null
-          description: Duration of the workflow step
-          example: 1
-          type:
-          - integer
-          - 'null'
-        label:
-          description: Name of the workflow step
-          example: Step 1
-          type: string
-        substeps:
-          description: List of the substeps
-          items:
-            $ref: '#/components/schemas/WorkflowSubStep'
-          type: array
-      required:
-      - label
-      - substeps
-      - description
-      - duration
+      - homepage_url
+      - authorization_callback_urls
+      - expose_email
+      - env
       type: object
     SettingsRoutingRule:
       additionalProperties: false
@@ -907,44 +439,176 @@ components:
       - description
       - template_name
       type: object
-    WorkflowChannel:
+    SettingsWorkflow:
       additionalProperties: false
       properties:
-        display_name:
-          description: Name of the channel
-          example: exampleChannel
-          type: string
-        type:
-          description: Type of channel
-          example: twitter
-          type: string
-      required:
-      - display_name
-      - type
-      type: object
-    LogicRuleTargetField:
-      additionalProperties: false
-      description: Template logic rule action's target field
-      properties:
-        custom_field_type:
+        blacklisted_channels:
+          description: List of the disallowed channels
+          items:
+            $ref: '#/components/schemas/WorkflowChannel'
+          type: array
+        custom_fields:
+          description: List of the associated custom field
+          items:
+            $ref: '#/components/schemas/WorkflowCustomfield'
+          type: array
+        default_channels:
+          description: List of the associated channels
+          items:
+            $ref: '#/components/schemas/WorkflowChannel'
+          type: array
+        description:
           default: null
-          description: Type of custom field if the target field is a custom field
-          example: null
+          description: Description of the workflow
+          example: Sample description
           type:
           - string
           - 'null'
-        identifier:
-          description: Name of the target field identifier
-          example: end_of_form
+        is_flexible_workflow:
+          description: Indicates whether the workflow is flexible
+          example: false
+          type: boolean
+        is_not_pushed_to_library_by_default:
+          description: Indicates whether the contents of the task created from this workflow are not pushed to the library by default
+          example: false
+          type: boolean
+        is_released_as_asset:
+          description: Indicates whether the contents of the task created from this workflow are released as an asset
+          example: false
+          type: boolean
+        labels:
+          description: List of the associated labels
+          items:
+            $ref: '#/components/schemas/WorkflowLabel'
+          type: array
+        name:
+          description: Name of the workflow
+          example: A Workflow
           type: string
-        type:
-          description: Type of the target field identifier
-          example: end_of_form
+        steps:
+          description: List of the workflow steps
+          items:
+            $ref: '#/components/schemas/WorkflowStep'
+          type: array
+      required:
+      - is_flexible_workflow
+      - is_not_pushed_to_library_by_default
+      - is_released_as_asset
+      - name
+      - labels
+      - custom_fields
+      - default_channels
+      - blacklisted_channels
+      - steps
+      - description
+      type: object
+    SettingsLabelGroupLabel:
+      additionalProperties: false
+      properties:
+        color:
+          default: null
+          description: Color of the label
+          example: '#4ECFD5'
+          type:
+          - string
+          - 'null'
+        name:
+          description: Name of the label
+          example: Pillar1
           type: string
       required:
-      - identifier
-      - custom_field_type
-      - type
+      - name
+      - color
+      type: object
+    NumberCustomField:
+      additionalProperties: false
+      properties:
+        decimal_places:
+          description: Value of decimal places
+          example: 1
+          type:
+          - integer
+          - 'null'
+        has_thousand_separator:
+          default: false
+          description: Indicator of thousand separator
+          example: false
+          type: boolean
+        label:
+          description: Name of the custom field
+          example: A Number Custom Field
+          type: string
+      required:
+      - label
+      - decimal_places
+      - has_thousand_separator
+      type: object
+    Error:
+      additionalProperties: true
+      description: Error payload
+      properties:
+        errors:
+          additionalProperties: true
+          description: Additional information
+          properties: {}
+          type: object
+        message:
+          description: Message describing the error
+          example: Not found
+          type: string
+      required:
+      - message
+      type: object
+    SettingsLabelGroup:
+      additionalProperties: false
+      properties:
+        has_single_value:
+          description: Single or multiple value support indicator for the label group
+          example: true
+          type: boolean
+        label_type:
+          description: Name of the label group
+          example: Content Pillar
+          type: string
+        labels:
+          description: List of labels of the label group
+          items:
+            $ref: '#/components/schemas/SettingsLabelGroupLabel'
+          type: array
+      required:
+      - has_single_value
+      - label_type
+      - labels
+      type: object
+    CurrencyCustomField:
+      additionalProperties: false
+      properties:
+        currency_code:
+          default: USD
+          description: Curency code of custom field
+          example: USD
+          type: string
+        decimal_places:
+          default: null
+          description: Value of decimal places
+          example: 1
+          type:
+          - integer
+          - 'null'
+        has_thousand_separator:
+          default: false
+          description: Indicator of thousand separator
+          example: false
+          type: boolean
+        label:
+          description: Name of the custom field
+          example: A Currency Custom Field
+          type: string
+      required:
+      - label
+      - decimal_places
+      - currency_code
+      - has_thousand_separator
       type: object
     WorkflowSubStep:
       additionalProperties: false
@@ -1003,53 +667,59 @@ components:
       - external_system
       - description
       type: object
-    NumberCustomField:
+    LogicRuleTargetField:
       additionalProperties: false
+      description: Template logic rule action's target field
       properties:
-        decimal_places:
-          description: Value of decimal places
-          example: 1
+        custom_field_type:
+          default: null
+          description: Type of custom field if the target field is a custom field
+          example: null
           type:
-          - integer
+          - string
           - 'null'
-        has_thousand_separator:
-          default: false
-          description: Indicator of thousand separator
-          example: false
-          type: boolean
-        label:
-          description: Name of the custom field
-          example: A Number Custom Field
+        identifier:
+          description: Name of the target field identifier
+          example: end_of_form
+          type: string
+        type:
+          description: Type of the target field identifier
+          example: end_of_form
           type: string
       required:
-      - label
-      - decimal_places
-      - has_thousand_separator
+      - identifier
+      - custom_field_type
+      - type
       type: object
-    SettingsUpdateResponse:
+    WorkflowLabel:
       additionalProperties: false
       properties:
-        changeset:
-          $ref: '#/components/schemas/SettingsChangeset'
-          description: Changeset of created or updated settings
-          type: object
-        resources:
-          $ref: '#/components/schemas/SettingsResources'
-          description: Created or updated settings
-          type: object
+        default_value:
+          description: List of label names
+          example:
+          - label1
+          - label2
+          items:
+            example: label1
+            type: string
+          type: array
+        is_required:
+          description: Indicates whether a label is required
+          example: true
+          type: boolean
+        is_required_at_task_creation:
+          description: Indicates whether a label is required at task creation
+          example: false
+          type: boolean
+        label_type:
+          description: Name of the Label Group
+          example: Content Pillar
+          type: string
       required:
-      - resources
-      - changeset
-      type: object
-    Settings:
-      additionalProperties: false
-      properties:
-        resources:
-          $ref: '#/components/schemas/SettingsResources'
-          description: Fetched settings
-          type: object
-      required:
-      - resources
+      - default_value
+      - is_required
+      - label_type
+      - is_required_at_task_creation
       type: object
     FormField:
       additionalProperties: false
@@ -1094,30 +764,368 @@ components:
       - identifier
       - custom_field_type
       type: object
-    LogicRuleAction:
+    WorkflowStep:
       additionalProperties: false
-      description: Template logic rule action
       properties:
-        target_field:
-          $ref: '#/components/schemas/LogicRuleTargetField'
-          type: object
-        type:
-          description: Type of logic rule action
-          example: jump_to
+        description:
+          default: null
+          description: Description of the workflow step
+          example: This is a dummy example
+          type:
+          - string
+          - 'null'
+        duration:
+          default: null
+          description: Duration of the workflow step
+          example: 1
+          type:
+          - integer
+          - 'null'
+        label:
+          description: Name of the workflow step
+          example: Step 1
           type: string
-        values:
-          description: Values to consider on logic rule action
-          example: []
+        substeps:
+          description: List of the substeps
           items:
-            example: a choice
+            $ref: '#/components/schemas/WorkflowSubStep'
+          type: array
+      required:
+      - label
+      - substeps
+      - description
+      - duration
+      type: object
+    WorkflowCustomfield:
+      additionalProperties: false
+      properties:
+        default_value:
+          default: []
+          description: List of the custom field choices
+          example:
+          - choice1
+          - choice2
+          items:
+            example: choice1
+            type: string
+          type: array
+        field:
+          description: Name of the custom field
+          example: exampleCustomField
+          type: string
+        is_required:
+          description: Indicates whether a custom field is required
+          example: false
+          type: boolean
+        type:
+          description: Type of custom field
+          example: equal
+          type: string
+      required:
+      - is_required
+      - field
+      - default_value
+      - type
+      type: object
+    SettingsResources:
+      additionalProperties: false
+      properties:
+        apps:
+          description: Settings apps
+          items:
+            $ref: '#/components/schemas/SettingsApp'
+          type: array
+        custom_fields:
+          $ref: '#/components/schemas/SettingsCustomField'
+          type: object
+        labels:
+          description: Settings labels
+          items:
+            $ref: '#/components/schemas/SettingsLabelGroup'
+          type: array
+        routing_rules:
+          description: Settings routing rules
+          items:
+            $ref: '#/components/schemas/SettingsRoutingRule'
+          type: array
+        templates:
+          description: Settings templates
+          items:
+            $ref: '#/components/schemas/SettingsTemplate'
+          type: array
+        webhooks:
+          description: Settings webhooks
+          items:
+            $ref: '#/components/schemas/SettingsWebhook'
+          type: array
+        workflows:
+          description: Settings workflows
+          items:
+            $ref: '#/components/schemas/SettingsWorkflow'
+          type: array
+      required:
+      - labels
+      - custom_fields
+      - workflows
+      - templates
+      - apps
+      - webhooks
+      - routing_rules
+      type: object
+    SettingsChangeset:
+      additionalProperties: false
+      properties:
+        create:
+          $ref: '#/components/schemas/SettingsChangesetBase'
+          description: Created settings
+          type: object
+        update:
+          $ref: '#/components/schemas/SettingsChangesetBase'
+          description: Updated settings
+          type: object
+      required:
+      - create
+      - update
+      type: object
+    SettingsUpdateResponse:
+      additionalProperties: false
+      properties:
+        changeset:
+          $ref: '#/components/schemas/SettingsChangeset'
+          description: Changeset of created or updated settings
+          type: object
+        resources:
+          $ref: '#/components/schemas/SettingsResources'
+          description: Created or updated settings
+          type: object
+      required:
+      - resources
+      - changeset
+      type: object
+    SettingsChangesetBase:
+      additionalProperties: false
+      properties:
+        apps:
+          description: List of the app names
+          example:
+          - A App
+          items:
+            example: A App
+            type: string
+          type: array
+        custom_fields:
+          description: List of the custom field names
+          example:
+          - A Custom Field
+          items:
+            example: A Custom Field
+            type: string
+          type: array
+        labels:
+          description: List of the label names
+          example:
+          - A LabelGroup
+          items:
+            example: A LabelGroup
+            type: string
+          type: array
+        routing_rules:
+          description: List of the routing rule names
+          example:
+          - A routing Rule
+          items:
+            example: A routing Rule
+            type: string
+          type: array
+        templates:
+          description: List of the template names
+          example:
+          - A Template
+          items:
+            example: A Template
+            type: string
+          type: array
+        webhooks:
+          description: List of the webhook names
+          example:
+          - A Webhook
+          items:
+            example: A Webhook
+            type: string
+          type: array
+        workflows:
+          description: List of the workflow names
+          example:
+          - A WorkFlow
+          items:
+            example: A WorkFlow
             type: string
           type: array
       required:
-      - target_field
+      - labels
+      - custom_fields
+      - workflows
+      - webhooks
+      - apps
+      - templates
+      - routing_rules
+      type: object
+    SettingsCustomField:
+      additionalProperties: false
+      description: Settings for custom fields
+      properties:
+        checkbox:
+          description: List of checkbox custom fields
+          items:
+            $ref: '#/components/schemas/MultipleOptionCustomField'
+          type: array
+        currency:
+          description: List of currency custom fields
+          items:
+            $ref: '#/components/schemas/CurrencyCustomField'
+          type: array
+        date:
+          description: List of date custom fields
+          items:
+            $ref: '#/components/schemas/LabelOnlyCustomField'
+          type: array
+        dropdown:
+          description: List of dropdown custom fields
+          items:
+            $ref: '#/components/schemas/MultipleOptionCustomField'
+          type: array
+        image:
+          description: List of image custom fields
+          items:
+            $ref: '#/components/schemas/LabelOnlyCustomField'
+          type: array
+        multi_select_dropdown:
+          description: List of multi-select dropdown custom fields
+          items:
+            $ref: '#/components/schemas/MultipleOptionCustomField'
+          type: array
+        multichoice:
+          description: List of multichoice custom fields
+          items:
+            $ref: '#/components/schemas/MultipleOptionCustomField'
+          type: array
+        number:
+          description: List of number custom fields
+          items:
+            $ref: '#/components/schemas/NumberCustomField'
+          type: array
+        percentage:
+          description: List of percentage custom fields
+          items:
+            $ref: '#/components/schemas/PercentageCustomField'
+          type: array
+        richtext:
+          description: List of rich text custom fields
+          items:
+            $ref: '#/components/schemas/LabelOnlyCustomField'
+          type: array
+        string:
+          description: List of string custom fields
+          items:
+            $ref: '#/components/schemas/LabelOnlyCustomField'
+          type: array
+        textarea:
+          description: List of textarea custom fields
+          items:
+            $ref: '#/components/schemas/LabelOnlyCustomField'
+          type: array
+        video:
+          description: List of video custom fields
+          items:
+            $ref: '#/components/schemas/LabelOnlyCustomField'
+          type: array
+      required:
+      - currency
+      - number
+      - percentage
+      - checkbox
+      - dropdown
+      - multichoice
+      - multi_select_dropdown
+      - date
+      - image
+      - richtext
+      - string
+      - textarea
+      - video
+      type: object
+    Section:
+      additionalProperties: false
+      properties:
+        id:
+          description: Id of the template section
+          example: 9ec506f480dbc2d5f6919168ae448c41
+          type: string
+        label:
+          description: Name of the template section
+          example: Test section
+          type: string
+      required:
+      - label
+      - id
+      type: object
+    WorkflowChannel:
+      additionalProperties: false
+      properties:
+        display_name:
+          description: Name of the channel
+          example: exampleChannel
+          type: string
+        type:
+          description: Type of channel
+          example: twitter
+          type: string
+      required:
+      - display_name
       - type
-      - values
+      type: object
+    LogicRule:
+      additionalProperties: false
+      properties:
+        action:
+          $ref: '#/components/schemas/LogicRuleAction'
+          description: Template logic rule action
+          type: object
+        condition:
+          $ref: '#/components/schemas/LogicRuleCondition'
+          description: Logic rule action associated condition
+          type: object
+      required:
+      - action
+      - condition
+      type: object
+    PercentageCustomField:
+      additionalProperties: false
+      properties:
+        decimal_places:
+          default: null
+          description: Value of decimal places
+          example: 1
+          type:
+          - integer
+          - 'null'
+        label:
+          description: Name of the custom field
+          example: A Percentage Custom Field
+          type: string
+      required:
+      - label
+      - decimal_places
       type: object
   responses:
+    UnprocessableEntity:
+      content:
+        application/json:
+          example:
+            message: Resource cannot be processed
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Unprocessable entity error
     Forbidden:
       content:
         application/json:
@@ -1134,14 +1142,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Authorization error
-    UnprocessableEntity:
-      content:
-        application/json:
-          example:
-            message: Resource cannot be processed
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Unprocessable entity error
   securitySchemes:
     OAuth2:
       flows:

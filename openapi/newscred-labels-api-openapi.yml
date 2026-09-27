@@ -87,22 +87,6 @@ components:
       - next
       - previous
       type: object
-    LabelGroupValue:
-      additionalProperties: false
-      description: Values of a label group
-      properties:
-        id:
-          description: Unique identifier for the label group value
-          example: 1693bd22eac001bae8f33eab29ee5bc2
-          type: string
-        name:
-          description: Name of the label group value
-          example: Pillar 1
-          type: string
-      required:
-      - id
-      - name
-      type: object
     Error:
       additionalProperties: true
       description: Error payload
@@ -153,6 +137,42 @@ components:
       - source_org_type
       - values
       type: object
+    LabelGroupValue:
+      additionalProperties: false
+      description: Values of a label group
+      properties:
+        id:
+          description: Unique identifier for the label group value
+          example: 1693bd22eac001bae8f33eab29ee5bc2
+          type: string
+        name:
+          description: Name of the label group value
+          example: Pillar 1
+          type: string
+      required:
+      - id
+      - name
+      type: object
+  parameters:
+    offset:
+      description: Starting index of results (zero indexed)
+      example: 5
+      in: query
+      name: offset
+      schema:
+        default: 0
+        minimum: 0
+        type: integer
+    page_size:
+      description: Number of results to return per page
+      example: 15
+      in: query
+      name: page_size
+      schema:
+        default: 10
+        maximum: 100
+        minimum: 1
+        type: integer
   responses:
     Forbidden:
       content:
@@ -178,26 +198,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Client error
-  parameters:
-    page_size:
-      description: Number of results to return per page
-      example: 15
-      in: query
-      name: page_size
-      schema:
-        default: 10
-        maximum: 100
-        minimum: 1
-        type: integer
-    offset:
-      description: Starting index of results (zero indexed)
-      example: 5
-      in: query
-      name: offset
-      schema:
-        default: 0
-        minimum: 0
-        type: integer
   securitySchemes:
     OAuth2:
       flows:

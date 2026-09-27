@@ -208,84 +208,45 @@ paths:
       - Templates
 components:
   schemas:
-    TemplateLogicRuleAction:
+    Pagination:
       additionalProperties: false
-      description: Action to perform for the rule
+      description: Pagination related information
       properties:
-        target_field:
-          description: Target field for the action
-          properties:
-            identifier:
-              description: Identifier of the target field
-              example: 70ca0e8a954911ecb4be0242ac160014
-              type: string
-          required:
-          - identifier
-          type: object
-        type:
-          description: Type of the action
-          enum:
-          - jump_to
-          - show_values
-          example: show_values
-          type: string
-        values:
-          description: Values for the action
-          items:
-            example: 73e05aa2b5d311eca17f0242ac160019
-            type: string
-          type: array
+        next:
+          description: URL to the next page
+          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
+          type:
+          - string
+          - 'null'
+        previous:
+          description: URL to the previous page
+          example: null
+          type:
+          - string
+          - 'null'
       required:
-      - target_field
-      - type
-      - values
+      - next
+      - previous
       type: object
-    TemplateResponse:
+    TemplateInstructionFormField:
       allOf:
-      - $ref: '#/components/schemas/BaseTemplateResponse'
+      - $ref: '#/components/schemas/BaseTemplateFormField'
       - properties:
-          form_fields:
-            description: List of form fields
-            items:
-              discriminator:
-                mapping:
-                  brief: '#/components/schemas/TemplateDefaultFormField'
-                  checkbox: '#/components/schemas/TemplateChoiceFormField'
-                  currency_number: '#/components/schemas/TemplateCurrencyNumberFormField'
-                  date: '#/components/schemas/TemplateDefaultFormField'
-                  dropdown: '#/components/schemas/TemplateChoiceFormField'
-                  file: '#/components/schemas/TemplateDefaultFormField'
-                  instruction: '#/components/schemas/TemplateInstructionFormField'
-                  label: '#/components/schemas/TemplateChoiceFormField'
-                  percentage_number: '#/components/schemas/TemplatePercentageNumberFormField'
-                  radio_button: '#/components/schemas/TemplateChoiceFormField'
-                  richtext: '#/components/schemas/TemplateDefaultFormField'
-                  section: '#/components/schemas/TemplateDefaultFormField'
-                  simple_number: '#/components/schemas/TemplateSimpleNumberFormField'
-                  text: '#/components/schemas/TemplateDefaultFormField'
-                  text_area: '#/components/schemas/TemplateDefaultFormField'
-                propertyName: type
-              oneOf:
-              - $ref: '#/components/schemas/TemplateDefaultFormField'
-              - $ref: '#/components/schemas/TemplateCurrencyNumberFormField'
-              - $ref: '#/components/schemas/TemplateSimpleNumberFormField'
-              - $ref: '#/components/schemas/TemplatePercentageNumberFormField'
-              - $ref: '#/components/schemas/TemplateChoiceFormField'
-              - $ref: '#/components/schemas/TemplateInstructionFormField'
-            type: array
-          links:
-            description: Meta links
+          logic_rules:
+            $ref: '#/components/schemas/TemplateLogicRule'
+          type_specific_meta:
+            description: Type-specific meta-information
             properties:
-              self:
-                description: URL of the template
-                example: https://api.cmp.optimizely.com/v3/templates/9119a313057e401189407116fcd3aa24
+              description:
+                description: Description of the field
+                example: just a message to inform something
                 type: string
             required:
-            - self
+            - description
             type: object
         required:
-        - form_fields
-        - links
+        - type_specific_meta
+        - logic_rules
         type: object
     Error:
       additionalProperties: true
@@ -367,48 +328,6 @@ components:
       - sort_order
       - type
       type: object
-    Pagination:
-      additionalProperties: false
-      description: Pagination related information
-      properties:
-        next:
-          description: URL to the next page
-          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
-          type:
-          - string
-          - 'null'
-        previous:
-          description: URL to the previous page
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - next
-      - previous
-      type: object
-    TemplateLogicRuleCondition:
-      additionalProperties: false
-      description: Condition of the rule
-      properties:
-        operator:
-          description: Operator of the condition
-          enum:
-          - any_of
-          - equal
-          - not_equal
-          example: any_of
-          type: string
-        values:
-          description: Values of the condition
-          items:
-            example: 4a8b901e9fd911ecbefa0242ac160019
-            type: string
-          type: array
-      required:
-      - operator
-      - values
-      type: object
     TemplateListResponse:
       additionalProperties: false
       properties:
@@ -446,20 +365,138 @@ components:
       - data
       - pagination
       type: object
-    ResourceChoiceResponse:
+    TemplateDefaultFormField:
+      allOf:
+      - $ref: '#/components/schemas/BaseTemplateFormField'
+      - properties:
+          logic_rules:
+            $ref: '#/components/schemas/TemplateLogicRule'
+          type_specific_meta:
+            description: Type-specific meta-information
+            enum:
+            - null
+            example: null
+            type:
+            - object
+            - 'null'
+        required:
+        - type_specific_meta
+        - logic_rules
+        type: object
+    TemplateChoiceFormField:
+      allOf:
+      - $ref: '#/components/schemas/BaseTemplateFormField'
+      - properties:
+          logic_rules:
+            $ref: '#/components/schemas/TemplateLogicRule'
+          type_specific_meta:
+            description: Type-specific meta-information
+            properties:
+              choices:
+                description: Choices for the field
+                items:
+                  $ref: '#/components/schemas/ResourceChoiceResponse'
+                type: array
+              is_multi_select:
+                description: Whether multiple selection is allowed
+                example: true
+                type: boolean
+            required:
+            - is_multi_select
+            - choices
+            type: object
+        required:
+        - type_specific_meta
+        - logic_rules
+        type: object
+    TemplateLogicRule:
+      description: List of logic rules
+      items:
+        properties:
+          action:
+            $ref: '#/components/schemas/TemplateLogicRuleAction'
+          condition:
+            $ref: '#/components/schemas/TemplateLogicRuleCondition'
+        required:
+        - condition
+        - action
+        type: object
+      type: array
+    TemplatePercentageNumberFormField:
+      allOf:
+      - $ref: '#/components/schemas/BaseTemplateFormField'
+      - properties:
+          logic_rules:
+            $ref: '#/components/schemas/TemplateLogicRule'
+          type_specific_meta:
+            description: Type-specific meta-information
+            properties:
+              decimal_places:
+                description: Decimal places allowed for the field
+                example: 2
+                type:
+                - integer
+                - 'null'
+            required:
+            - decimal_places
+            type: object
+        required:
+        - type_specific_meta
+        - logic_rules
+        type: object
+    TemplateLogicRuleCondition:
       additionalProperties: false
+      description: Condition of the rule
       properties:
-        id:
-          description: Unique identifier of the choice
-          example: 9119a313057e401189407116fcd3
+        operator:
+          description: Operator of the condition
+          enum:
+          - any_of
+          - equal
+          - not_equal
+          example: any_of
           type: string
-        name:
-          description: Name of the choice
-          example: Some choice
-          type: string
+        values:
+          description: Values of the condition
+          items:
+            example: 4a8b901e9fd911ecbefa0242ac160019
+            type: string
+          type: array
       required:
-      - id
-      - name
+      - operator
+      - values
+      type: object
+    TemplateLogicRuleAction:
+      additionalProperties: false
+      description: Action to perform for the rule
+      properties:
+        target_field:
+          description: Target field for the action
+          properties:
+            identifier:
+              description: Identifier of the target field
+              example: 70ca0e8a954911ecb4be0242ac160014
+              type: string
+          required:
+          - identifier
+          type: object
+        type:
+          description: Type of the action
+          enum:
+          - jump_to
+          - show_values
+          example: show_values
+          type: string
+        values:
+          description: Values for the action
+          items:
+            example: 73e05aa2b5d311eca17f0242ac160019
+            type: string
+          type: array
+      required:
+      - target_field
+      - type
+      - values
       type: object
     TemplateCurrencyNumberFormField:
       allOf:
@@ -520,66 +557,6 @@ components:
         - type_specific_meta
         - logic_rules
         type: object
-    TemplateInstructionFormField:
-      allOf:
-      - $ref: '#/components/schemas/BaseTemplateFormField'
-      - properties:
-          logic_rules:
-            $ref: '#/components/schemas/TemplateLogicRule'
-          type_specific_meta:
-            description: Type-specific meta-information
-            properties:
-              description:
-                description: Description of the field
-                example: just a message to inform something
-                type: string
-            required:
-            - description
-            type: object
-        required:
-        - type_specific_meta
-        - logic_rules
-        type: object
-    TemplateDefaultFormField:
-      allOf:
-      - $ref: '#/components/schemas/BaseTemplateFormField'
-      - properties:
-          logic_rules:
-            $ref: '#/components/schemas/TemplateLogicRule'
-          type_specific_meta:
-            description: Type-specific meta-information
-            enum:
-            - null
-            example: null
-            type:
-            - object
-            - 'null'
-        required:
-        - type_specific_meta
-        - logic_rules
-        type: object
-    TemplatePercentageNumberFormField:
-      allOf:
-      - $ref: '#/components/schemas/BaseTemplateFormField'
-      - properties:
-          logic_rules:
-            $ref: '#/components/schemas/TemplateLogicRule'
-          type_specific_meta:
-            description: Type-specific meta-information
-            properties:
-              decimal_places:
-                description: Decimal places allowed for the field
-                example: 2
-                type:
-                - integer
-                - 'null'
-            required:
-            - decimal_places
-            type: object
-        required:
-        - type_specific_meta
-        - logic_rules
-        type: object
     BaseTemplateResponse:
       additionalProperties: false
       properties:
@@ -616,44 +593,67 @@ components:
       - description
       - applicable_to
       type: object
-    TemplateLogicRule:
-      description: List of logic rules
-      items:
-        properties:
-          action:
-            $ref: '#/components/schemas/TemplateLogicRuleAction'
-          condition:
-            $ref: '#/components/schemas/TemplateLogicRuleCondition'
-        required:
-        - condition
-        - action
-        type: object
-      type: array
-    TemplateChoiceFormField:
+    ResourceChoiceResponse:
+      additionalProperties: false
+      properties:
+        id:
+          description: Unique identifier of the choice
+          example: 9119a313057e401189407116fcd3
+          type: string
+        name:
+          description: Name of the choice
+          example: Some choice
+          type: string
+      required:
+      - id
+      - name
+      type: object
+    TemplateResponse:
       allOf:
-      - $ref: '#/components/schemas/BaseTemplateFormField'
+      - $ref: '#/components/schemas/BaseTemplateResponse'
       - properties:
-          logic_rules:
-            $ref: '#/components/schemas/TemplateLogicRule'
-          type_specific_meta:
-            description: Type-specific meta-information
+          form_fields:
+            description: List of form fields
+            items:
+              discriminator:
+                mapping:
+                  brief: '#/components/schemas/TemplateDefaultFormField'
+                  checkbox: '#/components/schemas/TemplateChoiceFormField'
+                  currency_number: '#/components/schemas/TemplateCurrencyNumberFormField'
+                  date: '#/components/schemas/TemplateDefaultFormField'
+                  dropdown: '#/components/schemas/TemplateChoiceFormField'
+                  file: '#/components/schemas/TemplateDefaultFormField'
+                  instruction: '#/components/schemas/TemplateInstructionFormField'
+                  label: '#/components/schemas/TemplateChoiceFormField'
+                  percentage_number: '#/components/schemas/TemplatePercentageNumberFormField'
+                  radio_button: '#/components/schemas/TemplateChoiceFormField'
+                  richtext: '#/components/schemas/TemplateDefaultFormField'
+                  section: '#/components/schemas/TemplateDefaultFormField'
+                  simple_number: '#/components/schemas/TemplateSimpleNumberFormField'
+                  text: '#/components/schemas/TemplateDefaultFormField'
+                  text_area: '#/components/schemas/TemplateDefaultFormField'
+                propertyName: type
+              oneOf:
+              - $ref: '#/components/schemas/TemplateDefaultFormField'
+              - $ref: '#/components/schemas/TemplateCurrencyNumberFormField'
+              - $ref: '#/components/schemas/TemplateSimpleNumberFormField'
+              - $ref: '#/components/schemas/TemplatePercentageNumberFormField'
+              - $ref: '#/components/schemas/TemplateChoiceFormField'
+              - $ref: '#/components/schemas/TemplateInstructionFormField'
+            type: array
+          links:
+            description: Meta links
             properties:
-              choices:
-                description: Choices for the field
-                items:
-                  $ref: '#/components/schemas/ResourceChoiceResponse'
-                type: array
-              is_multi_select:
-                description: Whether multiple selection is allowed
-                example: true
-                type: boolean
+              self:
+                description: URL of the template
+                example: https://api.cmp.optimizely.com/v3/templates/9119a313057e401189407116fcd3aa24
+                type: string
             required:
-            - is_multi_select
-            - choices
+            - self
             type: object
         required:
-        - type_specific_meta
-        - logic_rules
+        - form_fields
+        - links
         type: object
   responses:
     Forbidden:
@@ -664,22 +664,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Permission error
-    ClientError:
-      content:
-        application/json:
-          example:
-            message: 'Unsupported arguments: a,b,c'
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Client error
-    Unauthorized:
-      content:
-        application/json:
-          example:
-            message: Unauthorized
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Authorization error
     NotFound:
       content:
         application/json:
@@ -688,7 +672,32 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Not found error
+    Unauthorized:
+      content:
+        application/json:
+          example:
+            message: Unauthorized
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Authorization error
+    ClientError:
+      content:
+        application/json:
+          example:
+            message: 'Unsupported arguments: a,b,c'
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client error
   parameters:
+    offset:
+      description: Starting index of results (zero indexed)
+      example: 5
+      in: query
+      name: offset
+      schema:
+        default: 0
+        minimum: 0
+        type: integer
     page_size:
       description: Number of results to return per page
       example: 15
@@ -698,15 +707,6 @@ components:
         default: 10
         maximum: 100
         minimum: 1
-        type: integer
-    offset:
-      description: Starting index of results (zero indexed)
-      example: 5
-      in: query
-      name: offset
-      schema:
-        default: 0
-        minimum: 0
         type: integer
   securitySchemes:
     OAuth2:
