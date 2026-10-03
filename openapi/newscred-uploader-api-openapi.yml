@@ -296,23 +296,6 @@ paths:
       tags:
       - Uploader
 components:
-  schemas:
-    Error:
-      additionalProperties: true
-      description: Error payload
-      properties:
-        errors:
-          additionalProperties: true
-          description: Additional information
-          properties: {}
-          type: object
-        message:
-          description: Message describing the error
-          example: Not found
-          type: string
-      required:
-      - message
-      type: object
   responses:
     UnprocessableEntity:
       content:
@@ -322,6 +305,14 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Unprocessable entity error
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
     Forbidden:
       content:
         application/json:
@@ -346,14 +337,23 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Client error
-    NotFound:
-      content:
-        application/json:
-          example:
-            message: Resource not found
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Not found error
+  schemas:
+    Error:
+      additionalProperties: true
+      description: Error payload
+      properties:
+        errors:
+          additionalProperties: true
+          description: Additional information
+          properties: {}
+          type: object
+        message:
+          description: Message describing the error
+          example: Not found
+          type: string
+      required:
+      - message
+      type: object
   securitySchemes:
     OAuth2:
       flows:

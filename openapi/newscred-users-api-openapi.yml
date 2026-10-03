@@ -102,90 +102,6 @@ paths:
       - Users
 components:
   schemas:
-    UserResponse:
-      additionalProperties: false
-      properties:
-        email:
-          description: Email of the user – null unless the application is configured to expose the user email
-          example: john.doe@example.com
-          type:
-          - string
-          - 'null'
-        first_name:
-          description: First name of the user
-          example: John
-          type: string
-        full_name:
-          description: Full name of the user
-          example: John Doe
-          type: string
-        id:
-          description: Unique identifier of the user
-          example: 5fe4925ef8a9378056bf4e37
-          type: string
-        image_url:
-          description: URL of the profile picture of the user – null if the user has not provided an image
-          example: https://images.cmp.optimizely.com/6a485f72ba424f9397c71ddf0cfb8f59
-          type:
-          - string
-          - 'null'
-        last_name:
-          description: Last name of the user
-          example: Doe
-          type: string
-        links:
-          additionalProperties: false
-          description: Meta links
-          properties:
-            self:
-              description: URL of the user
-              example: https://api.cmp.optimizely.com/v3/users/5fe4925ef8a9378056bf4e37
-              type: string
-          type: object
-      required:
-      - id
-      - first_name
-      - last_name
-      - full_name
-      - email
-      - image_url
-      type: object
-    Pagination:
-      additionalProperties: false
-      description: Pagination related information
-      properties:
-        next:
-          description: URL to the next page
-          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
-          type:
-          - string
-          - 'null'
-        previous:
-          description: URL to the previous page
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - next
-      - previous
-      type: object
-    Error:
-      additionalProperties: true
-      description: Error payload
-      properties:
-        errors:
-          additionalProperties: true
-          description: Additional information
-          properties: {}
-          type: object
-        message:
-          description: Message describing the error
-          example: Not found
-          type: string
-      required:
-      - message
-      type: object
     UserListResponseItem:
       additionalProperties: false
       properties:
@@ -281,6 +197,90 @@ components:
       - data
       - pagination
       type: object
+    Error:
+      additionalProperties: true
+      description: Error payload
+      properties:
+        errors:
+          additionalProperties: true
+          description: Additional information
+          properties: {}
+          type: object
+        message:
+          description: Message describing the error
+          example: Not found
+          type: string
+      required:
+      - message
+      type: object
+    Pagination:
+      additionalProperties: false
+      description: Pagination related information
+      properties:
+        next:
+          description: URL to the next page
+          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
+          type:
+          - string
+          - 'null'
+        previous:
+          description: URL to the previous page
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - next
+      - previous
+      type: object
+    UserResponse:
+      additionalProperties: false
+      properties:
+        email:
+          description: Email of the user – null unless the application is configured to expose the user email
+          example: john.doe@example.com
+          type:
+          - string
+          - 'null'
+        first_name:
+          description: First name of the user
+          example: John
+          type: string
+        full_name:
+          description: Full name of the user
+          example: John Doe
+          type: string
+        id:
+          description: Unique identifier of the user
+          example: 5fe4925ef8a9378056bf4e37
+          type: string
+        image_url:
+          description: URL of the profile picture of the user – null if the user has not provided an image
+          example: https://images.cmp.optimizely.com/6a485f72ba424f9397c71ddf0cfb8f59
+          type:
+          - string
+          - 'null'
+        last_name:
+          description: Last name of the user
+          example: Doe
+          type: string
+        links:
+          additionalProperties: false
+          description: Meta links
+          properties:
+            self:
+              description: URL of the user
+              example: https://api.cmp.optimizely.com/v3/users/5fe4925ef8a9378056bf4e37
+              type: string
+          type: object
+      required:
+      - id
+      - first_name
+      - last_name
+      - full_name
+      - email
+      - image_url
+      type: object
   parameters:
     offset:
       description: Starting index of results (zero indexed)
@@ -302,6 +302,14 @@ components:
         minimum: 1
         type: integer
   responses:
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
     Forbidden:
       content:
         application/json:
@@ -326,14 +334,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Client error
-    NotFound:
-      content:
-        application/json:
-          example:
-            message: Resource not found
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Not found error
   securitySchemes:
     OAuth2:
       flows:

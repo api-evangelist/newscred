@@ -262,41 +262,6 @@ components:
       allOf:
       - $ref: '#/components/schemas/BaseObjectField'
       - $ref: '#/components/schemas/DropdownTypeObjectFieldUpdatePayload'
-    Pagination:
-      additionalProperties: false
-      description: Pagination related information
-      properties:
-        next:
-          description: URL to the next page
-          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
-          type:
-          - string
-          - 'null'
-        previous:
-          description: URL to the previous page
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - next
-      - previous
-      type: object
-    StringTypeObjectFieldUpdatePayload:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
-      - properties:
-          values:
-            description: Any single string
-            items:
-              example: This is a test string
-              type: string
-            type: array
-        type: object
-    NumberTypeObjectField:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectField'
-      - $ref: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
     EventUpdateRequest:
       additionalProperties: false
       properties:
@@ -323,6 +288,88 @@ components:
           example: The awesome event
           type: string
       type: object
+    FieldTypeRadio:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - properties:
+          choices:
+            description: Choices of the radio button
+            items:
+              properties:
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Radio 1 Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              - color
+              type: object
+            type: array
+        required:
+        - choices
+        type: object
+    FieldTypeCheckbox:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - properties:
+          choices:
+            description: Choices of the checkbox
+            items:
+              properties:
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Checkbox 1 Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              - color
+              type: object
+            type: array
+        required:
+        - choices
+        type: object
+    BaseObjectFieldUpdatePayload:
+      properties:
+        type:
+          description: Type of the field
+          example: checkbox
+          type: string
+        values:
+          description: Values for the campaign field
+          type: array
+      required:
+      - type
+      - values
+      type: object
+    AssetTypeObjectField:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectField'
+      - $ref: '#/components/schemas/AssetTypeObjectFieldUpdatePayload'
+    DateTypeObjectField:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectField'
+      - $ref: '#/components/schemas/DateTypeObjectFieldUpdatePayload'
+    BaseObjectField:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
+      - properties:
+          id:
+            description: Unique identifier of the field
+            example: 41aac313bda1e40b6cde7116fc24a
+            type: string
+        required:
+        - id
+        type: object
     AssetTypeObjectFieldUpdatePayload:
       allOf:
       - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
@@ -346,98 +393,32 @@ components:
             maxItems: 1
             type: array
         type: object
-    MultiChoiceTypeObjectField:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectField'
-      - $ref: '#/components/schemas/MultiChoiceTypeObjectFieldUpdatePayload'
-    FieldTypeSimpleNumber:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - properties:
-          decimal_places:
-            description: Decimal place of the numerical field
-            example: 2
-            type:
-            - integer
-            - 'null'
-          has_thousand_separator:
-            description: Whether the numerical field has a thousand separator
-            example: true
-            type: boolean
-        required:
-        - has_thousand_separator
-        - decimal_places
-        type: object
-    RadioButtonTypeObjectField:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectField'
-      - $ref: '#/components/schemas/RadioButtonTypeObjectFieldUpdatePayload'
-    FieldTypeCommon:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - type: object
-    Error:
-      additionalProperties: true
-      description: Error payload
-      properties:
-        errors:
-          additionalProperties: true
-          description: Additional information
-          properties: {}
-          type: object
-        message:
-          description: Message describing the error
-          example: Not found
-          type: string
-      required:
-      - message
-      type: object
-    FieldTypeDropdown:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - properties:
-          choices:
-            description: Choices of the dropdown
-            items:
-              properties:
-                id:
-                  description: Identifier of the choice
-                  example: 6ceee2f4fa3411ecb37802420ac8001b
-                  type: string
-                name:
-                  description: Name of the choice
-                  example: Dropdown 1 Choice 1
-                  type: string
-              required:
-              - id
-              - name
-              type: object
-            type: array
-          is_multi_select:
-            description: Select multiple values from the dropdown
-            type: boolean
-        required:
-        - is_multi_select
-        - choices
-        type: object
-    DateTypeObjectFieldUpdatePayload:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
-      - properties:
-          values:
-            description: Array of date-time values, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
-            items:
-              description: Date and time, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
-              example: '2020-02-10T10:40:45Z'
-              format: date-time
-              type: string
-            maxItems: 1
-            type: array
-        type: object
-    AssetTypeObjectField:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectField'
-      - $ref: '#/components/schemas/AssetTypeObjectFieldUpdatePayload'
+    FieldListResponseItem:
+      discriminator:
+        mapping:
+          checkbox: '#/components/schemas/FieldTypeCheckbox'
+          currency_number: '#/components/schemas/FieldTypeCurrencyNumber'
+          date: '#/components/schemas/FieldTypeCommon'
+          dropdown: '#/components/schemas/FieldTypeDropdown'
+          image: '#/components/schemas/FieldTypeCommon'
+          label: '#/components/schemas/FieldTypeLabel'
+          percentage_number: '#/components/schemas/FieldTypePercentageNumber'
+          radio_button: '#/components/schemas/FieldTypeRadio'
+          rich_text: '#/components/schemas/FieldTypeCommon'
+          simple_number: '#/components/schemas/FieldTypeSimpleNumber'
+          text: '#/components/schemas/FieldTypeCommon'
+          text_area: '#/components/schemas/FieldTypeCommon'
+          video: '#/components/schemas/FieldTypeCommon'
+        propertyName: type
+      oneOf:
+      - $ref: '#/components/schemas/FieldTypeCommon'
+      - $ref: '#/components/schemas/FieldTypeLabel'
+      - $ref: '#/components/schemas/FieldTypeDropdown'
+      - $ref: '#/components/schemas/FieldTypeRadio'
+      - $ref: '#/components/schemas/FieldTypeCheckbox'
+      - $ref: '#/components/schemas/FieldTypeSimpleNumber'
+      - $ref: '#/components/schemas/FieldTypePercentageNumber'
+      - $ref: '#/components/schemas/FieldTypeCurrencyNumber'
     FieldBaseType:
       additionalProperties: false
       properties:
@@ -464,54 +445,6 @@ components:
       - type
       - values
       type: object
-    RadioButtonTypeObjectFieldUpdatePayload:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
-      - properties:
-          values:
-            description: Accepts a single choice Id.
-            items:
-              example: 9119a313057e401189407116fcd3
-              type: string
-            maxItems: 1
-            type: array
-        type: object
-    BaseObjectField:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
-      - properties:
-          id:
-            description: Unique identifier of the field
-            example: 41aac313bda1e40b6cde7116fc24a
-            type: string
-        required:
-        - id
-        type: object
-    FieldTypeRadio:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - properties:
-          choices:
-            description: Choices of the radio button
-            items:
-              properties:
-                id:
-                  description: Identifier of the choice
-                  example: 6ceee2f4fa3411ecb37802420ac8001b
-                  type: string
-                name:
-                  description: Name of the choice
-                  example: Radio 1 Choice 1
-                  type: string
-              required:
-              - id
-              - name
-              - color
-              type: object
-            type: array
-        required:
-        - choices
-        type: object
     EventCreateRequest:
       additionalProperties: false
       properties:
@@ -578,29 +511,37 @@ components:
       - start_date
       - end_date
       type: object
-    DropdownTypeObjectFieldUpdatePayload:
+    MultiChoiceTypeObjectFieldUpdatePayload:
       allOf:
       - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
       - properties:
           values:
-            description: Array of choice ID. Multiple choice values are not acceptable for `is_multi_select=false`.
+            description: Array of choice IDs
             items:
               example: 9119a313057e401189407116fcd3
               type: string
             type: array
         type: object
-    NumberTypeObjectFieldUpdatePayload:
+    NumberTypeObjectField:
       allOf:
-      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
-      - properties:
-          values:
-            description: Accepts a single numeric value
-            items:
-              example: 200
-              type: number
-            maxItems: 1
-            type: array
-        type: object
+      - $ref: '#/components/schemas/BaseObjectField'
+      - $ref: '#/components/schemas/NumberTypeObjectFieldUpdatePayload'
+    Error:
+      additionalProperties: true
+      description: Error payload
+      properties:
+        errors:
+          additionalProperties: true
+          description: Additional information
+          properties: {}
+          type: object
+        message:
+          description: Message describing the error
+          example: Not found
+          type: string
+      required:
+      - message
+      type: object
     EventResponse:
       additionalProperties: false
       properties:
@@ -678,12 +619,55 @@ components:
       - created_by
       - links
       type: object
-    FieldTypeLabel:
+    Pagination:
+      additionalProperties: false
+      description: Pagination related information
+      properties:
+        next:
+          description: URL to the next page
+          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
+          type:
+          - string
+          - 'null'
+        previous:
+          description: URL to the previous page
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - next
+      - previous
+      type: object
+    StringTypeObjectFieldUpdatePayload:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
+      - properties:
+          values:
+            description: Any single string
+            items:
+              example: This is a test string
+              type: string
+            type: array
+        type: object
+    RadioButtonTypeObjectFieldUpdatePayload:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
+      - properties:
+          values:
+            description: Accepts a single choice Id.
+            items:
+              example: 9119a313057e401189407116fcd3
+              type: string
+            maxItems: 1
+            type: array
+        type: object
+    FieldTypeDropdown:
       allOf:
       - $ref: '#/components/schemas/FieldBaseType'
       - properties:
           choices:
-            description: Choices of the label
+            description: Choices of the dropdown
             items:
               properties:
                 id:
@@ -692,31 +676,19 @@ components:
                   type: string
                 name:
                   description: Name of the choice
-                  example: Label 1 Choice 1
+                  example: Dropdown 1 Choice 1
                   type: string
               required:
               - id
               - name
-              - color
               type: object
             type: array
           is_multi_select:
-            description: Select multiple values from the label
+            description: Select multiple values from the dropdown
             type: boolean
         required:
         - is_multi_select
         - choices
-        type: object
-    MultiChoiceTypeObjectFieldUpdatePayload:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
-      - properties:
-          values:
-            description: Array of choice IDs
-            items:
-              example: 9119a313057e401189407116fcd3
-              type: string
-            type: array
         type: object
     EventFieldsUpdateRequest:
       items:
@@ -747,57 +719,64 @@ components:
         - $ref: '#/components/schemas/AssetTypeObjectField'
         type: object
       type: array
-    FieldListResponseItem:
-      discriminator:
-        mapping:
-          checkbox: '#/components/schemas/FieldTypeCheckbox'
-          currency_number: '#/components/schemas/FieldTypeCurrencyNumber'
-          date: '#/components/schemas/FieldTypeCommon'
-          dropdown: '#/components/schemas/FieldTypeDropdown'
-          image: '#/components/schemas/FieldTypeCommon'
-          label: '#/components/schemas/FieldTypeLabel'
-          percentage_number: '#/components/schemas/FieldTypePercentageNumber'
-          radio_button: '#/components/schemas/FieldTypeRadio'
-          rich_text: '#/components/schemas/FieldTypeCommon'
-          simple_number: '#/components/schemas/FieldTypeSimpleNumber'
-          text: '#/components/schemas/FieldTypeCommon'
-          text_area: '#/components/schemas/FieldTypeCommon'
-          video: '#/components/schemas/FieldTypeCommon'
-        propertyName: type
-      oneOf:
-      - $ref: '#/components/schemas/FieldTypeCommon'
-      - $ref: '#/components/schemas/FieldTypeLabel'
-      - $ref: '#/components/schemas/FieldTypeDropdown'
-      - $ref: '#/components/schemas/FieldTypeRadio'
-      - $ref: '#/components/schemas/FieldTypeCheckbox'
-      - $ref: '#/components/schemas/FieldTypeSimpleNumber'
-      - $ref: '#/components/schemas/FieldTypePercentageNumber'
-      - $ref: '#/components/schemas/FieldTypeCurrencyNumber'
-    FieldTypeCheckbox:
+    DateTypeObjectFieldUpdatePayload:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
+      - properties:
+          values:
+            description: Array of date-time values, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
+            items:
+              description: Date and time, in ISO 8601 UTC format (2020-02-10T10:40:45Z)
+              example: '2020-02-10T10:40:45Z'
+              format: date-time
+              type: string
+            maxItems: 1
+            type: array
+        type: object
+    NumberTypeObjectFieldUpdatePayload:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
+      - properties:
+          values:
+            description: Accepts a single numeric value
+            items:
+              example: 200
+              type: number
+            maxItems: 1
+            type: array
+        type: object
+    DropdownTypeObjectFieldUpdatePayload:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectFieldUpdatePayload'
+      - properties:
+          values:
+            description: Array of choice ID. Multiple choice values are not acceptable for `is_multi_select=false`.
+            items:
+              example: 9119a313057e401189407116fcd3
+              type: string
+            type: array
+        type: object
+    StringTypeObjectField:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectField'
+      - $ref: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
+    FieldTypePercentageNumber:
       allOf:
       - $ref: '#/components/schemas/FieldBaseType'
       - properties:
-          choices:
-            description: Choices of the checkbox
-            items:
-              properties:
-                id:
-                  description: Identifier of the choice
-                  example: 6ceee2f4fa3411ecb37802420ac8001b
-                  type: string
-                name:
-                  description: Name of the choice
-                  example: Checkbox 1 Choice 1
-                  type: string
-              required:
-              - id
-              - name
-              - color
-              type: object
-            type: array
+          decimal_places:
+            description: Decimal place of the numerical field
+            example: 2
+            type:
+            - integer
+            - 'null'
         required:
-        - choices
+        - decimal_places
         type: object
+    RadioButtonTypeObjectField:
+      allOf:
+      - $ref: '#/components/schemas/BaseObjectField'
+      - $ref: '#/components/schemas/RadioButtonTypeObjectFieldUpdatePayload'
     FieldTypeCurrencyNumber:
       allOf:
       - $ref: '#/components/schemas/FieldBaseType'
@@ -821,28 +800,44 @@ components:
         - decimal_places
         - currency_code
         type: object
-    DateTypeObjectField:
+    FieldTypeCommon:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - type: object
+    FieldTypeLabel:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - properties:
+          choices:
+            description: Choices of the label
+            items:
+              properties:
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Label 1 Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              - color
+              type: object
+            type: array
+          is_multi_select:
+            description: Select multiple values from the label
+            type: boolean
+        required:
+        - is_multi_select
+        - choices
+        type: object
+    MultiChoiceTypeObjectField:
       allOf:
       - $ref: '#/components/schemas/BaseObjectField'
-      - $ref: '#/components/schemas/DateTypeObjectFieldUpdatePayload'
-    StringTypeObjectField:
-      allOf:
-      - $ref: '#/components/schemas/BaseObjectField'
-      - $ref: '#/components/schemas/StringTypeObjectFieldUpdatePayload'
-    BaseObjectFieldUpdatePayload:
-      properties:
-        type:
-          description: Type of the field
-          example: checkbox
-          type: string
-        values:
-          description: Values for the campaign field
-          type: array
-      required:
-      - type
-      - values
-      type: object
-    FieldTypePercentageNumber:
+      - $ref: '#/components/schemas/MultiChoiceTypeObjectFieldUpdatePayload'
+    FieldTypeSimpleNumber:
       allOf:
       - $ref: '#/components/schemas/FieldBaseType'
       - properties:
@@ -852,26 +847,15 @@ components:
             type:
             - integer
             - 'null'
+          has_thousand_separator:
+            description: Whether the numerical field has a thousand separator
+            example: true
+            type: boolean
         required:
+        - has_thousand_separator
         - decimal_places
         type: object
   responses:
-    UnprocessableEntity:
-      content:
-        application/json:
-          example:
-            message: Resource cannot be processed
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Unprocessable entity error
-    Forbidden:
-      content:
-        application/json:
-          example:
-            message: You do not have the permission to perform this operation
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Permission error
     NotFound:
       content:
         application/json:
@@ -888,6 +872,22 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Authorization error
+    Forbidden:
+      content:
+        application/json:
+          example:
+            message: You do not have the permission to perform this operation
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Permission error
+    UnprocessableEntity:
+      content:
+        application/json:
+          example:
+            message: Resource cannot be processed
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Unprocessable entity error
     ClientError:
       content:
         application/json:
