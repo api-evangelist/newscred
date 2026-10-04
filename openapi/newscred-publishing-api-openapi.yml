@@ -225,93 +225,6 @@ paths:
       - Publishing
 components:
   schemas:
-    PublishingEventMetadataCreateRequest:
-      properties:
-        asset_id:
-          description: Unique identifier of the asset
-          example: 4567m474974987479856456457
-          type: string
-        locale:
-          description: The locale to which the asset is being published
-          example: en
-          type: string
-        public_url:
-          description: public url of asset
-          example: https://example.com/test
-          type: string
-        publishing_destination_updated_at:
-          description: Timestamp of when the publishing destination of the asset was updated
-          example: '2019-10-06T13:15:30Z'
-          format: date-time
-          type: string
-        status:
-          description: Publishing status of the asset
-          enum:
-          - published
-          - unpublished
-          - synced
-          - failed
-          example: published
-          type: string
-        status_message:
-          description: Any message patched by the integrator about the asset's status
-          example: This asset is in review
-          type: string
-      required:
-      - asset_id
-      - status
-      type: object
-    PublishingEventAssets:
-      additionalProperties: false
-      properties:
-        id:
-          description: Unique identifier of the asset
-          example: 5d7f910551b00a722e0418830cee2212
-          type: string
-        links:
-          additionalProperties: false
-          description: Meta links
-          properties:
-            self:
-              description: URL of asset
-              example: https://api.cmp.optimizely.com/v3/articles/5d7f910551b00a722e0418830cee2212
-              type: string
-          required:
-          - self
-          type: object
-        publishing_metadata:
-          description: List of information related to publishing metadata for the asset
-          items:
-            properties:
-              id:
-                description: Unique identifier of the publishing metadata
-                example: 5e46745616s564s4564964
-                type: string
-              links:
-                description: Meta links
-                properties:
-                  self:
-                    description: URL of the publishing metadata of the asset
-                    example: https://api.cmp.optimizely.com/v3/publishing-events/5d7f910551b00a722e0418830cee5534/assets/5d7f910551b00a722e0418830cee2212/publishing-metadata/5e46745616s564s4564964
-                    type: string
-                required:
-                - self
-                type: object
-            required:
-            - id
-            - links
-            type: object
-          type: array
-        type:
-          description: 'Type of the asset: `article`, `image`, `video`, `raw_file`, `structured_content`'
-          example: article
-          type: string
-      required:
-      - id
-      - publishing_metadata
-      - type
-      - links
-      type: object
     PublishingEventMetadataBulkCreateResponse:
       properties:
         data:
@@ -367,46 +280,76 @@ components:
       - data
       - errors
       type: object
-    PublishingEventResponse:
+    Pagination:
+      additionalProperties: false
+      description: Pagination related information
+      properties:
+        next:
+          description: URL to the next page
+          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
+          type:
+          - string
+          - 'null'
+        previous:
+          description: URL to the previous page
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - next
+      - previous
+      type: object
+    PublishingEventAssets:
       additionalProperties: false
       properties:
-        assets:
-          description: List of assets associated with the publishing event.
-          items:
-            $ref: '#/components/schemas/PublishingEventAssets'
-          type: array
         id:
-          description: Unique identifier of the publishing event
-          example: 5d7f910551b00a722e0418830cee5534
+          description: Unique identifier of the asset
+          example: 5d7f910551b00a722e0418830cee2212
           type: string
         links:
           additionalProperties: false
           description: Meta links
           properties:
-            publishing_metadata:
-              description: URL of list of publishing metadata
-              example: https://api.cmp.optimizely.com/v3/publishing-events/5d7f910551b00a722e0418830cee5534/publishing-metadata
-              type: string
             self:
-              description: URL of the publishing event
-              example: https://api.cmp.optimizely.com/v3/publishing-events/5d7f910551b00a722e0418830cee2212
+              description: URL of asset
+              example: https://api.cmp.optimizely.com/v3/articles/5d7f910551b00a722e0418830cee2212
               type: string
           required:
           - self
-          - publishing_metadata
           type: object
+        publishing_metadata:
+          description: List of information related to publishing metadata for the asset
+          items:
+            properties:
+              id:
+                description: Unique identifier of the publishing metadata
+                example: 5e46745616s564s4564964
+                type: string
+              links:
+                description: Meta links
+                properties:
+                  self:
+                    description: URL of the publishing metadata of the asset
+                    example: https://api.cmp.optimizely.com/v3/publishing-events/5d7f910551b00a722e0418830cee5534/assets/5d7f910551b00a722e0418830cee2212/publishing-metadata/5e46745616s564s4564964
+                    type: string
+                required:
+                - self
+                type: object
+            required:
+            - id
+            - links
+            type: object
+          type: array
+        type:
+          description: 'Type of the asset: `article`, `image`, `video`, `raw_file`, `structured_content`'
+          example: article
+          type: string
       required:
       - id
-      - assets
+      - publishing_metadata
+      - type
       - links
-      type: object
-    PublishingEventMetadataListResponse:
-      properties:
-        data:
-          description: List of successfully posted publishing metadata
-          items:
-            $ref: '#/components/schemas/PublishingEventMetadataResponse'
-          type: array
       type: object
     Error:
       additionalProperties: true
@@ -424,51 +367,41 @@ components:
       required:
       - message
       type: object
-    PublishingChannelListResponse:
-      additionalProperties: false
+    PublishingEventMetadataCreateRequest:
       properties:
-        data:
-          description: List of publishing channels
-          items:
-            $ref: '#/components/schemas/PublishingChannelResponse'
-          type: array
-        pagination:
-          allOf:
-          - $ref: '#/components/schemas/Pagination'
-          - properties:
-              next:
-                example: https://api.cmp.optimizely.com/v3/publishing-channels?offset=10&page_size=10
-                type:
-                - string
-                - 'null'
-            type: object
-      required:
-      - data
-      - pagination
-      type: object
-    PublishingChannelResponse:
-      additionalProperties: false
-      properties:
-        disabled:
-          description: Whether the publishing channel is currently disabled
-          example: false
-          type:
-          - boolean
-          - 'null'
-        id:
-          description: Unique identifier of the publishing channel
-          example: 6a2fd16faec3bed9c72f7d4f
+        asset_id:
+          description: Unique identifier of the asset
+          example: 4567m474974987479856456457
           type: string
-        name:
-          description: Human-readable name of the publishing channel
-          example: My Drupal
-          type:
-          - string
-          - 'null'
+        locale:
+          description: The locale to which the asset is being published
+          example: en
+          type: string
+        public_url:
+          description: public url of asset
+          example: https://example.com/test
+          type: string
+        publishing_destination_updated_at:
+          description: Timestamp of when the publishing destination of the asset was updated
+          example: '2019-10-06T13:15:30Z'
+          format: date-time
+          type: string
+        status:
+          description: Publishing status of the asset
+          enum:
+          - published
+          - unpublished
+          - synced
+          - failed
+          example: published
+          type: string
+        status_message:
+          description: Any message patched by the integrator about the asset's status
+          example: This asset is in review
+          type: string
       required:
-      - id
-      - name
-      - disabled
+      - asset_id
+      - status
       type: object
     PublishingEventMetadataResponse:
       additionalProperties: false
@@ -560,26 +493,6 @@ components:
       - publishing_destination_updated_at
       - links
       type: object
-    Pagination:
-      additionalProperties: false
-      description: Pagination related information
-      properties:
-        next:
-          description: URL to the next page
-          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
-          type:
-          - string
-          - 'null'
-        previous:
-          description: URL to the previous page
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - next
-      - previous
-      type: object
     PublishingEventMetadataBulkCreateRequest:
       properties:
         data:
@@ -590,6 +503,126 @@ components:
       required:
       - data
       type: object
+    PublishingChannelListResponse:
+      additionalProperties: false
+      properties:
+        data:
+          description: List of publishing channels
+          items:
+            $ref: '#/components/schemas/PublishingChannelResponse'
+          type: array
+        pagination:
+          allOf:
+          - $ref: '#/components/schemas/Pagination'
+          - properties:
+              next:
+                example: https://api.cmp.optimizely.com/v3/publishing-channels?offset=10&page_size=10
+                type:
+                - string
+                - 'null'
+            type: object
+      required:
+      - data
+      - pagination
+      type: object
+    PublishingEventResponse:
+      additionalProperties: false
+      properties:
+        assets:
+          description: List of assets associated with the publishing event.
+          items:
+            $ref: '#/components/schemas/PublishingEventAssets'
+          type: array
+        id:
+          description: Unique identifier of the publishing event
+          example: 5d7f910551b00a722e0418830cee5534
+          type: string
+        links:
+          additionalProperties: false
+          description: Meta links
+          properties:
+            publishing_metadata:
+              description: URL of list of publishing metadata
+              example: https://api.cmp.optimizely.com/v3/publishing-events/5d7f910551b00a722e0418830cee5534/publishing-metadata
+              type: string
+            self:
+              description: URL of the publishing event
+              example: https://api.cmp.optimizely.com/v3/publishing-events/5d7f910551b00a722e0418830cee2212
+              type: string
+          required:
+          - self
+          - publishing_metadata
+          type: object
+      required:
+      - id
+      - assets
+      - links
+      type: object
+    PublishingChannelResponse:
+      additionalProperties: false
+      properties:
+        disabled:
+          description: Whether the publishing channel is currently disabled
+          example: false
+          type:
+          - boolean
+          - 'null'
+        id:
+          description: Unique identifier of the publishing channel
+          example: 6a2fd16faec3bed9c72f7d4f
+          type: string
+        name:
+          description: Human-readable name of the publishing channel
+          example: My Drupal
+          type:
+          - string
+          - 'null'
+      required:
+      - id
+      - name
+      - disabled
+      type: object
+    PublishingEventMetadataListResponse:
+      properties:
+        data:
+          description: List of successfully posted publishing metadata
+          items:
+            $ref: '#/components/schemas/PublishingEventMetadataResponse'
+          type: array
+      type: object
+  responses:
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
+    ClientError:
+      content:
+        application/json:
+          example:
+            message: 'Unsupported arguments: a,b,c'
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client error
+    Unauthorized:
+      content:
+        application/json:
+          example:
+            message: Unauthorized
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Authorization error
+    Forbidden:
+      content:
+        application/json:
+          example:
+            message: You do not have the permission to perform this operation
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Permission error
   parameters:
     offset:
       description: Starting index of results (zero indexed)
@@ -600,39 +633,6 @@ components:
         default: 0
         minimum: 0
         type: integer
-  responses:
-    NotFound:
-      content:
-        application/json:
-          example:
-            message: Resource not found
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Not found error
-    Forbidden:
-      content:
-        application/json:
-          example:
-            message: You do not have the permission to perform this operation
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Permission error
-    Unauthorized:
-      content:
-        application/json:
-          example:
-            message: Unauthorized
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Authorization error
-    ClientError:
-      content:
-        application/json:
-          example:
-            message: 'Unsupported arguments: a,b,c'
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Client error
   securitySchemes:
     OAuth2:
       flows:

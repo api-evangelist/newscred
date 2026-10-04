@@ -74,22 +74,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Unprocessable entity error
-    NotFound:
-      content:
-        application/json:
-          example:
-            message: Resource not found
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Not found error
-    Forbidden:
-      content:
-        application/json:
-          example:
-            message: You do not have the permission to perform this operation
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Permission error
     Unauthorized:
       content:
         application/json:
@@ -106,6 +90,22 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Client error
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
+    Forbidden:
+      content:
+        application/json:
+          example:
+            message: You do not have the permission to perform this operation
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Permission error
   schemas:
     TaskStep:
       additionalProperties: false
@@ -147,6 +147,15 @@ components:
       - description
       - due_at
       - sub_steps
+      type: object
+    TaskStepRequest:
+      additionalProperties: false
+      properties:
+        due_at:
+          description: 'Due date and time of the task step, in ISO 8601 UTC format (2020-02-10T10:40:45Z). Point to note: in the CMP web interface, a popup is shown while updating a step''s due date to inform the user of temporal or sequential constraints based on the due date of other steps. However, this API will update the step''s due date while superceding any validation for the workflow.'
+          example: '2025-10-06T13:00:00Z'
+          format: date-time
+          type: string
       type: object
     Error:
       additionalProperties: true
@@ -243,15 +252,6 @@ components:
       - is_skipped
       - is_external
       - links
-      type: object
-    TaskStepRequest:
-      additionalProperties: false
-      properties:
-        due_at:
-          description: 'Due date and time of the task step, in ISO 8601 UTC format (2020-02-10T10:40:45Z). Point to note: in the CMP web interface, a popup is shown while updating a step''s due date to inform the user of temporal or sequential constraints based on the due date of other steps. However, this API will update the step''s due date while superceding any validation for the workflow.'
-          example: '2025-10-06T13:00:00Z'
-          format: date-time
-          type: string
       type: object
   securitySchemes:
     OAuth2:

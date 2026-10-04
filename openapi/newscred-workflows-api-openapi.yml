@@ -83,108 +83,7 @@ paths:
       tags:
       - Workflows
 components:
-  responses:
-    NotFound:
-      content:
-        application/json:
-          example:
-            message: Resource not found
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Not found error
-    Unauthorized:
-      content:
-        application/json:
-          example:
-            message: Unauthorized
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Authorization error
-    Forbidden:
-      content:
-        application/json:
-          example:
-            message: You do not have the permission to perform this operation
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Permission error
   schemas:
-    FieldTypeRadio:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - properties:
-          choices:
-            description: Choices of the radio button
-            items:
-              properties:
-                id:
-                  description: Identifier of the choice
-                  example: 6ceee2f4fa3411ecb37802420ac8001b
-                  type: string
-                name:
-                  description: Name of the choice
-                  example: Radio 1 Choice 1
-                  type: string
-              required:
-              - id
-              - name
-              - color
-              type: object
-            type: array
-        required:
-        - choices
-        type: object
-    FieldTypeCheckbox:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - properties:
-          choices:
-            description: Choices of the checkbox
-            items:
-              properties:
-                id:
-                  description: Identifier of the choice
-                  example: 6ceee2f4fa3411ecb37802420ac8001b
-                  type: string
-                name:
-                  description: Name of the choice
-                  example: Checkbox 1 Choice 1
-                  type: string
-              required:
-              - id
-              - name
-              - color
-              type: object
-            type: array
-        required:
-        - choices
-        type: object
-    FieldBaseType:
-      additionalProperties: false
-      properties:
-        id:
-          description: Identifier of the field
-          example: 64be245ec0d79e79fdf1ad84
-          type: string
-        name:
-          description: Name of the field
-          example: Dropdown 101
-          type: string
-        type:
-          description: Type of the field
-          example: text
-          type: string
-        values:
-          description: List of selected values or from user input
-          items:
-            type: string
-          type: array
-      required:
-      - id
-      - name
-      - type
-      - values
-      type: object
     Error:
       additionalProperties: true
       description: Error payload
@@ -221,34 +120,50 @@ components:
       - next
       - previous
       type: object
-    FieldTypeDropdown:
+    FieldTypeSimpleNumber:
       allOf:
       - $ref: '#/components/schemas/FieldBaseType'
       - properties:
-          choices:
-            description: Choices of the dropdown
-            items:
-              properties:
-                id:
-                  description: Identifier of the choice
-                  example: 6ceee2f4fa3411ecb37802420ac8001b
-                  type: string
-                name:
-                  description: Name of the choice
-                  example: Dropdown 1 Choice 1
-                  type: string
-              required:
-              - id
-              - name
-              type: object
-            type: array
-          is_multi_select:
-            description: Select multiple values from the dropdown
+          decimal_places:
+            description: Decimal place of the numerical field
+            example: 2
+            type:
+            - integer
+            - 'null'
+          has_thousand_separator:
+            description: Whether the numerical field has a thousand separator
+            example: true
             type: boolean
         required:
-        - is_multi_select
-        - choices
+        - has_thousand_separator
+        - decimal_places
         type: object
+    FieldBaseType:
+      additionalProperties: false
+      properties:
+        id:
+          description: Identifier of the field
+          example: 64be245ec0d79e79fdf1ad84
+          type: string
+        name:
+          description: Name of the field
+          example: Dropdown 101
+          type: string
+        type:
+          description: Type of the field
+          example: text
+          type: string
+        values:
+          description: List of selected values or from user input
+          items:
+            type: string
+          type: array
+      required:
+      - id
+      - name
+      - type
+      - values
+      type: object
     WorkflowListResponseItem:
       additionalProperties: false
       properties:
@@ -276,6 +191,58 @@ components:
       - description
       - is_flexible
       type: object
+    FieldTypeLabel:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - properties:
+          choices:
+            description: Choices of the label
+            items:
+              properties:
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Label 1 Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              - color
+              type: object
+            type: array
+          is_multi_select:
+            description: Select multiple values from the label
+            type: boolean
+        required:
+        - is_multi_select
+        - choices
+        type: object
+    FieldTypeCurrencyNumber:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - properties:
+          currency_code:
+            description: Currency code of the numerical field
+            example: USD
+            type: string
+          decimal_places:
+            description: Decimal place of the numerical field
+            example: 2
+            type:
+            - integer
+            - 'null'
+          has_thousand_separator:
+            description: Whether the numerical field has a thousand separator
+            example: true
+            type: boolean
+        required:
+        - has_thousand_separator
+        - decimal_places
+        - currency_code
+        type: object
     FieldTypePercentageNumber:
       allOf:
       - $ref: '#/components/schemas/FieldBaseType'
@@ -288,6 +255,38 @@ components:
             - 'null'
         required:
         - decimal_places
+        type: object
+    FieldTypeCommon:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - type: object
+    FieldTypeDropdown:
+      allOf:
+      - $ref: '#/components/schemas/FieldBaseType'
+      - properties:
+          choices:
+            description: Choices of the dropdown
+            items:
+              properties:
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Dropdown 1 Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              type: object
+            type: array
+          is_multi_select:
+            description: Select multiple values from the dropdown
+            type: boolean
+        required:
+        - is_multi_select
+        - choices
         type: object
     ObjectFieldCreateResponse:
       additionalProperties: false
@@ -317,29 +316,6 @@ components:
       - $ref: '#/components/schemas/FieldTypePercentageNumber'
       - $ref: '#/components/schemas/FieldTypeCurrencyNumber'
       type: object
-    FieldTypeCurrencyNumber:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - properties:
-          currency_code:
-            description: Currency code of the numerical field
-            example: USD
-            type: string
-          decimal_places:
-            description: Decimal place of the numerical field
-            example: 2
-            type:
-            - integer
-            - 'null'
-          has_thousand_separator:
-            description: Whether the numerical field has a thousand separator
-            example: true
-            type: boolean
-        required:
-        - has_thousand_separator
-        - decimal_places
-        - currency_code
-        type: object
     WorkflowResponse:
       additionalProperties: false
       properties:
@@ -497,16 +473,12 @@ components:
       - steps
       - fields
       type: object
-    FieldTypeCommon:
-      allOf:
-      - $ref: '#/components/schemas/FieldBaseType'
-      - type: object
-    FieldTypeLabel:
+    FieldTypeRadio:
       allOf:
       - $ref: '#/components/schemas/FieldBaseType'
       - properties:
           choices:
-            description: Choices of the label
+            description: Choices of the radio button
             items:
               properties:
                 id:
@@ -515,7 +487,7 @@ components:
                   type: string
                 name:
                   description: Name of the choice
-                  example: Label 1 Choice 1
+                  example: Radio 1 Choice 1
                   type: string
               required:
               - id
@@ -523,31 +495,59 @@ components:
               - color
               type: object
             type: array
-          is_multi_select:
-            description: Select multiple values from the label
-            type: boolean
         required:
-        - is_multi_select
         - choices
         type: object
-    FieldTypeSimpleNumber:
+    FieldTypeCheckbox:
       allOf:
       - $ref: '#/components/schemas/FieldBaseType'
       - properties:
-          decimal_places:
-            description: Decimal place of the numerical field
-            example: 2
-            type:
-            - integer
-            - 'null'
-          has_thousand_separator:
-            description: Whether the numerical field has a thousand separator
-            example: true
-            type: boolean
+          choices:
+            description: Choices of the checkbox
+            items:
+              properties:
+                id:
+                  description: Identifier of the choice
+                  example: 6ceee2f4fa3411ecb37802420ac8001b
+                  type: string
+                name:
+                  description: Name of the choice
+                  example: Checkbox 1 Choice 1
+                  type: string
+              required:
+              - id
+              - name
+              - color
+              type: object
+            type: array
         required:
-        - has_thousand_separator
-        - decimal_places
+        - choices
         type: object
+  responses:
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
+    Forbidden:
+      content:
+        application/json:
+          example:
+            message: You do not have the permission to perform this operation
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Permission error
+    Unauthorized:
+      content:
+        application/json:
+          example:
+            message: Unauthorized
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Authorization error
   parameters:
     offset:
       description: Starting index of results (zero indexed)

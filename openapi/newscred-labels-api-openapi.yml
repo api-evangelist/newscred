@@ -66,42 +66,26 @@ paths:
       tags:
       - Labels
 components:
-  parameters:
-    offset:
-      description: Starting index of results (zero indexed)
-      example: 5
-      in: query
-      name: offset
-      schema:
-        default: 0
-        minimum: 0
-        type: integer
-    page_size:
-      description: Number of results to return per page
-      example: 15
-      in: query
-      name: page_size
-      schema:
-        default: 10
-        maximum: 100
-        minimum: 1
-        type: integer
   schemas:
-    LabelGroupValue:
+    Pagination:
       additionalProperties: false
-      description: Values of a label group
+      description: Pagination related information
       properties:
-        id:
-          description: Unique identifier for the label group value
-          example: 1693bd22eac001bae8f33eab29ee5bc2
-          type: string
-        name:
-          description: Name of the label group value
-          example: Pillar 1
-          type: string
+        next:
+          description: URL to the next page
+          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
+          type:
+          - string
+          - 'null'
+        previous:
+          description: URL to the previous page
+          example: null
+          type:
+          - string
+          - 'null'
       required:
-      - id
-      - name
+      - next
+      - previous
       type: object
     Error:
       additionalProperties: true
@@ -118,6 +102,22 @@ components:
           type: string
       required:
       - message
+      type: object
+    LabelGroupValue:
+      additionalProperties: false
+      description: Values of a label group
+      properties:
+        id:
+          description: Unique identifier for the label group value
+          example: 1693bd22eac001bae8f33eab29ee5bc2
+          type: string
+        name:
+          description: Name of the label group value
+          example: Pillar 1
+          type: string
+      required:
+      - id
+      - name
       type: object
     LabelGroup:
       additionalProperties: false
@@ -153,35 +153,27 @@ components:
       - source_org_type
       - values
       type: object
-    Pagination:
-      additionalProperties: false
-      description: Pagination related information
-      properties:
-        next:
-          description: URL to the next page
-          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
-          type:
-          - string
-          - 'null'
-        previous:
-          description: URL to the previous page
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - next
-      - previous
-      type: object
+  parameters:
+    offset:
+      description: Starting index of results (zero indexed)
+      example: 5
+      in: query
+      name: offset
+      schema:
+        default: 0
+        minimum: 0
+        type: integer
+    page_size:
+      description: Number of results to return per page
+      example: 15
+      in: query
+      name: page_size
+      schema:
+        default: 10
+        maximum: 100
+        minimum: 1
+        type: integer
   responses:
-    Forbidden:
-      content:
-        application/json:
-          example:
-            message: You do not have the permission to perform this operation
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Permission error
     Unauthorized:
       content:
         application/json:
@@ -198,6 +190,14 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Client error
+    Forbidden:
+      content:
+        application/json:
+          example:
+            message: You do not have the permission to perform this operation
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Permission error
   securitySchemes:
     OAuth2:
       flows:

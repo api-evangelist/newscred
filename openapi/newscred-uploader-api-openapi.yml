@@ -305,22 +305,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Unprocessable entity error
-    NotFound:
-      content:
-        application/json:
-          example:
-            message: Resource not found
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Not found error
-    Forbidden:
-      content:
-        application/json:
-          example:
-            message: You do not have the permission to perform this operation
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Permission error
     Unauthorized:
       content:
         application/json:
@@ -337,6 +321,22 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Client error
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
+    Forbidden:
+      content:
+        application/json:
+          example:
+            message: You do not have the permission to perform this operation
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Permission error
   schemas:
     Error:
       additionalProperties: true

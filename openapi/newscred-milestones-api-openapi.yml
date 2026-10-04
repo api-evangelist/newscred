@@ -173,178 +173,7 @@ paths:
       tags:
       - Milestones
 components:
-  responses:
-    UnprocessableEntity:
-      content:
-        application/json:
-          example:
-            message: Resource cannot be processed
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Unprocessable entity error
-    NotFound:
-      content:
-        application/json:
-          example:
-            message: Resource not found
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Not found error
-    Forbidden:
-      content:
-        application/json:
-          example:
-            message: You do not have the permission to perform this operation
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Permission error
-    Unauthorized:
-      content:
-        application/json:
-          example:
-            message: Unauthorized
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Authorization error
-    ClientError:
-      content:
-        application/json:
-          example:
-            message: 'Unsupported arguments: a,b,c'
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Client error
-  parameters:
-    offset:
-      description: Starting index of results (zero indexed)
-      example: 5
-      in: query
-      name: offset
-      schema:
-        default: 0
-        minimum: 0
-        type: integer
-    page_size:
-      description: Number of results to return per page
-      example: 15
-      in: query
-      name: page_size
-      schema:
-        default: 10
-        maximum: 100
-        minimum: 1
-        type: integer
   schemas:
-    MilestoneUpdateRequest:
-      additionalProperties: false
-      properties:
-        campaign_id:
-          description: Id of the campaign to be associated with the milestone
-          example: 63f1c2b675be4132854d2741
-          type: string
-        description:
-          description: Description of the milestone. If provided, this should be between 1 and 250 characters.
-          example: Complete all tasks for the Q1 product launch
-          maxLength: 250
-          minLength: 1
-          type:
-          - string
-          - 'null'
-        due_date:
-          description: Date and time on which the milestone will expire, in ISO 8601 UTC format
-          example: '2023-10-07T13:15:30Z'
-          format: date-time
-          type: string
-        hex_color:
-          description: Hex color code for the milestone label
-          example: '#4ECFD5'
-          type: string
-        tasks:
-          description: List of tasks to be associated with the milestone. This can be an empty array, but in that case it will remove all task associations for that milestone.
-          example:
-          - id: 63f1c2b675be4132854d2741
-          - id: 63f1c2b675be4132854d2742
-          items:
-            properties:
-              id:
-                description: Task ID
-                type: string
-            required:
-            - id
-            type: object
-          type: array
-        title:
-          description: Title of the milestone. This should be between 1 and 80 characters.
-          example: Q1 Product Launch
-          maxLength: 80
-          minLength: 1
-          type: string
-      type: object
-    MilestoneCreateRequest:
-      additionalProperties: false
-      properties:
-        campaign_id:
-          description: Id of the campaign to be associated with the milestone
-          example: 63f1c2b675be4132854d2741
-          type: string
-        description:
-          description: Description of the milestone. If provided, this should be between 1 and 250 characters.
-          example: Complete all tasks for the Q1 product launch
-          maxLength: 250
-          minLength: 1
-          type:
-          - string
-          - 'null'
-        due_date:
-          description: Date and time on which the milestone will expire, in ISO 8601 UTC format
-          example: '2023-10-07T13:15:30Z'
-          format: date-time
-          type: string
-        hex_color:
-          description: Hex color code for the milestone label
-          example: '#4ECFD5'
-          type: string
-        tasks:
-          description: List of tasks to be associated with the milestone
-          example:
-          - id: 63f1c2b675be4132854d2741
-          - id: 63f1c2b675be4132854d2742
-          items:
-            properties:
-              id:
-                description: Task ID
-                type: string
-            required:
-            - id
-            type: object
-          type: array
-        title:
-          description: Title of the milestone. This should be between 1 and 80 characters.
-          example: Q1 Product Launch
-          maxLength: 80
-          minLength: 1
-          type: string
-      required:
-      - title
-      - due_date
-      - hex_color
-      type: object
-    Error:
-      additionalProperties: true
-      description: Error payload
-      properties:
-        errors:
-          additionalProperties: true
-          description: Additional information
-          properties: {}
-          type: object
-        message:
-          description: Message describing the error
-          example: Not found
-          type: string
-      required:
-      - message
-      type: object
     Pagination:
       additionalProperties: false
       description: Pagination related information
@@ -364,6 +193,22 @@ components:
       required:
       - next
       - previous
+      type: object
+    Error:
+      additionalProperties: true
+      description: Error payload
+      properties:
+        errors:
+          additionalProperties: true
+          description: Additional information
+          properties: {}
+          type: object
+        message:
+          description: Message describing the error
+          example: Not found
+          type: string
+      required:
+      - message
       type: object
     MilestoneResponse:
       additionalProperties: false
@@ -424,6 +269,161 @@ components:
       - campaign
       - links
       type: object
+    MilestoneCreateRequest:
+      additionalProperties: false
+      properties:
+        campaign_id:
+          description: Id of the campaign to be associated with the milestone
+          example: 63f1c2b675be4132854d2741
+          type: string
+        description:
+          description: Description of the milestone. If provided, this should be between 1 and 250 characters.
+          example: Complete all tasks for the Q1 product launch
+          maxLength: 250
+          minLength: 1
+          type:
+          - string
+          - 'null'
+        due_date:
+          description: Date and time on which the milestone will expire, in ISO 8601 UTC format
+          example: '2023-10-07T13:15:30Z'
+          format: date-time
+          type: string
+        hex_color:
+          description: Hex color code for the milestone label
+          example: '#4ECFD5'
+          type: string
+        tasks:
+          description: List of tasks to be associated with the milestone
+          example:
+          - id: 63f1c2b675be4132854d2741
+          - id: 63f1c2b675be4132854d2742
+          items:
+            properties:
+              id:
+                description: Task ID
+                type: string
+            required:
+            - id
+            type: object
+          type: array
+        title:
+          description: Title of the milestone. This should be between 1 and 80 characters.
+          example: Q1 Product Launch
+          maxLength: 80
+          minLength: 1
+          type: string
+      required:
+      - title
+      - due_date
+      - hex_color
+      type: object
+    MilestoneUpdateRequest:
+      additionalProperties: false
+      properties:
+        campaign_id:
+          description: Id of the campaign to be associated with the milestone
+          example: 63f1c2b675be4132854d2741
+          type: string
+        description:
+          description: Description of the milestone. If provided, this should be between 1 and 250 characters.
+          example: Complete all tasks for the Q1 product launch
+          maxLength: 250
+          minLength: 1
+          type:
+          - string
+          - 'null'
+        due_date:
+          description: Date and time on which the milestone will expire, in ISO 8601 UTC format
+          example: '2023-10-07T13:15:30Z'
+          format: date-time
+          type: string
+        hex_color:
+          description: Hex color code for the milestone label
+          example: '#4ECFD5'
+          type: string
+        tasks:
+          description: List of tasks to be associated with the milestone. This can be an empty array, but in that case it will remove all task associations for that milestone.
+          example:
+          - id: 63f1c2b675be4132854d2741
+          - id: 63f1c2b675be4132854d2742
+          items:
+            properties:
+              id:
+                description: Task ID
+                type: string
+            required:
+            - id
+            type: object
+          type: array
+        title:
+          description: Title of the milestone. This should be between 1 and 80 characters.
+          example: Q1 Product Launch
+          maxLength: 80
+          minLength: 1
+          type: string
+      type: object
+  responses:
+    UnprocessableEntity:
+      content:
+        application/json:
+          example:
+            message: Resource cannot be processed
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Unprocessable entity error
+    Unauthorized:
+      content:
+        application/json:
+          example:
+            message: Unauthorized
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Authorization error
+    ClientError:
+      content:
+        application/json:
+          example:
+            message: 'Unsupported arguments: a,b,c'
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client error
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
+    Forbidden:
+      content:
+        application/json:
+          example:
+            message: You do not have the permission to perform this operation
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Permission error
+  parameters:
+    offset:
+      description: Starting index of results (zero indexed)
+      example: 5
+      in: query
+      name: offset
+      schema:
+        default: 0
+        minimum: 0
+        type: integer
+    page_size:
+      description: Number of results to return per page
+      example: 15
+      in: query
+      name: page_size
+      schema:
+        default: 10
+        maximum: 100
+        minimum: 1
+        type: integer
   securitySchemes:
     OAuth2:
       flows:

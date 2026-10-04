@@ -102,6 +102,79 @@ paths:
       - Users
 components:
   schemas:
+    Pagination:
+      additionalProperties: false
+      description: Pagination related information
+      properties:
+        next:
+          description: URL to the next page
+          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
+          type:
+          - string
+          - 'null'
+        previous:
+          description: URL to the previous page
+          example: null
+          type:
+          - string
+          - 'null'
+      required:
+      - next
+      - previous
+      type: object
+    Error:
+      additionalProperties: true
+      description: Error payload
+      properties:
+        errors:
+          additionalProperties: true
+          description: Additional information
+          properties: {}
+          type: object
+        message:
+          description: Message describing the error
+          example: Not found
+          type: string
+      required:
+      - message
+      type: object
+    UserListResponse:
+      additionalProperties: false
+      properties:
+        data:
+          description: List of users
+          items:
+            allOf:
+            - $ref: '#/components/schemas/UserListResponseItem'
+            - properties:
+                links:
+                  description: Meta links
+                  properties:
+                    self:
+                      description: URL of the user
+                      example: https://api.cmp.optimizely.com/v3/users/9119a313057e401189407116fcd3aa24
+                      type: string
+                  required:
+                  - self
+                  type: object
+              required:
+              - links
+              type: object
+          type: array
+        pagination:
+          allOf:
+          - $ref: '#/components/schemas/Pagination'
+          - properties:
+              next:
+                example: https://api.cmp.optimizely.com/v3/users?offset=10&page_size=10
+                type:
+                - string
+                - 'null'
+            type: object
+      required:
+      - data
+      - pagination
+      type: object
     UserListResponseItem:
       additionalProperties: false
       properties:
@@ -159,79 +232,6 @@ components:
       - full_name
       - image_url
       - links
-      type: object
-    UserListResponse:
-      additionalProperties: false
-      properties:
-        data:
-          description: List of users
-          items:
-            allOf:
-            - $ref: '#/components/schemas/UserListResponseItem'
-            - properties:
-                links:
-                  description: Meta links
-                  properties:
-                    self:
-                      description: URL of the user
-                      example: https://api.cmp.optimizely.com/v3/users/9119a313057e401189407116fcd3aa24
-                      type: string
-                  required:
-                  - self
-                  type: object
-              required:
-              - links
-              type: object
-          type: array
-        pagination:
-          allOf:
-          - $ref: '#/components/schemas/Pagination'
-          - properties:
-              next:
-                example: https://api.cmp.optimizely.com/v3/users?offset=10&page_size=10
-                type:
-                - string
-                - 'null'
-            type: object
-      required:
-      - data
-      - pagination
-      type: object
-    Error:
-      additionalProperties: true
-      description: Error payload
-      properties:
-        errors:
-          additionalProperties: true
-          description: Additional information
-          properties: {}
-          type: object
-        message:
-          description: Message describing the error
-          example: Not found
-          type: string
-      required:
-      - message
-      type: object
-    Pagination:
-      additionalProperties: false
-      description: Pagination related information
-      properties:
-        next:
-          description: URL to the next page
-          example: https://api.cmp.optimizely.com/<some-path-to-next-page>?offset=10&page_size=10
-          type:
-          - string
-          - 'null'
-        previous:
-          description: URL to the previous page
-          example: null
-          type:
-          - string
-          - 'null'
-      required:
-      - next
-      - previous
       type: object
     UserResponse:
       additionalProperties: false
@@ -302,22 +302,6 @@ components:
         minimum: 1
         type: integer
   responses:
-    NotFound:
-      content:
-        application/json:
-          example:
-            message: Resource not found
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Not found error
-    Forbidden:
-      content:
-        application/json:
-          example:
-            message: You do not have the permission to perform this operation
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Permission error
     Unauthorized:
       content:
         application/json:
@@ -334,6 +318,22 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Client error
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
+    Forbidden:
+      content:
+        application/json:
+          example:
+            message: You do not have the permission to perform this operation
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Permission error
   securitySchemes:
     OAuth2:
       flows:
