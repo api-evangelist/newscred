@@ -157,6 +157,26 @@ paths:
       tags:
       - Brand Compliance
 components:
+  parameters:
+    page_size:
+      description: Number of results to return per page
+      example: 15
+      in: query
+      name: page_size
+      schema:
+        default: 10
+        maximum: 100
+        minimum: 1
+        type: integer
+    offset:
+      description: Starting index of results (zero indexed)
+      example: 5
+      in: query
+      name: offset
+      schema:
+        default: 0
+        minimum: 0
+        type: integer
   schemas:
     Pagination:
       additionalProperties: false
@@ -193,40 +213,6 @@ components:
           type: string
       required:
       - message
-      type: object
-    BrandComplianceCategoriesResponse:
-      additionalProperties: false
-      properties:
-        criteria:
-          items:
-            properties:
-              description:
-                description: Details about the criteria
-                example: Description-1A
-                type: string
-              id:
-                description: Unique identifier of the criteria
-                example: 66cebe190bc97e0151eecddb
-                type: string
-              name:
-                description: Name of the criteria
-                example: Sub-category-1A
-                type: string
-            required:
-            - id
-            type: object
-          type: array
-        id:
-          description: Unique identifier of the category
-          example: 66cebe190bc97e0151eecdda
-          type: string
-        name:
-          description: Name of the category
-          example: Category-1
-          type: string
-      required:
-      - id
-      - criteria
       type: object
     TaskAssetDraftBrandComplianceResponse:
       additionalProperties: false
@@ -328,6 +314,40 @@ components:
       - reviewed_by
       - categories
       type: object
+    BrandComplianceCategoriesResponse:
+      additionalProperties: false
+      properties:
+        criteria:
+          items:
+            properties:
+              description:
+                description: Details about the criteria
+                example: Description-1A
+                type: string
+              id:
+                description: Unique identifier of the criteria
+                example: 66cebe190bc97e0151eecddb
+                type: string
+              name:
+                description: Name of the criteria
+                example: Sub-category-1A
+                type: string
+            required:
+            - id
+            type: object
+          type: array
+        id:
+          description: Unique identifier of the category
+          example: 66cebe190bc97e0151eecdda
+          type: string
+        name:
+          description: Name of the category
+          example: Category-1
+          type: string
+      required:
+      - id
+      - criteria
+      type: object
     TaskAssetDraftBrandComplianceRequest:
       additionalProperties: false
       properties:
@@ -403,51 +423,7 @@ components:
       - status
       - categories
       type: object
-  parameters:
-    offset:
-      description: Starting index of results (zero indexed)
-      example: 5
-      in: query
-      name: offset
-      schema:
-        default: 0
-        minimum: 0
-        type: integer
-    page_size:
-      description: Number of results to return per page
-      example: 15
-      in: query
-      name: page_size
-      schema:
-        default: 10
-        maximum: 100
-        minimum: 1
-        type: integer
   responses:
-    ClientError:
-      content:
-        application/json:
-          example:
-            message: 'Unsupported arguments: a,b,c'
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Client error
-    NotFound:
-      content:
-        application/json:
-          example:
-            message: Resource not found
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Not found error
-    Unauthorized:
-      content:
-        application/json:
-          example:
-            message: Unauthorized
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Authorization error
     Forbidden:
       content:
         application/json:
@@ -456,6 +432,30 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
       description: Permission error
+    Unauthorized:
+      content:
+        application/json:
+          example:
+            message: Unauthorized
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Authorization error
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
+    ClientError:
+      content:
+        application/json:
+          example:
+            message: 'Unsupported arguments: a,b,c'
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client error
   securitySchemes:
     OAuth2:
       flows:

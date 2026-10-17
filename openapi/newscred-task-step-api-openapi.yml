@@ -65,98 +65,7 @@ paths:
       tags:
       - Task Step
 components:
-  responses:
-    UnprocessableEntity:
-      content:
-        application/json:
-          example:
-            message: Resource cannot be processed
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Unprocessable entity error
-    Unauthorized:
-      content:
-        application/json:
-          example:
-            message: Unauthorized
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Authorization error
-    ClientError:
-      content:
-        application/json:
-          example:
-            message: 'Unsupported arguments: a,b,c'
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Client error
-    NotFound:
-      content:
-        application/json:
-          example:
-            message: Resource not found
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Not found error
-    Forbidden:
-      content:
-        application/json:
-          example:
-            message: You do not have the permission to perform this operation
-          schema:
-            $ref: '#/components/schemas/Error'
-      description: Permission error
   schemas:
-    TaskStep:
-      additionalProperties: false
-      properties:
-        description:
-          description: Description of the step
-          example: Description of the step
-          type:
-          - string
-          - 'null'
-        due_at:
-          description: Due date and time of the step containing the substep,  in ISO 8601 UTC format (2020-02-10T10:40:45Z)
-          example: '2020-10-06T13:15:30Z'
-          format: date-time
-          type:
-          - string
-          - 'null'
-        id:
-          description: Unique identifier of the step
-          example: 6d7f910551b00a722e0418830cee5564
-          type: string
-        is_completed:
-          description: Determines whether the step is completed in Optimizely CMP
-          example: false
-          type: boolean
-        sub_steps:
-          description: Substeps of the step
-          items:
-            $ref: '#/components/schemas/TaskSubStep'
-          type: array
-        title:
-          description: Title of the step
-          example: Sample step
-          type: string
-      required:
-      - id
-      - title
-      - is_completed
-      - description
-      - due_at
-      - sub_steps
-      type: object
-    TaskStepRequest:
-      additionalProperties: false
-      properties:
-        due_at:
-          description: 'Due date and time of the task step, in ISO 8601 UTC format (2020-02-10T10:40:45Z). Point to note: in the CMP web interface, a popup is shown while updating a step''s due date to inform the user of temporal or sequential constraints based on the due date of other steps. However, this API will update the step''s due date while superceding any validation for the workflow.'
-          example: '2025-10-06T13:00:00Z'
-          format: date-time
-          type: string
-      type: object
     Error:
       additionalProperties: true
       description: Error payload
@@ -172,6 +81,15 @@ components:
           type: string
       required:
       - message
+      type: object
+    TaskStepRequest:
+      additionalProperties: false
+      properties:
+        due_at:
+          description: 'Due date and time of the task step, in ISO 8601 UTC format (2020-02-10T10:40:45Z). Point to note: in the CMP web interface, a popup is shown while updating a step''s due date to inform the user of temporal or sequential constraints based on the due date of other steps. However, this API will update the step''s due date while superceding any validation for the workflow.'
+          example: '2025-10-06T13:00:00Z'
+          format: date-time
+          type: string
       type: object
     TaskSubStep:
       additionalProperties: false
@@ -253,6 +171,88 @@ components:
       - is_external
       - links
       type: object
+    TaskStep:
+      additionalProperties: false
+      properties:
+        description:
+          description: Description of the step
+          example: Description of the step
+          type:
+          - string
+          - 'null'
+        due_at:
+          description: Due date and time of the step containing the substep,  in ISO 8601 UTC format (2020-02-10T10:40:45Z)
+          example: '2020-10-06T13:15:30Z'
+          format: date-time
+          type:
+          - string
+          - 'null'
+        id:
+          description: Unique identifier of the step
+          example: 6d7f910551b00a722e0418830cee5564
+          type: string
+        is_completed:
+          description: Determines whether the step is completed in Optimizely CMP
+          example: false
+          type: boolean
+        sub_steps:
+          description: Substeps of the step
+          items:
+            $ref: '#/components/schemas/TaskSubStep'
+          type: array
+        title:
+          description: Title of the step
+          example: Sample step
+          type: string
+      required:
+      - id
+      - title
+      - is_completed
+      - description
+      - due_at
+      - sub_steps
+      type: object
+  responses:
+    Forbidden:
+      content:
+        application/json:
+          example:
+            message: You do not have the permission to perform this operation
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Permission error
+    Unauthorized:
+      content:
+        application/json:
+          example:
+            message: Unauthorized
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Authorization error
+    UnprocessableEntity:
+      content:
+        application/json:
+          example:
+            message: Resource cannot be processed
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Unprocessable entity error
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Resource not found
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not found error
+    ClientError:
+      content:
+        application/json:
+          example:
+            message: 'Unsupported arguments: a,b,c'
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Client error
   securitySchemes:
     OAuth2:
       flows:
