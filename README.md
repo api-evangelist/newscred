@@ -64,5 +64,117 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Newscred is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://www.nasdaqprivatemarket.com/
+> **Acquired or rebranded.** This company was acquired, merged or renamed. Its API, if it still exists, is offered under another name. This profile is kept as a historical record and is not maintained or rated.
+
+Newscred is the content marketing platform company that began as a licensed-content syndication API and grew into an enterprise Content Marketing Platform (CMP), Marketing Resource Management and Digital Asset Management suite. The company rebranded to Welcome in 2020 after Industry Dive acquired its content-services business, and Optimizely acquired Welcome in December 2021, where the product now ships as Optimizely Content Marketing Platform. The API lineage is continuous and the vendor documents it: the Open API base URL moved from https://api.newscred.com/v3 to https://api.welcomesoftware.com/v3 (28 March 2021) to https://api.cmp.optimizely.com/v3, and CMP still requires customers to allowlist *.newscred.com. The public contract is a 170-operation OAuth 2.0 REST API published by the newscred GitHub organization, covering library and digital asset management, tasks and workflows, campaigns, publishing, structured content, work requests, templates, teams and settings, plus a webhook event surface.
+
+**Areas:** Company · Content Marketing · Content Management · Digital Asset Management · Marketing · Marketing Resource Management · Workflows · Publishing · Webhook · Acquired
+
+## Newscred on APIs.io (historical record)
+
+Everything profiled for Newscred is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/newscred/](https://apis.io/providers/newscred/)** — or go straight to one of the APIs or properties below.
+
+### APIs (19)
+
+- [Newscred Assets API](https://apis.io/apis/newscred/newscred-assets-api/) — The Assets API from Newscred — 1 operation(s) for assets.
+- [Newscred Brand Compliance API](https://apis.io/apis/newscred/newscred-brand-compliance-api/) — The Brand Compliance API from Newscred — 2 operation(s) for brand compliance.
+- [Newscred Campaigns API](https://apis.io/apis/newscred/newscred-campaigns-api/) — The Campaigns API from Newscred — 7 operation(s) for campaigns.
+- [Newscred Events API](https://apis.io/apis/newscred/newscred-events-api/) — The Events API from Newscred — 3 operation(s) for events.
+- [Newscred Fields API](https://apis.io/apis/newscred/newscred-fields-api/) — The Fields API from Newscred — 4 operation(s) for fields.
+- [Newscred Labels API](https://apis.io/apis/newscred/newscred-labels-api/) — The Labels API from Newscred — 1 operation(s) for labels.
+- [Newscred Library API](https://apis.io/apis/newscred/newscred-library-api/) — The Library API from Newscred — 24 operation(s) for library.
+- [Newscred Milestones API](https://apis.io/apis/newscred/newscred-milestones-api/) — The Milestones API from Newscred — 2 operation(s) for milestones.
+- [Newscred Publishing API](https://apis.io/apis/newscred/newscred-publishing-api/) — The Publishing API from Newscred — 4 operation(s) for publishing.
+- [Newscred Settings API](https://apis.io/apis/newscred/newscred-settings-api/) — The Settings API from Newscred — 1 operation(s) for settings.
+- [Newscred Structured Contents API](https://apis.io/apis/newscred/newscred-structured-contents-api/) — The Structured Contents API from Newscred — 11 operation(s) for structured contents.
+- [Newscred Task Step API](https://apis.io/apis/newscred/newscred-task-step-api/) — The Task Step API from Newscred — 1 operation(s) for task step.
+- [Newscred Tasks API](https://apis.io/apis/newscred/newscred-tasks-api/) — Facilitates the integration of external systems with Optimizely CMP through the following use cases: 1. **External Work Management** – Use the endpoints to…
+- [Newscred Teams API](https://apis.io/apis/newscred/newscred-teams-api/) — The Teams API from Newscred — 2 operation(s) for teams.
+- [Newscred Templates API](https://apis.io/apis/newscred/newscred-templates-api/) — The Templates API from Newscred — 2 operation(s) for templates.
+- [Newscred Uploader API](https://apis.io/apis/newscred/newscred-uploader-api/) — The Uploader API from Newscred — 4 operation(s) for uploader.
+- [Newscred Users API](https://apis.io/apis/newscred/newscred-users-api/) — The Users API from Newscred — 3 operation(s) for users.
+- [Newscred Work Requests API](https://apis.io/apis/newscred/newscred-work-requests-api/) — The Work Requests API from Newscred — 13 operation(s) for work requests.
+- [Newscred Workflows API](https://apis.io/apis/newscred/newscred-workflows-api/) — The Workflows API from Newscred — 2 operation(s) for workflows.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Newscred Cmp Webhooks](https://apis.io/asyncapis/newscred/newscred-cmp-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [newscred-mcp.yml](https://apis.io/servers/newscred/newscred-mcp-yml/)
+
+#### Overlays (2)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Newscred Cmp Open Api Overlay](https://apis.io/overlays/newscred/newscred-cmp-open-api-overlay/)
+- [Newscred Welcome Open Api Overlay](https://apis.io/overlays/newscred/newscred-welcome-open-api-overlay/)
+
+#### Security (4)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Newscred Authentication](https://apis.io/security/newscred/newscred-authentication/)
+- [Newscred Domain Security](https://apis.io/security/newscred/newscred-domain-security/)
+- [Newscred Trust Center](https://apis.io/security/newscred/newscred-trust-center/)
+- [Newscred Vulnerability Disclosure](https://apis.io/security/newscred/newscred-vulnerability-disclosure/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Newscred Scopes](https://apis.io/scopes/newscred/newscred-scopes/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Newscred Plans Pricing](https://apis.io/plans/newscred/newscred-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Newscred Rate Limits](https://apis.io/rate-limits/newscred/newscred-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.optimizely.com/campaigns/acquisition/newscred)
+- [Documentation](https://docs.developers.optimizely.com/content-marketing-platform/docs/open-api-introduction)
+- [Getting started](https://docs.developers.optimizely.com/content-marketing-platform/reference/get-started)
+- [API reference](https://docs.developers.optimizely.com/content-marketing-platform/reference/api-reference)
+- [Pricing](https://www.optimizely.com/plans)
+- [Support](https://support.optimizely.com/hc/en-us)
+- [Blog](https://www.optimizely.com/field-notes/articles)
+- [Trust centre](https://www.optimizely.com/trust-center)
+- [Terms of service](https://www.optimizely.com/legal/terms)
+- [Privacy policy](https://www.optimizely.com/legal/privacy-notice)
+- [GitHub](https://github.com/newscred)
+- [Status](https://status.optimizely.com/)
+
+## API Evangelist rating
+
+**Not rated** — this company is recorded as acquired or rebranded, so no score is published. If it is in fact operating, say so on this repository and it will be re-profiled.
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Newscred: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/newscred/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
